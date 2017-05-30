@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -70,8 +71,18 @@ class Quote
      */
     private $description;
 
+	/**
+	 * @var ArrayCollection
+	 *
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Section", mappedBy="quote", cascade={"all"})
+	 */
+	private $sections;
 
-    /**
+	public function __construct() {
+		$this->sections = new ArrayCollection();
+	}
+
+	/**
      * Get id
      *
      * @return int
@@ -248,5 +259,17 @@ class Quote
     {
         return $this->description;
     }
+    
+	public function addSection(Section $section)
+	{
+		$this->sections->add($section);
+		return $this;
+	}
+
+	public function removeSection(Section $section)
+	{
+		$this->sections->removeElement($section);
+		return $this;
+	}
 }
 
