@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Quote</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ quote.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ quote.title }}</td>
+            </tr>
+            <tr>
+                <th>Datecreation</th>
+                <td>{% if quote.dateCreation %}{{ quote.dateCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Dateedition</th>
+                <td>{% if quote.dateEdition %}{{ quote.dateEdition|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Pdfpath</th>
+                <td>{{ quote.pdfPath }}</td>
+            </tr>
+            <tr>
+                <th>Customerid</th>
+                <td>{{ quote.customerId }}</td>
+            </tr>
+            <tr>
+                <th>Projectid</th>
+                <td>{{ quote.projectId }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ quote.description }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('quote_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('quote_edit', { 'id': quote.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
