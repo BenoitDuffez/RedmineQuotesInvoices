@@ -8,6 +8,7 @@ use AppBundle\Form\QuoteType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Redmine\Client;
 
 /**
  * Quote controller.
@@ -59,9 +60,23 @@ class QuoteController extends Controller
             return $this->redirectToRoute('quote_show', array('id' => $quote->getId()));
         }
 
+        $redmine = new Client('https://projects.upactivity.com', '0f3be55b17af11b80c7331db4b6aea3f68a5f4ba');
+        $projects = $redmine->project->all(['limit' => 1000]);
+        if ($quote->getProjectId() > 0) {
+            $customers = [];
+            $memberships = $redmine->membership->all($quote->getProjectId(), ['limit' => 1000]);
+            foreach ($memberships['memberships'] as $membership) {
+                $customers[] = $membership['user'];
+            }
+        } else {
+            $customers = null;
+        }
+
         return $this->render('quote/new.html.twig', array(
             'quote' => $quote,
             'form' => $form->createView(),
+            'projects' => $projects,
+            'customers' => $customers,
         ));
     }
 
