@@ -23,7 +23,9 @@
         <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}" type="application/javascript"></script>
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
         {% block javascripts %}{% endblock %}
     </body>
 </html>
