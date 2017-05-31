@@ -34,12 +34,14 @@ class QuoteController extends Controller
         ));
     }
 
-    /**
-     * Creates a new quote entity.
-     *
-     * @Route("/new", name="quote_new")
-     * @Method({"GET", "POST"})
-     */
+	/**
+	 * Creates a new quote entity.
+	 *
+	 * @Route("/new", name="quote_new")
+	 * @Method({"GET", "POST"})
+	 * @param Request $request
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+	 */
     public function newAction(Request $request)
     {
         $quote = new Quote();
@@ -52,25 +54,30 @@ class QuoteController extends Controller
 			$form->handleRequest($request);
 		}
 
-        if ($form->isSubmitted() && $form->isValid() && $form->get('save')->isClicked()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($quote);
-            $em->flush();
-
-            return $this->redirectToRoute('quote_show', array('id' => $quote->getId()));
-        }
-
         $redmine = new Client('https://projects.upactivity.com', '0f3be55b17af11b80c7331db4b6aea3f68a5f4ba');
         $projects = $redmine->project->all(['limit' => 1000]);
+		$customers = null;
         if ($quote->getProjectId() > 0) {
-            $customers = [];
             $memberships = $redmine->membership->all($quote->getProjectId(), ['limit' => 1000]);
-            foreach ($memberships['memberships'] as $membership) {
-                $customers[] = $membership['user'];
+			if ($memberships != null && isset($memberships['memberships'])) {
+            	$customers = [];
+				foreach ($memberships['memberships'] as $membership) {
+					$customers[] = $membership['user'];
+				}
             }
-        } else {
-            $customers = null;
         }
+
+		if ($customers != null) {
+			$form = $this->createForm('AppBundle\Form\QuoteType', $quote, ['customers_choices' => $customers]);
+		}
+
+		if ($form->isSubmitted() && $form->isValid() && $form->get('save')->isClicked()) {
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($quote);
+			$em->flush();
+
+			return $this->redirectToRoute('quote_show', array('id' => $quote->getId()));
+		}
 
         return $this->render('quote/new.html.twig', array(
             'quote' => $quote,

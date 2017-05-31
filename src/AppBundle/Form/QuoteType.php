@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,12 +18,18 @@ class QuoteType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+		if (isset($options['customers_choices'])) {
+			$choices = [];
+			foreach ($options['customers_choices'] as $customer) {
+				$choices[$customer['name']] = $customer['id'];
+			}
+			$builder->add('customerId', ChoiceType::class, ['choices' => $choices]);
+		}
         $builder
 			//->add('title')
 			//->add('dateCreation')
 			//->add('dateEdition')
 			//->add('pdfPath')
-			->add('customerId')
 			->add('projectId')
 			->add('description')
 			->add('sections', CollectionType::class, [
@@ -40,7 +47,8 @@ class QuoteType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Quote'
+            'data_class' => 'AppBundle\Entity\Quote',
+			'customers_choices' => null,
         ));
     }
 
