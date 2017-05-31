@@ -259,6 +259,13 @@ class Quote
     {
         return $this->description;
     }
+
+	/**
+	 * @return ArrayCollection
+	 */
+	public function getSections() {
+		return $this->sections;
+	}
     
 	public function addSection(Section $section)
 	{

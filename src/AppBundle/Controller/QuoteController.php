@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Quote;
+use AppBundle\Entity\Section;
+use AppBundle\Form\QuoteType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -43,7 +45,13 @@ class QuoteController extends Controller
         $form = $this->createForm('AppBundle\Form\QuoteType', $quote);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->get(QuoteType::BUTTON_ADD_SECTION)->isClicked()) {
+			$quote->addSection(new Section());
+			$form = $this->createForm('AppBundle\Form\QuoteType', $quote);
+			$form->handleRequest($request);
+		}
+
+        if ($form->isSubmitted() && $form->isValid() && $form->get('save')->isClicked()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($quote);
             $em->flush();

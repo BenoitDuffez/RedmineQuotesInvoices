@@ -168,6 +168,13 @@ class Section
         return $this->quote;
     }
 
+	/**
+	 * @return mixed
+	 */
+	public function getItems() {
+		return $this->items;
+	}
+
 	public function addItem(Item $item)
 	{
 		$this->items->add($item);
