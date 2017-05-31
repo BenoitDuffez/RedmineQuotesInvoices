@@ -44,18 +44,22 @@ class QuoteController extends Controller
 	 */
     public function newAction(Request $request)
     {
-        $quote = new Quote();
-        $form = $this->createForm('AppBundle\Form\QuoteType', $quote);
-        $form->handleRequest($request);
-
-        if ($form->get(QuoteType::BUTTON_ADD_SECTION)->isClicked()) {
-			$quote->addSection(new Section());
-			$form = $this->createForm('AppBundle\Form\QuoteType', $quote);
-			$form->handleRequest($request);
-		}
+    	$options = [];
 
         $redmine = new Client('https://projects.upactivity.com', '0f3be55b17af11b80c7331db4b6aea3f68a5f4ba');
-        $projects = $redmine->project->all(['limit' => 1000]);
+        $projectsList = $redmine->project->all(['limit' => 1000]);
+		if (isset($projectsList['projects'])) {
+			$projects = [];
+			foreach ($projectsList['projects'] as $p) {
+				$projects[$p['name']] = $p['id'];
+			}
+			$options['projects_choices'] = $projects;
+		}
+
+        $quote = new Quote();
+        $form = $this->createForm('AppBundle\Form\QuoteType', $quote, $options);
+        $form->handleRequest($request);
+
 		$customers = null;
         if ($quote->getProjectId() > 0) {
             $memberships = $redmine->membership->all($quote->getProjectId(), ['limit' => 1000]);
@@ -82,8 +86,6 @@ class QuoteController extends Controller
         return $this->render('quote/new.html.twig', array(
             'quote' => $quote,
             'form' => $form->createView(),
-            'projects' => $projects,
-            'customers' => $customers,
         ));
     }
 

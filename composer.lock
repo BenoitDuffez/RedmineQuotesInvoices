@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "01c18cf323b538a50922c02b2036c558",
+    "content-hash": "480e3306fd670ab73195004ef74991e3",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -1112,6 +1112,34 @@
                 "psr-3"
             ],
             "time": "2017-03-13T07:08:03+00:00"
+        },
+        {
+            "name": "ninsuo/symfony-collection",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ninsuo/symfony-collection.git",
+                "reference": "edeb43ec0ed6d63bf92050f115c779ebe370bd95"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ninsuo/symfony-collection/zipball/edeb43ec0ed6d63bf92050f115c779ebe370bd95",
+                "reference": "edeb43ec0ed6d63bf92050f115c779ebe370bd95",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alain Tiemblo",
+                    "email": "ninsuo@gmail.com"
+                }
+            ],
+            "description": "A jQuery plugin that manages adding, deleting and moving elements from a Symfony collection",
+            "time": "2017-05-23T19:59:13+00:00"
         },
         {
             "name": "paragonie/random_compat",

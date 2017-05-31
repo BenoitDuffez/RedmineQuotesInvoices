@@ -3,8 +3,18 @@
 {% block body %}
     <h1>Quote creation</h1>
 
+    {% form_theme form 'AppBundle::jquery.collection.html.twig' %}
     {{ form_start(form) }}
-        {{ form_widget(form) }}
+
+    <h3>Sections</h3>
+    <ul class="sections" data-prototype="{{ form_widget(form.sections.vars.prototype)|e('html_attr') }}">
+        {# iterate over each existing section and render its only field: name #}
+        {% for section in form.sections%}
+            <li>{{ form_row(section.name) }}</li>
+        {% endfor %}
+    </ul>
+
+    {{ form_widget(form) }}
         <input type="submit" value="Create" />
     {{ form_end(form) }}
 
@@ -13,4 +23,14 @@
             <a href="{{ path('quote_index') }}">Back to the list</a>
         </li>
     </ul>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="application/javascript" src="{{ asset('js/quote.form.js') }}"></script>
+
+    <script src="{{ asset('bundles/app/js/jquery.collection.js') }}"></script>
+
+    <script type="text/javascript">
+        $('.my-selector').collection();
+    </script>
 {% endblock %}

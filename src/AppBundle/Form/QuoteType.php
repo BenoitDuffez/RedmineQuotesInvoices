@@ -25,19 +25,28 @@ class QuoteType extends AbstractType
 			}
 			$builder->add('customerId', ChoiceType::class, ['choices' => $choices]);
 		}
+		if (isset($options['projects_choices'])) {
+			$choices = [];
+			foreach ($options['projects_choices'] as $project) {
+				$choices[$project['name']] = $project['id'];
+			}
+			$builder->add('projectId', ChoiceType::class, ['choices' => $options['projects_choices']]);
+		}
         $builder
 			//->add('title')
 			//->add('dateCreation')
 			//->add('dateEdition')
 			//->add('pdfPath')
-			->add('projectId')
 			->add('description')
 			->add('sections', CollectionType::class, [
-				'entry_type' => SectionType::class
-			])
-			->add('save', SubmitType::class, [])
-			->add(self::BUTTON_ADD_SECTION, SubmitType::class, [
-				'label' => 'Add section'
+				'entry_type' => SectionType::class,
+				'allow_add' => true,
+				'allow_delete' => true,
+				'prototype' => true,
+				'attr' => array(
+					'class' => 'my-selector',
+				),
+				'by_reference' => false,
 			]);
     }
     
@@ -49,6 +58,7 @@ class QuoteType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Quote',
 			'customers_choices' => null,
+			'projects_choices' => null,
         ));
     }
 
