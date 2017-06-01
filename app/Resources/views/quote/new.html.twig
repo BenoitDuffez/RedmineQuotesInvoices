@@ -3,8 +3,11 @@
 {% block body %}
     <h1>Quote creation</h1>
 
-    {% form_theme form 'AppBundle::jquery.collection.html.twig' %}
     {{ form_start(form) }}
+    {% form_theme form with [
+        'form/jquery.collection.html.twig',
+        'bootstrap_3_layout.html.twig'
+    ] %}
 
     <h3>Sections</h3>
     <ul class="sections" data-prototype="{{ form_widget(form.sections.vars.prototype)|e('html_attr') }}">
@@ -28,7 +31,7 @@
 {% block javascripts %}
     <script type="application/javascript" src="{{ asset('js/quote.form.js') }}"></script>
 
-    <script src="{{ asset('bundles/app/js/jquery.collection.js') }}"></script>
+    <script src="{{ asset('js/jquery.collection.js') }}"></script>
 
     <script type="text/javascript">
         $('.my-selector').collection();
