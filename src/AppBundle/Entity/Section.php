@@ -55,6 +55,7 @@ class Section
 	 * @var ArrayCollection
 	 * 
 	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Item", mappedBy="section", cascade={"all"})
+	 * @ORM\OrderBy({"position" = "ASC"})
 	 */
 	private $items;
 

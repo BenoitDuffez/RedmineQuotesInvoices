@@ -707,9 +707,14 @@
                         var collection = $('#' + that.data('collection')).find('.' + that.data('collection') + '-collection');
                         var settings = collection.data('collection-settings');
                         if (undefined === settings) {
-                            throw "Can't find collection: " + that.data('collection');
+                            var collection = $('#' + that.data('collectionElement')).parent();
+                            var settings = collection.data('collection-settings');
+                            if (undefined === settings) {
+                                throw "Can't find collection: " + that.data('collection');
+                            }
                         }
                     }
+
 
                     var elements = collection.find(settings.elements_selector);
                     var element = that.data(settings.prefix + '-element') ? $('#' + that.data(settings.prefix + '-element')) : undefined;

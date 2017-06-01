@@ -4,20 +4,23 @@
     <h1>Quote creation</h1>
 
     {{ form_start(form) }}
-    {% form_theme form with [
-        'form/jquery.collection.html.twig',
+    {% form_theme form
         'bootstrap_3_layout.html.twig'
-    ] %}
+        'form/jquery.collection.html.twig'
+        _self
+    %}
 
     <h3>Sections</h3>
-    <ul class="sections" data-prototype="{{ form_widget(form.sections.vars.prototype)|e('html_attr') }}">
-        {# iterate over each existing section and render its only field: name #}
-        {% for section in form.sections%}
-            <li>{{ form_row(section.name) }}</li>
-        {% endfor %}
-    </ul>
+    <div class="sections" data-prototype="{{ form_widget(form.sections.vars.prototype)|e('html_attr') }}">
+        {{ form_widget(form.sections) }}
+    </div>
 
-    {{ form_widget(form) }}
+    <h3>Other fields</h3>
+    {{ form_row(form.projectId) }}
+    {{ form_row(form.customerId) }}
+    {{ form_row(form.description) }}
+
+    <h3>The rest</h3>
         <input type="submit" value="Create" />
     {{ form_end(form) }}
 
@@ -34,6 +37,35 @@
     <script src="{{ asset('js/jquery.collection.js') }}"></script>
 
     <script type="text/javascript">
-        $('.my-selector').collection();
+        $('.sections').collection({
+            prototype_name: '{{ form.sections.vars.prototype.vars.name }}',
+            allow_add: true,
+            allow_remove: true,
+            name_prefix: '{{ form.sections.vars.full_name }}',
+            fade_in: true,
+            fade_out: true,
+            drag_drop: true
+        });
     </script>
 {% endblock %}
+
+{% block _appbundle_quote_sections_widget %}
+    {% for section in form %}
+        {{ form_widget(section) }}
+        <hr>
+    {% endfor %}
+{% endblock %}
+
+    {% block _appbundle_quote_sections_entry_widget %}
+        <div class="row">
+            <div class="col-md-8">
+                {{ form_row(form.title) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(form.rate) }}
+            </div>
+            <div class="col-md-2">
+                <div class="collection-actions"></div>
+            </div>
+        </div>
+    {% endblock %}

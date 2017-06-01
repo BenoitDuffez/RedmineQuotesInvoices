@@ -2,10 +2,11 @@
 
 namespace AppBundle\Form;
 
+use Doctrine\DBAL\Types\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,6 +25,8 @@ class QuoteType extends AbstractType
 				$choices[$customer['name']] = $customer['id'];
 			}
 			$builder->add('customerId', ChoiceType::class, ['choices' => $choices]);
+		} else {
+			$builder->add('customerId', HiddenType::class);
 		}
 		if (isset($options['projects_choices'])) {
 			$choices = [];
@@ -31,6 +34,8 @@ class QuoteType extends AbstractType
 				$choices[$project['name']] = $project['id'];
 			}
 			$builder->add('projectId', ChoiceType::class, ['choices' => $options['projects_choices']]);
+		} else {
+			$builder->add('projectId', HiddenType::class);
 		}
         $builder
 			//->add('title')
@@ -44,7 +49,7 @@ class QuoteType extends AbstractType
 				'allow_delete' => true,
 				'prototype' => true,
 				'attr' => array(
-					'class' => 'my-selector',
+					'class' => 'sections'
 				),
 				'by_reference' => false,
 			]);
