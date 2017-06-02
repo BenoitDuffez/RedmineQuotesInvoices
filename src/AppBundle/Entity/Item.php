@@ -36,13 +36,19 @@ class Item
     private $hours;
 
     /**
-     * @var int
+     * @var Section
      *
 	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Section",inversedBy="items")
      * @ORM\JoinColumn(name="section_id", referencedColumnName="id")
      */
     private $section;
 
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="description", type="text")
+	 */
+	private $description;
 
     /**
      * Get id
@@ -105,7 +111,7 @@ class Item
     /**
      * Set section
      *
-     * @param \stdClass $section
+     * @param Section $section
      *
      * @return Item
      */
@@ -119,11 +125,34 @@ class Item
     /**
      * Get section
      *
-     * @return \stdClass
+     * @return Section
      */
     public function getSection()
     {
         return $this->section;
     }
-}
 
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Item
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+}
