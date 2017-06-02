@@ -2,11 +2,11 @@
 
 namespace AppBundle\Form;
 
-use Doctrine\DBAL\Types\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -33,7 +33,10 @@ class QuoteType extends AbstractType
 			foreach ($options['projects_choices'] as $project) {
 				$choices[$project['name']] = $project['id'];
 			}
-			$builder->add('projectId', ChoiceType::class, ['choices' => $options['projects_choices']]);
+			$builder->add('projectId', ChoiceType::class, [
+				'choices' => $options['projects_choices'],
+				'label' => 'Target project',
+			]);
 		} else {
 			$builder->add('projectId', HiddenType::class);
 		}
@@ -42,9 +45,21 @@ class QuoteType extends AbstractType
 			//->add('dateCreation')
 			//->add('dateEdition')
 			//->add('pdfPath')
-			->add('description')
+			->add('description', TextareaType::class, [
+				'label' => 'Global quote description',
+			])
 			->add('sections', CollectionType::class, [
 				'entry_type' => SectionType::class,
+				'entry_options'  => array(
+					'entry_type'     => ItemType::class,
+					'allow_add'      => true,
+					'allow_delete'   => true,
+					'prototype'      => true,
+					'prototype_name' => '__children_name__',
+					'attr'           => array(
+						'class' => "items",
+					),
+				),
 				'allow_add' => true,
 				'allow_delete' => true,
 				'prototype' => true,

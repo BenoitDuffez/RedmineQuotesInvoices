@@ -4,6 +4,7 @@ namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,10 +18,12 @@ class ItemType extends AbstractType
         $builder
 			->add('hours')
 			->add('section')
-			->add('description')
+			->add('description', TextareaType::class, [
+				'attr' => ['rows' => '4']
+			])
 			->add('position', HiddenType::class, [
 				'attr' => [
-					'class' => 'section-position',
+					'class' => 'item-position',
 				],
 			]);
     }

@@ -5,23 +5,32 @@
 
     {{ form_start(form) }}
     {% form_theme form
+        _self
         'bootstrap_3_layout.html.twig'
         'form/jquery.collection.html.twig'
-        _self
     %}
 
+    <h3>General information</h3>
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.projectId) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.customerId) }}
+            {{ form_row(form.description) }}
+        </div>
+    </div>
+
     <h3>Sections</h3>
-    <div class="sections" data-prototype="{{ form_widget(form.sections.vars.prototype)|e('html_attr') }}">
+    <div id="sections">
         {{ form_widget(form.sections) }}
     </div>
 
-    <h3>Other fields</h3>
-    {{ form_row(form.projectId) }}
-    {{ form_row(form.customerId) }}
-    {{ form_row(form.description) }}
+    <div class="row">
+        <div class="col-md-11"></div>
+        <div class="col-md-1"><input type="submit" value="Create" /></div>
+    </div>
 
-    <h3>The rest</h3>
-        <input type="submit" value="Create" />
     {{ form_end(form) }}
 
     <ul>
@@ -37,41 +46,61 @@
     <script src="{{ asset('js/jquery.collection.js') }}"></script>
 
     <script type="text/javascript">
-        $('.sections').collection({
-            prototype_name: '{{ form.sections.vars.prototype.vars.name }}',
+        $('.sections-collection').collection({
+            {#prototype_name: '{{ form.sections.vars.prototype.vars.name }}',#}
+            name_prefix: '{{ form.sections.vars.full_name }}',
             allow_add: true,
             allow_remove: true,
-            name_prefix: '{{ form.sections.vars.full_name }}',
+            add_at_the_end: true,
             fade_in: true,
             fade_out: true,
-            drag_drop: true
+            prefix: 'sections',
+            up: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-arrow-up"></span> Move section up</a>',
+            down: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-arrow-down"></span> Move section down</a>',
+            add: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Add section</a>',
+            remove: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> Remove section</a>',
+            drag_drop: true,
+            children: [{
+                selector: '.items',
+                name_prefix: '{{ form.sections.vars.prototype.items.vars.full_name }}',
+                up: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-arrow-up"></span></a>',
+                down: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-arrow-down"></span></a>',
+                add: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus-sign"> Add new item in this section</span></a>',
+                remove: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span></a>',
+                add_at_the_end: true,
+                prefix: 'items'
+            }]
         });
     </script>
 {% endblock %}
 
 {# This prevents the "0", "1", ... label from being printed before each section #}
 {% block _appbundle_quote_sections_widget %}
-    {% for section in form %}
-        {{ form_widget(section) }} {# print only the widget, not the label #}
-        <hr>
-    {% endfor %}
+    <div id="form_sections" class="sections-collection" data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}">
+        {% for section in form %}
+            {{ form_widget(section) }} {# print only the widget, not the label #}
+        {% endfor %}
+    </div>
 {% endblock %}
 
 {% block _appbundle_quote_sections_entry_widget %}
-    <div class="row">
+    <div id="form_sections_{{ name }}" class="row with-3d-shadow" style="box-shadow: 5px 5px 10px #999; background: #eee; padding: 1em 0 0 1em;">
         <div class="col-md-2">
             {{ form_row(form.title) }}
             {{ form_row(form.rate) }}
-            <div class="collection-actions"></div>
+            <div class="sections-actions" style="padding-bottom: 1em;"></div>
         </div>
-        {{ form_widget(form.items) }}
+        <div class="col-md-10 items" id="form_sections_{{ name }}_items" data-prototype="{{ form_widget(form.items.vars.prototype)|e('html_attr') }}">
+            {{ form_widget(form.items) }}
+        </div>
     </div>
+    <hr>
 {% endblock %}
 
 {# This prevents the "0", "1", ... label from being printed before each section item #}
 {% block _appbundle_quote_sections_entry_items_widget %}
     {% for item in form %}
-        <div class="col-md-10" style="background: {{ loop.index0 is even ? "#eee" : "#ddd" }}">
+        <div style="background: {{ loop.index0 is even ? "#eee" : "#ddd" }}">
             {{ form_widget(item) }} {# print only the widget, not the label #}
         </div>
     {% endfor %}
@@ -80,6 +109,9 @@
 {% block _appbundle_quote_sections_entry_items_entry_widget %}
     <div class="row">
         <div class="col-xs-10">{{ form_row(form.description) }}</div>
-        <div class="col-xs-2">{{ form_row(form.hours) }}</div>
+        <div class="col-xs-2">
+            {{ form_row(form.hours) }}
+            <div class="items-actions"></div>
+        </div>
     </div>
 {% endblock %}

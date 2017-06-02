@@ -2,11 +2,9 @@
 
 namespace AppBundle\Form;
 
-use function Sodium\add;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -23,12 +21,17 @@ class SectionType extends AbstractType
 			->add('title')
 			->add('rate')
 			//->add('quote')
-        	->add('items', CollectionType::class, [
-        		'entry_type' => ItemType::class
+			->add('items', CollectionType::class, [
+        		'entry_type' => ItemType::class,
+				'allow_add' => true,
+				'allow_delete' => true,
+				'prototype' => true,
+				'attr' => [ 'class' => 'items' ],
+				'by_reference' => false,
 			])
 			->add('position', HiddenType::class, [
 				'attr' => [
-					'class' => 'my-position',
+					'class' => 'section-position',
 				],
 			]);
     }
@@ -39,7 +42,15 @@ class SectionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Section'
+            'data_class' => 'AppBundle\Entity\Section',
+            'allow_add' => false,
+            'allow_delete' => false,
+            'prototype' => true,
+            'prototype_data' => null,
+            'prototype_name' => '__name__',
+            'entry_type' => __NAMESPACE__.'\ItemType',
+            'entry_options' => array(),
+            'delete_empty' => false,
         ));
     }
 
