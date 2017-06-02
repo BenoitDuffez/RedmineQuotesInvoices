@@ -49,23 +49,37 @@
     </script>
 {% endblock %}
 
+{# This prevents the "0", "1", ... label from being printed before each section #}
 {% block _appbundle_quote_sections_widget %}
     {% for section in form %}
-        {{ form_widget(section) }}
+        {{ form_widget(section) }} {# print only the widget, not the label #}
         <hr>
     {% endfor %}
 {% endblock %}
 
-    {% block _appbundle_quote_sections_entry_widget %}
-        <div class="row">
-            <div class="col-md-8">
-                {{ form_row(form.title) }}
-            </div>
-            <div class="col-md-2">
-                {{ form_row(form.rate) }}
-            </div>
-            <div class="col-md-2">
-                <div class="collection-actions"></div>
-            </div>
+{% block _appbundle_quote_sections_entry_widget %}
+    <div class="row">
+        <div class="col-md-2">
+            {{ form_row(form.title) }}
+            {{ form_row(form.rate) }}
+            <div class="collection-actions"></div>
         </div>
-    {% endblock %}
+        {{ form_widget(form.items) }}
+    </div>
+{% endblock %}
+
+{# This prevents the "0", "1", ... label from being printed before each section item #}
+{% block _appbundle_quote_sections_entry_items_widget %}
+    {% for item in form %}
+        <div class="col-md-10" style="background: {{ loop.index0 is even ? "#eee" : "#ddd" }}">
+            {{ form_widget(item) }} {# print only the widget, not the label #}
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block _appbundle_quote_sections_entry_items_entry_widget %}
+    <div class="row">
+        <div class="col-xs-10">Description de l'item</div>
+        <div class="col-xs-2">{{ form_row(form.hours) }}</div>
+    </div>
+{% endblock %}
