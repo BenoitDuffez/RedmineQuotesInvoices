@@ -17,6 +17,7 @@ class ItemType extends AbstractType
         $builder
 			->add('hours')
 			->add('section')
+			->add('description')
 			->add('position', HiddenType::class, [
 				'attr' => [
 					'class' => 'section-position',
