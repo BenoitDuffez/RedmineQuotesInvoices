@@ -40,10 +40,15 @@
     </ul>
 {% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+{% endblock %}
+
 {% block javascripts %}
     <script type="application/javascript" src="{{ asset('js/quote.form.js') }}"></script>
 
     <script src="{{ asset('js/jquery.collection.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
 
     <script type="text/javascript">
         $('.sections-collection').collection({
@@ -55,16 +60,16 @@
             fade_in: true,
             fade_out: true,
             prefix: 'sections',
-            up: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-arrow-up"></span> Move section up</a>',
-            down: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-arrow-down"></span> Move section down</a>',
+            up: '',
+            down: '',
             add: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Add section</a>',
             remove: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> Remove section</a>',
             drag_drop: true,
             children: [{
                 selector: '.items',
                 name_prefix: '{{ form.sections.vars.prototype.items.vars.full_name }}',
-                up: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-arrow-up"></span></a>',
-                down: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-arrow-down"></span></a>',
+                up: '',
+                down: '',
                 add: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus-sign"> Add new item in this section</span></a>',
                 remove: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span></a>',
                 add_at_the_end: true,
@@ -100,7 +105,7 @@
 {# This prevents the "0", "1", ... label from being printed before each section item #}
 {% block _appbundle_quote_sections_entry_items_widget %}
     {% for item in form %}
-        <div style="background: {{ loop.index0 is even ? "#eee" : "#ddd" }}">
+        <div class="form-group ui-sortable-handle" style="background: {{ loop.index0 is even ? "#eee" : "#ddd" }}">
             {{ form_widget(item) }} {# print only the widget, not the label #}
         </div>
     {% endfor %}
