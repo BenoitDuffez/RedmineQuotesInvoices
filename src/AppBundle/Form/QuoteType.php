@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,15 +20,7 @@ class QuoteType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-		if (isset($options['customers_choices'])) {
-			$choices = [];
-			foreach ($options['customers_choices'] as $customer) {
-				$choices[$customer['name']] = $customer['id'];
-			}
-			$builder->add('customerId', ChoiceType::class, ['choices' => $choices]);
-		} else {
-			$builder->add('customerId', HiddenType::class);
-		}
+    	// List of projects, if provided
 		if (isset($options['projects_choices'])) {
 			$choices = [];
 			foreach ($options['projects_choices'] as $project) {
@@ -40,15 +33,27 @@ class QuoteType extends AbstractType
 		} else {
 			$builder->add('projectId', HiddenType::class);
 		}
-        $builder
-			//->add('title')
-			//->add('dateCreation')
-			//->add('dateEdition')
-			//->add('pdfPath')
-			->add('description', TextareaType::class, [
+
+    	// List of customers, if provided
+		if (isset($options['customers_choices'])) {
+			$choices = [];
+			foreach ($options['customers_choices'] as $customer) {
+				$choices[$customer['name']] = $customer['id'];
+			}
+			$builder->add('customerId', ChoiceType::class, ['choices' => $choices]);
+		} else {
+			$builder->add('customerId', HiddenType::class);
+		}
+
+		$showSections = isset($options['customers_choices']);
+
+        $builder->add('description', TextareaType::class, [
 				'label' => 'Global quote description',
-			])
-			->add('sections', CollectionType::class, [
+				'required' => false,
+			]);
+
+		if ($showSections) {
+			$builder->add('sections', CollectionType::class, [
 				'entry_type' => SectionType::class,
 				'entry_options'  => array(
 					'entry_type'     => ItemType::class,
@@ -68,8 +73,18 @@ class QuoteType extends AbstractType
 				),
 				'by_reference' => false,
 			]);
+    	} else {
+			$builder->add('sections', CollectionType::class);
+		}
+
+		// Submit buttons
+		if ($showSections) {
+			$builder->add('next', SubmitType::class, ['label' => 'Create quote']);
+		} else {
+			$builder->add('submit', SubmitType::class, ['label' => 'Next']);
+		}
     }
-    
+
     /**
      * {@inheritdoc}
      */

@@ -14,6 +14,9 @@
     <div class="row">
         <div class="col-md-6">
             {{ form_row(form.projectId) }}
+            {% if project is not null %}
+                {{ dump(project) }}
+            {% endif %}
         </div>
         <div class="col-md-6">
             {{ form_row(form.customerId) }}
@@ -21,15 +24,14 @@
         </div>
     </div>
 
-    <h3>Sections</h3>
-    <div id="sections">
-        {{ form_widget(form.sections) }}
-    </div>
-
-    <div class="row">
-        <div class="col-md-11"></div>
-        <div class="col-md-1"><input type="submit" value="Create" /></div>
-    </div>
+    {% if project is not null %}
+        <h3>Sections</h3>
+        <div id="sections">
+            {{ form_widget(form.sections) }}
+        </div>
+    {% else %}
+        {{ form_widget(form.sections, {'attr': {'hidden': true}}) }}
+    {% endif %}
 
     {{ form_end(form) }}
 
@@ -45,47 +47,51 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script type="application/javascript" src="{{ asset('js/quote.form.js') }}"></script>
+    {% if project is not null %}
+        <script type="application/javascript" src="{{ asset('js/quote.form.js') }}"></script>
 
-    <script src="{{ asset('js/jquery.collection.js') }}"></script>
-    <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.collection.js') }}"></script>
+        <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
 
-    <script type="text/javascript">
-        $('.sections-collection').collection({
-            {#prototype_name: '{{ form.sections.vars.prototype.vars.name }}',#}
-            name_prefix: '{{ form.sections.vars.full_name }}',
-            allow_add: true,
-            allow_remove: true,
-            add_at_the_end: true,
-            fade_in: true,
-            fade_out: true,
-            prefix: 'sections',
-            up: '',
-            down: '',
-            add: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Add section</a>',
-            remove: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> Remove section</a>',
-            drag_drop: true,
-            children: [{
-                selector: '.items',
-                name_prefix: '{{ form.sections.vars.prototype.items.vars.full_name }}',
+        <script type="text/javascript">
+            $('.sections-collection').collection({
+                {#prototype_name: '{{ form.sections.vars.prototype.vars.name }}',#}
+                name_prefix: '{{ form.sections.vars.full_name }}',
+                allow_add: true,
+                allow_remove: true,
+                add_at_the_end: true,
+                fade_in: true,
+                fade_out: true,
+                prefix: 'sections',
                 up: '',
                 down: '',
-                add: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus-sign"> Add new item in this section</span></a>',
-                remove: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span></a>',
-                add_at_the_end: true,
-                prefix: 'items'
-            }]
-        });
-    </script>
+                add: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Add section</a>',
+                remove: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> Remove section</a>',
+                drag_drop: true,
+                children: [{
+                    selector: '.items',
+                    name_prefix: '{{ form.sections.vars.prototype.items.vars.full_name }}',
+                    up: '',
+                    down: '',
+                    add: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus-sign"> Add new item in this section</span></a>',
+                    remove: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span></a>',
+                    add_at_the_end: true,
+                    prefix: 'items'
+                }]
+            });
+        </script>
+    {% endif %}
 {% endblock %}
 
 {# This prevents the "0", "1", ... label from being printed before each section #}
 {% block _appbundle_quote_sections_widget %}
-    <div id="form_sections" class="sections-collection" data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}">
-        {% for section in form %}
-            {{ form_widget(section) }} {# print only the widget, not the label #}
-        {% endfor %}
-    </div>
+    {% if form.vars.prototype is defined %}
+        <div id="form_sections" class="sections-collection" data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}">
+            {% for section in form %}
+                {{ form_widget(section) }} {# print only the widget, not the label #}
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block _appbundle_quote_sections_entry_widget %}

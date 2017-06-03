@@ -43,6 +43,7 @@ class QuoteController extends Controller
     public function newAction(Request $request)
     {
     	$options = [];
+    	$project = null;
 
         $redmine = new Client('https://projects.upactivity.com', '0f3be55b17af11b80c7331db4b6aea3f68a5f4ba');
         $projectsList = $redmine->project->all(['limit' => 1000]);
@@ -60,6 +61,7 @@ class QuoteController extends Controller
 
 		$customers = null;
         if ($quote->getProjectId() > 0) {
+			$project = $redmine->project->show($quote->getProjectId());
             $memberships = $redmine->membership->all($quote->getProjectId(), ['limit' => 1000]);
 			if ($memberships != null && isset($memberships['memberships'])) {
             	$customers = [];
@@ -84,6 +86,7 @@ class QuoteController extends Controller
         return $this->render('quote/new.html.twig', array(
             'quote' => $quote,
             'form' => $form->createView(),
+			'project' => $project,
         ));
     }
 
