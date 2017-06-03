@@ -34,7 +34,10 @@ class QuoteType extends AbstractType
 			$builder->add('projectId', HiddenType::class);
 		}
 
-		$builder->add('customerId', ChoiceType::class);
+		$builder->add('customerId', ChoiceType::class, [
+			'required' => false
+		]);
+		$builder->get('customerId')->resetViewTransformers();
 
         $builder->add('description', TextareaType::class, [
 				'label' => 'Global quote description',
