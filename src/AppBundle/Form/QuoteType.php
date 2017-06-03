@@ -34,55 +34,36 @@ class QuoteType extends AbstractType
 			$builder->add('projectId', HiddenType::class);
 		}
 
-    	// List of customers, if provided
-		if (isset($options['customers_choices'])) {
-			$choices = [];
-			foreach ($options['customers_choices'] as $customer) {
-				$choices[$customer['name']] = $customer['id'];
-			}
-			$builder->add('customerId', ChoiceType::class, ['choices' => $choices]);
-		} else {
-			$builder->add('customerId', HiddenType::class);
-		}
-
-		$showSections = isset($options['customers_choices']);
+		$builder->add('customerId', ChoiceType::class);
 
         $builder->add('description', TextareaType::class, [
 				'label' => 'Global quote description',
 				'required' => false,
 			]);
 
-		if ($showSections) {
-			$builder->add('sections', CollectionType::class, [
-				'entry_type' => SectionType::class,
-				'entry_options'  => array(
-					'entry_type'     => ItemType::class,
-					'allow_add'      => true,
-					'allow_delete'   => true,
-					'prototype'      => true,
-					'prototype_name' => '__children_name__',
-					'attr'           => array(
-						'class' => "items",
-					),
+		$builder->add('sections', CollectionType::class, [
+			'entry_type' => SectionType::class,
+			'entry_options'  => array(
+				'entry_type'     => ItemType::class,
+				'allow_add'      => true,
+				'allow_delete'   => true,
+				'prototype'      => true,
+				'prototype_name' => '__children_name__',
+				'attr'           => array(
+					'class' => "items",
 				),
-				'allow_add' => true,
-				'allow_delete' => true,
-				'prototype' => true,
-				'attr' => array(
-					'class' => 'sections'
-				),
-				'by_reference' => false,
-			]);
-    	} else {
-			$builder->add('sections', CollectionType::class);
-		}
+			),
+			'allow_add' => true,
+			'allow_delete' => true,
+			'prototype' => true,
+			'attr' => array(
+				'class' => 'sections'
+			),
+			'by_reference' => false,
+		]);
 
-		// Submit buttons
-		if ($showSections) {
-			$builder->add('next', SubmitType::class, ['label' => 'Create quote']);
-		} else {
-			$builder->add('submit', SubmitType::class, ['label' => 'Next']);
-		}
+		// Submit button
+		$builder->add('submit', SubmitType::class, ['label' => 'Create quote']);
     }
 
     /**

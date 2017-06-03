@@ -49,16 +49,54 @@ function addSectionForm($collectionHolder, $newLinkLi) {
  */
 function onCustomerSelected(select, baseUrl) {
     var userId = $(select[0].selectedOptions[0]).val();
-    $.getJSON(baseUrl + '/' + userId, function(user) {
-        if (user === undefined || user.user === undefined) {
+    $.getJSON(baseUrl + '/' + userId, function(result) {
+        if (result === undefined || result.user === undefined) {
             return;
         }
-        $.each(user.user.custom_fields, function(i, customField){
-           if ("siret" === customField.name) {
+
+        $('#sections_container').show(250);
+        $('#customer_info').show(250);
+        $.each(result.user.custom_fields, function(i, customField){
+            if ("siret" === customField.name) {
                 $('#siret').html(customField.value)
-           } else if ("address" === customField.name) {
+            } else if ("address" === customField.name) {
                 $('#address').html(customField.value)
-           }
+            }
         });
+    });
+}
+
+/**
+ * When the customer select is updated: trigger customer details UI update
+ */
+function onProjectSelected(select, baseUrl, customersSelector) {
+    var projectId = $(select[0].selectedOptions[0]).val();
+    $.getJSON(baseUrl + '/' + projectId, function(result) {
+        if (result === undefined) {
+            return;
+        }
+
+        // Show project info
+        if (result.project !== undefined) {
+            $('#project_info').show(250);
+            var link = $('#project_name');
+            link.html(result.project.name);
+            link.attr('href', link.data('redmine-url') + '/projects/' + result.project.identifier);
+        }
+
+        // Fill customers select (filter by role)
+        $.each(result.memberships, function (i, membership) {
+            $.each(membership.roles, function(j, role) {
+                if (role.id === 5) { //customers
+                    $('<option/>')
+                        .val(membership.user.id)
+                        .html(membership.user.name)
+                        .appendTo($(customersSelector));
+                    $(customersSelector).val(membership.user.id).change();
+                    return false;
+                }
+            });
+        });
+        $(customersSelector).prop('disabled', false);
     });
 }

@@ -51,6 +51,24 @@ class QuoteController extends Controller
 	}
 
 	/**
+	 * Get the list of customers in a project
+	 *
+	 * @Route("/customer-list/{projectId}", name="customer_list", defaults={"projectId": 0}))
+	 * @Method("GET")
+	 * @param $projectId string Redmine project identifier (ID or string)
+	 * @return JsonResponse
+	 */
+	public function customerInProjectAction($projectId) {
+		$redmine = new Client(self::REDMINE_URL, '0f3be55b17af11b80c7331db4b6aea3f68a5f4ba');
+		$data = array_merge(
+			$redmine->membership->all($projectId, ['limit' => 1000]),
+			$redmine->project->show($projectId)
+		);
+		$response = new JsonResponse($data);
+		return $response;
+	}
+
+	/**
 	 * Creates a new quote entity.
 	 *
 	 * @Route("/new", name="quote_new")
@@ -77,23 +95,7 @@ class QuoteController extends Controller
         $form = $this->createForm('AppBundle\Form\QuoteType', $quote, $options);
         $form->handleRequest($request);
 
-		$customers = null;
-        if ($quote->getProjectId() > 0) {
-			$project = $redmine->project->show($quote->getProjectId())['project'];
-            $memberships = $redmine->membership->all($quote->getProjectId(), ['limit' => 1000]);
-			if ($memberships != null && isset($memberships['memberships'])) {
-            	$customers = [];
-				foreach ($memberships['memberships'] as $membership) {
-					$customers[] = $membership['user'];
-				}
-            }
-        }
-
-		if ($customers != null) {
-			$form = $this->createForm('AppBundle\Form\QuoteType', $quote, ['customers_choices' => $customers]);
-		}
-
-		if ($form->isSubmitted() && $form->isValid() && $form->get('save')->isClicked()) {
+		if ($form->isSubmitted() && $form->isValid()) {
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($quote);
 			$em->flush();
@@ -104,7 +106,6 @@ class QuoteController extends Controller
         return $this->render('quote/new.html.twig', array(
             'quote' => $quote,
             'form' => $form->createView(),
-			'project' => $project,
 			'redmineUrl' => self::REDMINE_URL,
         ));
     }
