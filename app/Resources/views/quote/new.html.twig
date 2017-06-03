@@ -10,12 +10,22 @@
         'form/jquery.collection.html.twig'
     %}
 
-    <h3>General information</h3>
+    <h2>General information</h2>
     <div class="row">
         <div class="col-md-6">
             {{ form_row(form.projectId) }}
             {% if project is not null %}
-                {{ dump(project) }}
+                <h3><a href="{{ redmineUrl }}/projects/{{ project['identifier'] }}">{{ project['name'] }}</a></h3>
+                <p>{{ project['description'] }}</p>
+                <hr>
+                <p>
+                    <strong>SIRET:</strong><br />
+                    <pre id="siret"></pre>
+                </p>
+                <p>
+                    <strong>Address:</strong><br />
+                    <pre id="address"></pre>
+                </p>
             {% endif %}
         </div>
         <div class="col-md-6">
@@ -25,13 +35,15 @@
     </div>
 
     {% if project is not null %}
-        <h3>Sections</h3>
+        <h2>Sections</h2>
         <div id="sections">
             {{ form_widget(form.sections) }}
         </div>
     {% else %}
         {{ form_widget(form.sections, {'attr': {'hidden': true}}) }}
     {% endif %}
+
+    <hr />
 
     {{ form_end(form) }}
 
@@ -54,6 +66,10 @@
         <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
 
         <script type="text/javascript">
+            $(document).on('change', 'select#{{ form.customerId.vars.id }}', function() {
+                onCustomerSelected($(this), '{{ path('customer_info') }}');
+            });
+
             $('.sections-collection').collection({
                 {#prototype_name: '{{ form.sections.vars.prototype.vars.name }}',#}
                 name_prefix: '{{ form.sections.vars.full_name }}',

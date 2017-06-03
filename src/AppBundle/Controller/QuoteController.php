@@ -5,7 +5,9 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Quote;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Redmine\Client;
 
 /**
@@ -15,7 +17,9 @@ use Redmine\Client;
  */
 class QuoteController extends Controller
 {
-    /**
+	const REDMINE_URL = 'https://projects.upactivity.com';
+
+	/**
      * Lists all quote entities.
      *
      * @Route("/", name="quote_index")
@@ -33,6 +37,20 @@ class QuoteController extends Controller
     }
 
 	/**
+	 * Get detailed information about one customer (plus custom fields)
+	 *
+	 * @Route("/customer-info/{userId}", name="customer_info", requirements={"userId": "\d+"}, defaults={"userId": 0}))
+	 * @Method("GET")
+	 * @param $userId integer Redmine user ID
+	 * @return JsonResponse
+	 */
+	public function customerInfoAction($userId) {
+		$redmine = new Client(self::REDMINE_URL, '0f3be55b17af11b80c7331db4b6aea3f68a5f4ba');
+		$response = new JsonResponse($redmine->user->show($userId, ['include' => ['custom_fields']]));
+		return $response;
+	}
+
+	/**
 	 * Creates a new quote entity.
 	 *
 	 * @Route("/new", name="quote_new")
@@ -45,7 +63,7 @@ class QuoteController extends Controller
     	$options = [];
     	$project = null;
 
-        $redmine = new Client('https://projects.upactivity.com', '0f3be55b17af11b80c7331db4b6aea3f68a5f4ba');
+        $redmine = new Client(self::REDMINE_URL, '0f3be55b17af11b80c7331db4b6aea3f68a5f4ba');
         $projectsList = $redmine->project->all(['limit' => 1000]);
 		if (isset($projectsList['projects'])) {
 			$projects = [];
@@ -61,7 +79,7 @@ class QuoteController extends Controller
 
 		$customers = null;
         if ($quote->getProjectId() > 0) {
-			$project = $redmine->project->show($quote->getProjectId());
+			$project = $redmine->project->show($quote->getProjectId())['project'];
             $memberships = $redmine->membership->all($quote->getProjectId(), ['limit' => 1000]);
 			if ($memberships != null && isset($memberships['memberships'])) {
             	$customers = [];
@@ -87,6 +105,7 @@ class QuoteController extends Controller
             'quote' => $quote,
             'form' => $form->createView(),
 			'project' => $project,
+			'redmineUrl' => self::REDMINE_URL,
         ));
     }
 

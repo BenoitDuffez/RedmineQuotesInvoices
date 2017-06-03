@@ -43,3 +43,22 @@ function addSectionForm($collectionHolder, $newLinkLi) {
     var $newFormLi = $('<li></li>').append(newForm);
     $newLinkLi.before($newFormLi);
 }
+
+/**
+ * When the customer select is updated: trigger customer details UI update
+ */
+function onCustomerSelected(select, baseUrl) {
+    var userId = $(select[0].selectedOptions[0]).val();
+    $.getJSON(baseUrl + '/' + userId, function(user) {
+        if (user === undefined || user.user === undefined) {
+            return;
+        }
+        $.each(user.user.custom_fields, function(i, customField){
+           if ("siret" === customField.name) {
+                $('#siret').html(customField.value)
+           } else if ("address" === customField.name) {
+                $('#address').html(customField.value)
+           }
+        });
+    });
+}
