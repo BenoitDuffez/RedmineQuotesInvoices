@@ -178,6 +178,7 @@ class Section
 
 	public function addItem(Item $item)
 	{
+		$item->setSection($this);
 		$this->items->add($item);
 		return $this;
 	}

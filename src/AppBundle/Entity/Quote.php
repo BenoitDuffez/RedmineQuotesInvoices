@@ -270,6 +270,7 @@ class Quote
     
 	public function addSection(Section $section)
 	{
+		$section->setQuote($this);
 		$this->sections->add($section);
 		return $this;
 	}
