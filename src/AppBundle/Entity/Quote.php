@@ -2,8 +2,10 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Controller\QuoteController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Redmine\Client;
 
 /**
  * Quote
@@ -13,6 +15,18 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Quote
 {
+	/**
+	 * Not a column. Some kind of singleton. Used to retrieve data from Redmine
+	 * @var Client
+	 */
+	private $redmine;
+
+	/**
+	 * Not a column. Some kind of singleton. Retrieved from Redmine with the customer ID (including the custom fields)
+	 * @var array
+	 */
+	private $customer;
+
     /**
      * @var int
      *
@@ -81,6 +95,19 @@ class Quote
 
 	public function __construct() {
 		$this->sections = new ArrayCollection();
+		$this->redmine = null;
+		$this->customer = null;
+	}
+
+	/**
+	 * Retrieve the Redmine client
+	 * @return Client
+	 */
+	private function getRedmineClient() {
+		if ($this->redmine == null) {
+			$this->redmine = new Client(QuoteController::REDMINE_URL, '0f3be55b17af11b80c7331db4b6aea3f68a5f4ba');
+		}
+		return $this->redmine;
 	}
 
 	/**
@@ -212,6 +239,59 @@ class Quote
     {
         return $this->customerId;
     }
+
+	/**
+	 * Retrieve the customer from Redmine based on $this->customerId
+	 * Asks for the custom fields too
+	 * @return array
+	 */
+    private function getCustomer() {
+		if ($this->customer == null) {
+			$this->customer = $this->getRedmineClient()->user->show($this->getCustomerId(), ['include' => ['custom_fields']]);
+		}
+		return $this->customer;
+	}
+
+	/**
+	 * Retrieve one field (native or custom) from the customer
+	 * @param $field
+	 * @return string
+	 */
+	public function getCustomerField($field) {
+		$customer = $this->getCustomer();
+		if ($customer == null || !isset($customer['user'])) {
+			return "";
+		}
+		if (isset($customer['user'][$field])) {
+			return $customer['user'][$field];
+		}
+		if (!is_array($customer['user']['custom_fields'])) {
+		return print_r($customer, true);
+		}
+		foreach ($customer['user']['custom_fields'] as $customField) {
+			if ($customField['name'] == $field) {
+				return $customField['value'];
+			}
+		}
+		return "";
+	}
+
+	/**
+	 * Get customer address
+	 * @return string
+	 */
+	public function getCustomerCompany() {
+		$customer = $this->getCustomer();
+		if ($customer == null || !isset($customer['user']) || !is_array($customer['user']['custom_fields'])) {
+			return "";
+		}
+		foreach ($customer['user']['custom_fields'] as $field) {
+			if ($field['name'] == 'address') {
+				return $field['value'];
+			}
+		}
+		return "";
+	}
 
     /**
      * Set projectId

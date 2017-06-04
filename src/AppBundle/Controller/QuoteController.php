@@ -96,7 +96,7 @@ class QuoteController extends Controller
         $form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
-			$quote->setTitle(sprintf("%s-%s-%s-%d", date('%Y'), $quote->getCustomerId(), $quote->getProjectId(), 0));
+			$quote->setTitle(sprintf("%d%03d%02d%02d", date('Y'), $quote->getCustomerId(), $quote->getProjectId(), 0));
 			$quote->setDescription(trim($quote->getDescription()));
 			$quote->setDateCreation(new \DateTime());
 
