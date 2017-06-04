@@ -188,5 +188,9 @@ class Section
 		$this->items->removeElement($item);
 		return $this;
 	}
+
+	public function __toString() {
+		return "SECTION LOL";
+	}
 }
 
