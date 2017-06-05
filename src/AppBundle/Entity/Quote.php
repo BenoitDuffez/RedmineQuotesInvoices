@@ -27,6 +27,12 @@ class Quote
 	 */
 	private $customer;
 
+	/**
+	 * Not a column. Some kind of singleton. Retrieved from Redmine with the project ID
+	 * @var array
+	 */
+	private $project;
+
     /**
      * @var int
      *
@@ -245,11 +251,22 @@ class Quote
 	 * Asks for the custom fields too
 	 * @return array
 	 */
-    private function getCustomer() {
+	private function getCustomer() {
 		if ($this->customer == null) {
 			$this->customer = $this->redmine->user->show($this->getCustomerId(), ['include' => ['custom_fields']]);
 		}
 		return $this->customer;
+	}
+
+	/**
+	 * Retrieve the project from Redmine based on $this->projectId
+	 * @return array
+	 */
+	private function getProject() {
+		if ($this->project == null) {
+			$this->project = $this->redmine->project->show($this->getProjectId());
+		}
+		return $this->project;
 	}
 
 	/**
@@ -266,7 +283,7 @@ class Quote
 			return $customer['user'][$field];
 		}
 		if (!is_array($customer['user']['custom_fields'])) {
-		return print_r($customer, true);
+			return print_r($customer, true);
 		}
 		foreach ($customer['user']['custom_fields'] as $customField) {
 			if ($customField['name'] == $field) {
@@ -276,19 +293,10 @@ class Quote
 		return "";
 	}
 
-	/**
-	 * Get customer address
-	 * @return string
-	 */
-	public function getCustomerCompany() {
-		$customer = $this->getCustomer();
-		if ($customer == null || !isset($customer['user']) || !is_array($customer['user']['custom_fields'])) {
-			return "";
-		}
-		foreach ($customer['user']['custom_fields'] as $field) {
-			if ($field['name'] == 'address') {
-				return $field['value'];
-			}
+	public function getProjectField($field) {
+		$project = $this->getProject();
+		if (is_array($project['project']) && isset($project['project'][$field])) {
+			return $project['project'][$field];
 		}
 		return "";
 	}

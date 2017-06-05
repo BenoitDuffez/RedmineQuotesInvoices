@@ -28,6 +28,9 @@ class QuoteController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $quotes = $em->getRepository('AppBundle:Quote')->findAll();
+		foreach ($quotes as $quote) {
+			$quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
+		}
 
         return $this->render('quote/index.html.twig', array(
             'quotes' => $quotes,
