@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Redmine\Client;
 
 /**
@@ -100,6 +101,49 @@ class QuoteController extends Controller
             'quote' => $quote,
             'delete_form' => $deleteForm->createView(),
         ));
+    }
+
+	/**
+	 * Finds and displays a quote entity.
+	 *
+	 * @Route("/{id}/pdf", name="quote_show_pdf")
+	 * @Method("GET")
+	 * @param Quote $quote Quote to display
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+    public function showPdfAction(Quote $quote)
+    {
+        $quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
+
+        $html = $this->renderView('quote/show_pdf.html.twig', ['quote' => $quote]);
+        $footer = $this->renderView('quote/pdf_footer.html.twig', ['quote' => $quote]);
+
+        $filename = sprintf("devis_%s.pdf", $quote->getTitle());
+
+        $snappy = $this->get('knp_snappy.pdf');
+        $snappy->setOption('footer-html', $footer);
+        return new Response(
+            $snappy->getOutputFromHtml($html),
+            200,
+            [
+                'Content-Type'        => 'application/pdf',
+                'Content-Disposition' => sprintf('attachment; filename="%s"', $filename),
+            ]
+        );
+    }
+
+	/**
+	 * Finds and displays a quote entity.
+	 *
+	 * @Route("/{id}/pdf/footer", name="pdf_footer")
+	 * @Method("GET")
+	 * @param Quote $quote Quote to display
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+    public function pdfFooterAction(Quote $quote)
+    {
+        $quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
+        return $this->render('quote/pdf_footer.html.twig', ['quote' => $quote]);
     }
 
     /**
