@@ -6,6 +6,7 @@ use AppBundle\Controller\QuoteController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Redmine\Client;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Quote
@@ -73,6 +74,8 @@ class Quote
     /**
      * @var int
      *
+	 * @Assert\NotEqualTo(value="0", message="Please select a customer")
+	 * @Assert\NotBlank()
      * @ORM\Column(name="customer_id", type="integer")
      */
     private $customerId;
