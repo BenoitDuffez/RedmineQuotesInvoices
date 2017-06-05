@@ -6,7 +6,6 @@ use AppBundle\Entity\Quote;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Redmine\Client;
 
@@ -17,8 +16,6 @@ use Redmine\Client;
  */
 class QuoteController extends Controller
 {
-	const REDMINE_URL = 'https://projects.upactivity.com';
-
 	/**
      * Lists all quote entities.
      *
@@ -49,7 +46,7 @@ class QuoteController extends Controller
     	$options = [];
     	$project = null;
 
-        $redmine = new Client(self::REDMINE_URL, '0f3be55b17af11b80c7331db4b6aea3f68a5f4ba');
+        $redmine = new Client($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
         $projectsList = $redmine->project->all(['limit' => 1000]);
 		if (isset($projectsList['projects'])) {
 			$projects = [];
@@ -82,18 +79,21 @@ class QuoteController extends Controller
         return $this->render('quote/new.html.twig', array(
             'quote' => $quote,
             'form' => $form->createView(),
-			'redmineUrl' => self::REDMINE_URL,
+			'redmine_url' => $this->getParameter('redmine_url'),
         ));
     }
 
-    /**
-     * Finds and displays a quote entity.
-     *
-     * @Route("/{id}", name="quote_show")
-     * @Method("GET")
-     */
+	/**
+	 * Finds and displays a quote entity.
+	 *
+	 * @Route("/{id}", name="quote_show")
+	 * @Method("GET")
+	 * @param Quote $quote Quote to display
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
     public function showAction(Quote $quote)
     {
+    	$quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
         $deleteForm = $this->createDeleteForm($quote);
 
         return $this->render('quote/show.html.twig', array(

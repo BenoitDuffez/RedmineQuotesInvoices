@@ -17,3 +17,7 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt
+
+    # Redmine credentials
+    redmine_url: 'https://server.com'
+    redmine_api_key: 'api_key'

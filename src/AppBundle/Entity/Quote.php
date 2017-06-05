@@ -100,14 +100,14 @@ class Quote
 	}
 
 	/**
-	 * Retrieve the Redmine client
-	 * @return Client
+	 * Init/create the redmine client
+	 * @param $url string Redmine URL
+	 * @param $apiKey string Redmine API key
 	 */
-	private function getRedmineClient() {
+	public function initRedmine($url, $apiKey) {
 		if ($this->redmine == null) {
-			$this->redmine = new Client(QuoteController::REDMINE_URL, '0f3be55b17af11b80c7331db4b6aea3f68a5f4ba');
+			$this->redmine = new Client($url, $apiKey);
 		}
-		return $this->redmine;
 	}
 
 	/**
@@ -247,7 +247,7 @@ class Quote
 	 */
     private function getCustomer() {
 		if ($this->customer == null) {
-			$this->customer = $this->getRedmineClient()->user->show($this->getCustomerId(), ['include' => ['custom_fields']]);
+			$this->customer = $this->redmine->user->show($this->getCustomerId(), ['include' => ['custom_fields']]);
 		}
 		return $this->customer;
 	}
