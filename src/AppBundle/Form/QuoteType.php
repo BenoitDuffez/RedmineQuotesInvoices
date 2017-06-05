@@ -67,7 +67,10 @@ class QuoteType extends AbstractType
 		]);
 
 		// Submit button
-		$builder->add('submit', SubmitType::class, ['label' => 'Create quote']);
+		$builder->add('submit', SubmitType::class, [
+			'label' => 'Create quote',
+			'attr' => [ 'class' => 'btn-lg btn-primary disabled' ],
+		]);
     }
 
     /**

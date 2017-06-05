@@ -56,6 +56,9 @@ function onCustomerSelected(select, baseUrl) {
 
         $('#sections_container').show(250);
         $('#customer_info').show(250);
+        $.each($('*[type=submit]'), function(i, input) {
+            $(input).removeClass('disabled');
+        });
         $.each(result.user.custom_fields, function(i, customField){
             if ("siret" === customField.name) {
                 $('#siret').html(customField.value)

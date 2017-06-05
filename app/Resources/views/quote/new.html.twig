@@ -47,6 +47,11 @@
 
     <hr />
 
+    <div class="row">
+        <div class="col-xs-12 text-right">
+            {{ form_widget(form.submit) }}
+        </div>
+    </div>
     {{ form_end(form) }}
 
     <ul>
@@ -80,34 +85,38 @@
             onCustomerSelected($(this), '{{ path('customer_info') }}');
         });
 
-        $('.sections').collection({
-            prototype_name: '{{ form.sections.vars.prototype.vars.name }}',
-            name_prefix: '{{ form.sections.vars.full_name }}',
-            allow_add: true,
-            allow_remove: true,
-            add_at_the_end: true,
+    $('.sections').collection({
+        prototype_name: '{{ form.sections.vars.prototype.vars.name }}',
+        name_prefix: '{{ form.sections.vars.full_name }}',
+        allow_add: true,
+        allow_remove: true,
+        add_at_the_end: true,
+        fade_in: true,
+        fade_out: true,
+        prefix: 'sections',
+        init_with_n_elements: 1,
+        up: '',
+        down: '',
+        add: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Add section</a>',
+        remove: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> Remove section</a>',
+        position_field_selector: '.section-position',
+        drag_drop: true,
+        children: [{
+            selector: '.items',
+            prototype_name: '{{  form.sections.vars.prototype.items.vars.prototype.vars.name }}',
+            name_prefix: '{{ form.sections.vars.prototype.items.vars.full_name }}',
+            init_with_n_elements: 1,
             fade_in: true,
             fade_out: true,
-            prefix: 'sections',
             up: '',
             down: '',
-            add: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Add section</a>',
-            remove: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> Remove section</a>',
-            position_field_selector: '.section-position',
-            drag_drop: true,
-            children: [{
-                selector: '.items',
-                prototype_name: '{{  form.sections.vars.prototype.items.vars.prototype.vars.name }}',
-                name_prefix: '{{ form.sections.vars.prototype.items.vars.full_name }}',
-                up: '',
-                down: '',
-                add: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus-sign"> Add new item in this section</span></a>',
-                remove: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span></a>',
-                position_field_selector: '.item-position',
-                add_at_the_end: true,
-                prefix: 'items'
-            }]
-        });
+            add: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus-sign"> Add new item in this section</span></a>',
+            remove: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span></a>',
+            position_field_selector: '.item-position',
+            add_at_the_end: true,
+            prefix: 'items'
+        }]
+    });
     </script>
 {% endblock %}
 
