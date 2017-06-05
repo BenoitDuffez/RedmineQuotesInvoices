@@ -46,7 +46,7 @@ class Section
     /**
      * @var int
      *
-	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Quote",inversedBy="sections")
+	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Quote", inversedBy="sections")
 	 * @ORM\JoinColumn(name="quote_id", referencedColumnName="id")
      */
     private $quote;
