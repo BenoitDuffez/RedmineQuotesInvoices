@@ -47,7 +47,7 @@ class SectionType extends AbstractType
             'allow_delete' => false,
             'prototype' => true,
             'prototype_data' => null,
-            'prototype_name' => '__name__',
+            'prototype_name' => '__item_name__',
             'entry_type' => __NAMESPACE__.'\ItemType',
             'entry_options' => array(),
             'delete_empty' => false,

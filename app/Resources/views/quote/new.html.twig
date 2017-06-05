@@ -80,8 +80,8 @@
             onCustomerSelected($(this), '{{ path('customer_info') }}');
         });
 
-        $('.sections-collection').collection({
-            {#prototype_name: '{{ form.sections.vars.prototype.vars.name }}',#}
+        $('.sections').collection({
+            prototype_name: '{{ form.sections.vars.prototype.vars.name }}',
             name_prefix: '{{ form.sections.vars.full_name }}',
             allow_add: true,
             allow_remove: true,
@@ -97,6 +97,7 @@
             drag_drop: true,
             children: [{
                 selector: '.items',
+                prototype_name: '{{  form.sections.vars.prototype.items.vars.prototype.vars.name }}',
                 name_prefix: '{{ form.sections.vars.prototype.items.vars.full_name }}',
                 up: '',
                 down: '',
@@ -113,7 +114,7 @@
 {# This prevents the "0", "1", ... label from being printed before each section #}
 {% block _appbundle_quote_sections_widget %}
     {% if form.vars.prototype is defined %}
-        <div id="form_sections" class="sections-collection" data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}">
+        <div id="{{ form.vars.id }}" class="sections" data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}">
             {% for section in form %}
                 {{ form_widget(section) }} {# print only the widget, not the label #}
             {% endfor %}
@@ -122,14 +123,14 @@
 {% endblock %}
 
 {% block _appbundle_quote_sections_entry_widget %}
-    <div id="form_sections_{{ name }}" class="row with-3d-shadow" style="box-shadow: 5px 5px 10px #999; background: #eee; padding: 1em 0 0 1em;">
+    <div id="{{ form.vars.id }}" class="row with-3d-shadow" style="box-shadow: 5px 5px 10px #999; background: #eee; padding: 1em 0 0 1em;">
         <div class="col-md-2">
             {{ form_row(form.title) }}
             {{ form_row(form.rate) }}
             {{ form_widget(form.position) }}
             <div class="sections-actions" style="padding-bottom: 1em;"></div>
         </div>
-        <div class="col-md-10 items" id="form_sections_{{ name }}_items" data-prototype="{{ form_widget(form.items.vars.prototype)|e('html_attr') }}">
+        <div class="col-md-10">
             {{ form_widget(form.items) }}
         </div>
     </div>
@@ -138,11 +139,15 @@
 
 {# This prevents the "0", "1", ... label from being printed before each section item #}
 {% block _appbundle_quote_sections_entry_items_widget %}
-    {% for item in form %}
-        <div class="form-group ui-sortable-handle" style="background: {{ loop.index0 is even ? "#eee" : "#ddd" }}">
-            {{ form_widget(item) }} {# print only the widget, not the label #}
+    {% if form.vars.prototype is defined %}
+        <div id="{{ form.vars.id }}" class="items" data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}">
+            {% for item in form %}
+                <div class="form-group ui-sortable-handle" style="background: {{ loop.index0 is even ? "#eee" : "#ddd" }}">
+                    {{ form_widget(item) }} {# print only the widget, not the label #}
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
+    {% endif %}
 {% endblock %}
 
 {% block _appbundle_quote_sections_entry_items_entry_widget %}

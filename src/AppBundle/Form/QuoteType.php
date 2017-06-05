@@ -51,14 +51,15 @@ class QuoteType extends AbstractType
 				'allow_add'      => true,
 				'allow_delete'   => true,
 				'prototype'      => true,
-				'prototype_name' => '__children_name__',
+				'prototype_name' => '__item_name__',
 				'attr'           => array(
-					'class' => "items",
+					'class' => 'items',
 				),
 			),
 			'allow_add' => true,
 			'allow_delete' => true,
 			'prototype' => true,
+			'prototype_name' => '__section_name__',
 			'attr' => array(
 				'class' => 'sections'
 			),
