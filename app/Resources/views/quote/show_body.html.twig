@@ -14,16 +14,14 @@
 {% endif %}
 
 <div class="row">
-    <div class="col-md-6">
-        <p>de</p>
+    <div class="col-lg-3">
         <div class="contact">Benoit Duffez
 18, allée du Léon
 35230 Bourgbarré
 
 SIRET: 53879565900035</div>
     </div>
-    <div class="col-md-6 right">
-        <p>pour</p>
+    <div class="col-lg-3 col-lg-offset-6 text-right">
         <div class="contact">{{ quote.customerField('firstname') }} {{ quote.customerField('lastname') }}
 {{ quote.customerField('company_name') }}
             {{ quote.customerField('address') }}
@@ -33,7 +31,7 @@ SIRET: 53879565900035</div>
 </div>
 
 <div class="row">
-    <div class="col-md-12 right">
+    <div class="col-md-12 text-right">
         {{ quote.dateEdition |date('d/m/Y') }}
     </div>
 </div>
@@ -44,7 +42,7 @@ SIRET: 53879565900035</div>
     <tr>
         <th>Section</th>
         <th>Désignation</th>
-        <th class="right">Total H.T.</th>
+        <th class="text-right">Total H.T.</th>
     </tr>
     </thead>
     <tbody>
@@ -77,16 +75,16 @@ SIRET: 53879565900035</div>
 
 <table class="table table-bordered">
     <tr>
-        <td>Total H.T.</td>
-        <td class="right">{{ "%d €" | format(quoteTotal) }}</td>
+        <td><h3>Total H.T.</h3></td>
+        <td class="text-right"><h3>{{ "%d €" | format(quoteTotal) }}</h3></td>
     </tr>
     <tr>
         <td>T.V.A. 0%, non applicable, article 293B du CGI</td>
-        <td class="right">{{ "%d €" | format(0) }}</td>
+        <td class="text-right">{{ "%d €" | format(0) }}</td>
     </tr>
     <tr>
         <th><h2>Net à payer</h2></th>
-        <th class="right"><h2>{{ "%d €" | format(quoteTotal) }}</h2></th>
+        <th class="text-right"><h2>{{ "%d €" | format(quoteTotal) }}</h2></th>
     </tr>
 </table>
 
