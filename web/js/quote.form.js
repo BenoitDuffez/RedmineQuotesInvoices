@@ -74,7 +74,11 @@ function onCustomerSelected(select, baseUrl) {
  */
 function onProjectSelected(select, baseUrl, customersSelector) {
     var projectId = $(select[0].selectedOptions[0]).val();
-    $.getJSON(baseUrl + '/' + projectId, function(result) {
+    loadProjectInfo(baseUrl + '/' + projectId, customersSelector);
+}
+
+function loadProjectInfo(url, customersSelector) {
+    $.getJSON(url, function(result) {
         if (result === undefined) {
             return;
         }

@@ -195,6 +195,7 @@ class QuoteController extends Controller
             'quote' => $quote,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+			'redmine_url' => $this->getParameter('redmine_url'),
         ));
     }
 
