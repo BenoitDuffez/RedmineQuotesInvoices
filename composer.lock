@@ -1385,16 +1385,16 @@
         },
         {
             "name": "ninsuo/symfony-collection",
-            "version": "2.1.2",
+            "version": "2.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ninsuo/symfony-collection.git",
-                "reference": "ee2908ce36f57cb9a278e00319fd321ab256b772"
+                "reference": "2c595a536fa58fcfc438389ffcd97c8651044820"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ninsuo/symfony-collection/zipball/ee2908ce36f57cb9a278e00319fd321ab256b772",
-                "reference": "ee2908ce36f57cb9a278e00319fd321ab256b772",
+                "url": "https://api.github.com/repos/ninsuo/symfony-collection/zipball/2c595a536fa58fcfc438389ffcd97c8651044820",
+                "reference": "2c595a536fa58fcfc438389ffcd97c8651044820",
                 "shasum": ""
             },
             "type": "library",
@@ -1409,7 +1409,7 @@
                 }
             ],
             "description": "A jQuery plugin that manages adding, deleting and moving elements from a Symfony collection",
-            "time": "2017-06-05T21:49:38+00:00"
+            "time": "2017-06-06T18:12:56+00:00"
         },
         {
             "name": "paragonie/random_compat",
