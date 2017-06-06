@@ -17,14 +17,15 @@
     <div class="col-md-6">
         <p>de</p>
         <div class="contact">Benoit Duffez
-            18, allée du Léon
-            35230 Bourgbarré
+18, allée du Léon
+35230 Bourgbarré
 
-            SIRET: 53879565900035</div>
+SIRET: 53879565900035</div>
     </div>
     <div class="col-md-6 right">
         <p>pour</p>
         <div class="contact">{{ quote.customerField('firstname') }} {{ quote.customerField('lastname') }}
+{{ quote.customerField('company_name') }}
             {{ quote.customerField('address') }}
 
             SIRET: {{ quote.customerField('siret') }}</div>
@@ -49,20 +50,26 @@
     <tbody>
     {% for section in quote.sections %}
         {% set sectionTotal = 0 %}
-        <tr>
-            <td>{{ section.title }}</td>
-            <td>
-                {% for item in section.items %}
+        {% for item in section.items %}
+            <tr>
+                {% if loop.index0 == 0 %}
+                    <td class="col-md-2" rowspan="{{ section.items | length }}">{{ section.title }}</td>
+                {% endif %}
+                <td class="col-md-8">
                     <div class="row">
                         <div class="col-md-12">
-                            {{ item.description }}
+                            {{ item.description | markdown }}
                             {% set sectionTotal = sectionTotal + item.hours * section.rate %}
                         </div>
                     </div>
-                {% endfor %}
-            </td>
-            <td class="right">{{ "%d €" | format(sectionTotal) }}</td>
-            {% set quoteTotal = quoteTotal + sectionTotal %}
+                </td>
+                <td class="right col-md-2">{{ "%d €" | format(item.hours * section.rate) }}</td>
+            </tr>
+        {% endfor %}
+        {% set quoteTotal = quoteTotal + sectionTotal %}
+        <tr>
+            <th class="col-md-10 right" colspan="2">Total</th>
+            <th class="right col-md-2">{{ "%d €" | format(sectionTotal) }}</th>
         </tr>
     {% endfor %}
     </tbody>

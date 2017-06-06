@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>{{ quote.title }}</title>
+        <title>{{ quote.title }} footer</title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -20,17 +20,20 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
         <style type="text/css">
-            body {
-            }
-            div.container > div.row {
-                padding-bottom: 1em;
+            .header {
+                text-align: center;
+                font-size: 0.7em;
             }
         </style>
-        {{ include(':quote:show_head.html.twig') }}
     </head>
     <body>
         <div class="container">
-            {{ include(':quote:show_body.html.twig') }}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="header">
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>

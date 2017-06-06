@@ -33,3 +33,12 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+
+    markdown.engine:
+        class: Aptoma\Twig\Extension\MarkdownEngine\MichelfMarkdownEngine
+    twig.markdown:
+        class: Aptoma\Twig\Extension\MarkdownExtension
+        arguments: ['@markdown.engine']
+        tags:
+            - { name: twig.extension }
+

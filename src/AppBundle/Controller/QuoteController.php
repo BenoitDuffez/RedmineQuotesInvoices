@@ -123,12 +123,18 @@ class QuoteController extends Controller
         $quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
 
         $html = $this->renderView('quote/show_pdf.html.twig', ['quote' => $quote]);
+        $header = $this->renderView('quote/pdf_header.html.twig', ['quote' => $quote]);
         $footer = $this->renderView('quote/pdf_footer.html.twig', ['quote' => $quote]);
 
         $filename = sprintf("devis_%s.pdf", $quote->getTitle());
 
         $snappy = $this->get('knp_snappy.pdf');
+        $snappy->setOption('header-html', $header);
         $snappy->setOption('footer-html', $footer);
+        $snappy->setOption('margin-top', 10);
+        $snappy->setOption('margin-bottom', 10);
+        $snappy->setOption('margin-left', 10);
+        $snappy->setOption('margin-right', 10);
         return new Response(
             $snappy->getOutputFromHtml($html),
             200,
@@ -151,6 +157,20 @@ class QuoteController extends Controller
     {
         $quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
         return $this->render('quote/pdf_footer.html.twig', ['quote' => $quote]);
+    }
+
+	/**
+	 * Finds and displays a quote entity.
+	 *
+	 * @Route("/{id}/pdf/header", name="pdf_header")
+	 * @Method("GET")
+	 * @param Quote $quote Quote to display
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+    public function pdfHeaderAction(Quote $quote)
+    {
+        $quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
+        return $this->render('quote/pdf_header.html.twig', ['quote' => $quote]);
     }
 
     /**
