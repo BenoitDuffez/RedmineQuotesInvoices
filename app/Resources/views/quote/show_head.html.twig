@@ -1,0 +1,34 @@
+<style type="text/css">
+    .contact {
+        white-space: pre;
+        padding: 1em;
+        margin: .5em;
+        line-height: normal;
+        border: 1px #666 solid;
+        background: #fafafa;
+    }
+    .table {
+        margin-top: 2em;
+    }
+
+    tr {
+        page-break-inside: avoid
+    }
+
+    @media all {
+        .private {
+            background: repeating-linear-gradient(
+                -45deg,
+                rgb(250, 190, 190),
+                rgb(250, 190, 190) 10px,
+                rgb(240, 150, 150) 10px,
+                rgb(240, 150, 150) 20px
+            );
+        }
+    }
+    @media print {
+        .private {
+            display: none;
+        }
+    }
+</style>

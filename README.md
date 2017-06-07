@@ -1,2 +1,2 @@
 # RedmineQuoteInvoice
-Quote/Invoice plugin for redmine
+Quote/Invoice Symfony project

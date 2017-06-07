@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {{ include(':quote:show_body.html.twig') }}
+
+    <hr>
+
+    <p align="center">
+        SIRET : 538 795 659 00035<br />
+        Dispensé d’immatriculation au registre du commerce et des sociétés (RCS) en application de l'article L.123-1-1 du Code du Commerce TVA non applicable, art. 293 B du CGI
+    </p>
+
+    <ul>
+        <li>
+            <a href="{{ path('quote_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('quote_edit', { 'id': quote.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+        <li>
+            <a href="{{ path('quote_show_pdf', {'id': quote.id}) }}">Download PDF</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ include(':quote:show_head.html.twig') }}
+{% endblock %}
+
+{% block navbar %}
+  <ul class="nav navbar-nav navbar-right">
+    <li><a href="{{ path('quote_edit', {'id': quote.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a></li>
+    <li><a href="{{ path('quote_show_pdf', {'id': quote.id}) }}"><span class="glyphicon glyphicon-download-alt"></span> Download PDF</a></li>
+  </ul>
+{% endblock %}
