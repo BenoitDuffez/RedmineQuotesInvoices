@@ -135,6 +135,7 @@ class QuoteController extends Controller
         $snappy->setOption('margin-bottom', 10);
         $snappy->setOption('margin-left', 10);
         $snappy->setOption('margin-right', 10);
+        $snappy->setOption('print-media-type', true);
         return new Response(
             $snappy->getOutputFromHtml($html),
             200,

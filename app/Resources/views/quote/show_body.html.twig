@@ -37,17 +37,20 @@ SIRET: 53879565900035</div>
 </div>
 
 {% set quoteTotal = 0 %}
+{% set quoteHours = 0 %}
 <table class="table table-bordered">
     <thead>
     <tr>
         <th>Section</th>
         <th>Désignation</th>
+        <th class="private">Temps estimé</th>
         <th class="text-right">Total H.T.</th>
     </tr>
     </thead>
     <tbody>
     {% for section in quote.sections %}
         {% set sectionTotal = 0 %}
+        {% set sectionHours = 0 %}
         {% for item in section.items %}
             <tr>
                 {% if loop.index0 == 0 %}
@@ -58,16 +61,20 @@ SIRET: 53879565900035</div>
                         <div class="col-md-12">
                             {{ item.description | markdown }}
                             {% set sectionTotal = sectionTotal + item.hours * section.rate %}
+                            {% set sectionHours = sectionHours + item.hours %}
                         </div>
                     </div>
                 </td>
-                <td class="right col-md-2">{{ "%d €" | format(item.hours * section.rate) }}</td>
+                <td class="private">{{ "%.2fh" | format(item.hours) }}</td>
+                <td class="text-right col-md-2">{{ "%d €" | format(item.hours * section.rate) }}</td>
             </tr>
         {% endfor %}
         {% set quoteTotal = quoteTotal + sectionTotal %}
+        {% set quoteHours = quoteHours + sectionHours %}
         <tr>
-            <th class="col-md-10 right" colspan="2">Total</th>
-            <th class="right col-md-2">{{ "%d €" | format(sectionTotal) }}</th>
+            <th class="col-md-10 text-right" colspan="2">Total</th>
+            <th class="private">{{ "%.2fh" | format(sectionHours) }}</th>
+            <th class="text-right col-md-2">{{ "%d €" | format(sectionTotal) }}</th>
         </tr>
     {% endfor %}
     </tbody>
@@ -76,14 +83,17 @@ SIRET: 53879565900035</div>
 <table class="table table-bordered">
     <tr>
         <td><h3>Total H.T.</h3></td>
+        <td class="private">Temps estimé</td>
         <td class="text-right"><h3>{{ "%d €" | format(quoteTotal) }}</h3></td>
     </tr>
     <tr>
         <td>T.V.A. 0%, non applicable, article 293B du CGI</td>
+        <td class="private">{{ "%.2f h" | format(quoteHours) }}</td>
         <td class="text-right">{{ "%d €" | format(0) }}</td>
     </tr>
     <tr>
         <th><h2>Net à payer</h2></th>
+        <td class="private">{{ "%.2f sem (à 15h / sem)" | format(quoteHours / 15) }}</td>
         <th class="text-right"><h2>{{ "%d €" | format(quoteTotal) }}</h2></th>
     </tr>
 </table>
