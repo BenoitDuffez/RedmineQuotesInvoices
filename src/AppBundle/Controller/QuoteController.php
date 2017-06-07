@@ -118,6 +118,7 @@ class QuoteController extends Controller
 	{
 		$dupe = clone $quote;
 		$dupe->updateTitle();
+		$dupe->setDateCreation(new \DateTime());
 
 		$em = $this->getDoctrine()->getManager();
 		$em->persist($dupe);
