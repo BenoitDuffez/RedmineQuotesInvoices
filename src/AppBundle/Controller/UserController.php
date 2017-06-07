@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Doctrine\ORM\EntityManagerInterface;
 
 
@@ -91,6 +92,7 @@ class UserController extends Controller
      * Lists all user entities.
      *
      * @Route("/", name="user_index")
+     * @Security("has_role('ROLE_ADMIN')")
      * @Method("GET")
      */
     public function indexAction()
@@ -108,6 +110,7 @@ class UserController extends Controller
      * Creates a new user entity.
      *
      * @Route("/new", name="user_new")
+     * @Security("has_role('ROLE_ADMIN')")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -134,6 +137,7 @@ class UserController extends Controller
      * Finds and displays a user entity.
      *
      * @Route("/{id}", name="user_show")
+     * @Security("has_role('ROLE_ADMIN')")
      * @Method("GET")
      */
     public function showAction(User $user)
@@ -150,6 +154,7 @@ class UserController extends Controller
      * Displays a form to edit an existing user entity.
      *
      * @Route("/{id}/edit", name="user_edit")
+     * @Security("has_role('ROLE_ADMIN')")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, User $user)
@@ -175,6 +180,7 @@ class UserController extends Controller
      * Deletes a user entity.
      *
      * @Route("/{id}", name="user_delete")
+     * @Security("has_role('ROLE_ADMIN')")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, User $user)

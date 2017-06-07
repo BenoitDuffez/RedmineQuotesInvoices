@@ -8,12 +8,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Redmine\Client;
 
 /**
  * Quote controller.
  *
  * @Route("quote")
+ * @Security("has_role('ROLE_USER')")
  */
 class QuoteController extends Controller
 {
