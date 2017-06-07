@@ -99,16 +99,35 @@ class QuoteController extends Controller
 	 * @param Quote $quote Quote to display
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-    public function showAction(Quote $quote)
-    {
-    	$quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
-        $deleteForm = $this->createDeleteForm($quote);
+	public function showAction(Quote $quote)
+	{
+		$quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
+		$deleteForm = $this->createDeleteForm($quote);
 
-        return $this->render('quote/show.html.twig', array(
-            'quote' => $quote,
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
+		return $this->render('quote/show.html.twig', array(
+			'quote' => $quote,
+			'delete_form' => $deleteForm->createView(),
+		));
+	}
+
+	/**
+	 * Duplicate a quote entity.
+	 *
+	 * @Route("/{id}/duplicate", name="quote_duplicate")
+	 * @Method("GET")
+	 * @param Quote $quote Quote to display
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function duplicateAction(Quote $quote)
+	{
+		$dupe = clone $quote;
+
+		$em = $this->getDoctrine()->getManager();
+		$em->persist($dupe);
+		$em->flush();
+
+		return $this->redirectToRoute('quote_show', array('id' => $dupe->getId()));
+	}
 
 	/**
 	 * Finds and displays a quote entity.

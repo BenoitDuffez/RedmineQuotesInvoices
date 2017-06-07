@@ -107,6 +107,20 @@ class Quote
 		$this->customer = null;
 	}
 
+	public function __clone() {
+		if ($this->id) {
+			$this->id = null;
+
+			$sectionsClone = new ArrayCollection();
+			foreach ($this->sections as $section) {
+				$itemClone = clone $section;
+				$itemClone->setQuote($this);
+				$sectionsClone->add($itemClone);
+			}
+			$this->sections = $sectionsClone;
+		}
+	}
+
 	/**
 	 * Init/create the redmine client
 	 * @param $url string Redmine URL

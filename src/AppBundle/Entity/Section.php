@@ -70,6 +70,20 @@ class Section
 		$this->items = new ArrayCollection();
 	}
 
+	public function __clone() {
+		if ($this->id) {
+			$this->id = null;
+
+			$itemsClone = new ArrayCollection();
+			foreach ($this->items as $item) {
+				$itemClone = clone $item;
+				$itemClone->setSection($this);
+				$itemsClone->add($itemClone);
+			}
+			$this->items = $itemsClone;
+		}
+	}
+
 	/**
      * Get id
      *
