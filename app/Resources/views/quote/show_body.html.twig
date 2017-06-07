@@ -57,7 +57,12 @@ SIRET: 53879565900035</div>
         {% for item in section.items %}
             <tr>
                 {% if loop.index0 == 0 %}
-                    <td class="col-md-2" rowspan="{{ section.items | length }}">{{ section.title }}</td>
+                    <td class="col-md-2" rowspan="{{ section.items | length }}">
+                        {% if section.option %}
+                            <strong>OPTION {{ "%d" | format(optionId + 1) }}</strong><br />
+                        {% endif %}
+                        {{ section.title }}
+                    </td>
                 {% endif %}
                 <td class="col-md-8">
                     <div class="row">
