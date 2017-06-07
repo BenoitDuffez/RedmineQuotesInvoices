@@ -10,4 +10,7 @@ namespace AppBundle\Repository;
  */
 class QuoteRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findAll() {
+        return $this->findBy([], ['dateCreation' => 'desc']);
+    }
 }
