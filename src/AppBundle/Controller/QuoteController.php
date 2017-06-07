@@ -77,7 +77,7 @@ class QuoteController extends Controller
 			$em->persist($quote);
 			$em->flush();
 
-			$quote->setTitle(sprintf("%d%03d%03d%03d", date('Y'), $quote->getCustomerId(), $quote->getProjectId(), $quote->getId()));
+			$quote->updateTitle();
 			$em->persist($quote);
 			$em->flush();
 
@@ -121,6 +121,7 @@ class QuoteController extends Controller
 	public function duplicateAction(Quote $quote)
 	{
 		$dupe = clone $quote;
+		$dupe->updateTitle();
 
 		$em = $this->getDoctrine()->getManager();
 		$em->persist($dupe);

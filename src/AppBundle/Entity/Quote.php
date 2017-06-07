@@ -384,5 +384,17 @@ class Quote
 		$this->sections->removeElement($section);
 		return $this;
 	}
+
+	public function updateTitle() {
+		$this->setTitle(
+			sprintf("%d%03d%03d%03d",
+				date('Y'),
+				$this->getCustomerId(),
+				$this->getProjectId(),
+				$this->getId()
+			)
+		);
+		return $this;
+	}
 }
 
