@@ -35,6 +35,7 @@ SIRET: 53879565900035</div>
 {% set optionId = 0 %}
 {% set quoteOptionsTotal = {} %}
 {% set quoteOptionsHours = {} %}
+{% set quoteTitles = {} %}
 <table class="table table-bordered">
     <thead>
     <tr>
@@ -74,6 +75,7 @@ SIRET: 53879565900035</div>
         {% if section.isOption %}
             {% set quoteOptionsTotal = quoteOptionsTotal | merge({(optionId): sectionTotal}) %}
             {% set quoteOptionsHours = quoteOptionsHours | merge({(optionId): sectionHours}) %}
+            {% set quoteTitles = quoteTitles | merge({(optionId): section.title}) %}
             {% set optionId = optionId + 1 %}
         {% else %}
             {% set quoteTotal = quoteTotal + sectionTotal %}
@@ -88,32 +90,47 @@ SIRET: 53879565900035</div>
     </tbody>
 </table>
 
+{% macro printTime(time) %}
+    <p>
+        {{ "%.1f h" | format(time) }}<br />
+        {{ "%.1f sem (à 15h / sem)" | format(time / 15) }}
+    </p>
+{% endmacro %}
+{% import _self as macros %}
+
 <table class="table table-bordered">
     <tr>
-        <td><h3>Total H.T. {{ optionId > 0 ? "(socle)" : "" }}</h3></td>
+        <td>T.V.A. 0%, non applicable, article 293B du CGI</td>
         <td class="private">Temps estimé</td>
+        <td class="text-right">{{ "%d €" | format(0) }}</td>
+    </tr>
+    <tr>
+        <td><h3>Total T.T.C. {{ optionId > 0 ? "(socle)" : "" }}</h3></td>
+        <td class="private">{{ macros.printTime(quoteHours) }}</td>
         <td class="text-right"><h3>{{ "%d €" | format(quoteTotal) }}</h3></td>
     </tr>
     {% if optionId > 0 %}
         {% for total in quoteOptionsTotal %}
             <tr>
-                <td><h2>Tarif option {{ loop.index }}</h2></td>
-                <td class="private">{{ "%.2f h" | format(quoteOptionsHours[loop.index0]) }}</td>
+                <td>
+                    <h2>Total T.T.C avec option {{ loop.index }}</h2>
+                    <p>{{ quoteTitles[loop.index0] }}</p>
+                </td>
+                <td class="private">
+                    {{ macros.printTime(quoteOptionsHours[loop.index0]) }}
+                    <hr />
+                    <strong>{{ macros.printTime(quoteHours + quoteOptionsHours[loop.index0]) }}</strong>
+                </td>
                 <td class="text-right"><h2>{{ "%d €" | format(total + quoteTotal) }}</h2></td>
             </tr>
         {% endfor %}
     {% else %}
         <tr>
             <th><h2>Net à payer</h2></th>
-            <td class="private">{{ "%.2f sem (à 15h / sem)" | format(quoteHours / 15) }}</td>
+            <td class="private"></td>
             <th class="text-right"><h2>{{ "%d €" | format(quoteTotal) }}</h2></th>
         </tr>
     {% endif %}
-    <tr>
-        <td>T.V.A. 0%, non applicable, article 293B du CGI</td>
-        <td class="private">{{ "%.2f h" | format(quoteHours) }}</td>
-        <td class="text-right">{{ "%d €" | format(0) }}</td>
-    </tr>
 </table>
 
 <table class="table table-bordered">
