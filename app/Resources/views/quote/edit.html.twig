@@ -5,7 +5,7 @@
 
     {{ form_start(edit_form) }}
     {% form_theme edit_form
-    _self
+    'form/quote.html.twig'
     'bootstrap_3_layout.html.twig'
     'form/jquery.collection.html.twig'
     %}
@@ -118,54 +118,4 @@
             }]
         });
     </script>
-{% endblock %}
-
-{# This prevents the "0", "1", ... label from being printed before each section #}
-{% block _appbundle_quote_sections_widget %}
-    {% if form.vars.prototype is defined %}
-        <div id="{{ form.vars.id }}" class="sections" data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}">
-            {% for section in form %}
-                {{ form_widget(section) }} {# print only the widget, not the label #}
-            {% endfor %}
-        </div>
-    {% endif %}
-{% endblock %}
-
-{% block _appbundle_quote_sections_entry_widget %}
-    <div id="{{ form.vars.id }}" class="row with-3d-shadow" style="box-shadow: 5px 5px 10px #999; background: #eee; padding: 1em 0 0 1em;">
-        <div class="col-md-2">
-            {{ form_row(form.title) }}
-            {{ form_row(form.rate) }}
-            {{ form_widget(form.position) }}
-            <div class="sections-actions" style="padding-bottom: 1em;"></div>
-        </div>
-        <div class="col-md-10">
-            {{ form_widget(form.items) }}
-        </div>
-    </div>
-    <hr>
-{% endblock %}
-
-{# This prevents the "0", "1", ... label from being printed before each section item #}
-{% block _appbundle_quote_sections_entry_items_widget %}
-    {% if form.vars.prototype is defined %}
-        <div id="{{ form.vars.id }}" class="items" data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}">
-            {% for item in form %}
-                <div class="form-group ui-sortable-handle" style="background: {{ loop.index0 is even ? "#eee" : "#ddd" }}">
-                    {{ form_widget(item) }} {# print only the widget, not the label #}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-{% endblock %}
-
-{% block _appbundle_quote_sections_entry_items_entry_widget %}
-    <div class="row">
-        <div class="col-xs-10">{{ form_row(form.description) }}</div>
-        <div class="col-xs-2">
-            {{ form_row(form.hours) }}
-            {{ form_widget(form.position) }}
-            <div class="items-actions"></div>
-        </div>
-    </div>
 {% endblock %}
