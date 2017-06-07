@@ -1,0 +1,8 @@
+{% macro navLi(route, link) %}
+    {% if app.request.requestUri starts with path(route) %}
+        <li class="active"><a href="{{ path(route) }}">{{ link }}</a></li>
+    {% else %}
+        <li><a href="{{ path(route) }}">{{ link }}</a></li>
+    {% endif %}
+{% endmacro %}
+
