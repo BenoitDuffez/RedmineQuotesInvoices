@@ -59,6 +59,13 @@ class Section
 	 */
 	private $items;
 
+	/**
+	 * @var boolean
+	 *
+	 * @ORM\Column(name="is_option", type="boolean")
+	 */
+	private $option;
+
 	public function __construct() {
 		$this->items = new ArrayCollection();
 	}
@@ -192,5 +199,28 @@ class Section
 	public function __toString() {
 		return "SECTION LOL";
 	}
-}
 
+    /**
+     * Set option
+     *
+     * @param boolean $option
+     *
+     * @return Section
+     */
+    public function setOption($option)
+    {
+        $this->option = $option;
+
+        return $this;
+    }
+
+    /**
+     * Get isOption
+     *
+     * @return boolean
+     */
+    public function isOption()
+    {
+        return $this->option;
+    }
+}
