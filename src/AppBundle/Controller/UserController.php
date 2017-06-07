@@ -37,6 +37,22 @@ class UserController extends Controller
     }
 
     /**
+     * Log out
+     *
+     * @Route("/logout", name="user_logout")
+     */
+    public function logoutAction(Request $request, AuthenticationUtils $authUtils)
+    {
+        $error = $authUtils->getLastAuthenticationError();
+        $lastUsername = $authUtils->getLastUsername();
+
+        return $this->render('user/login.html.twig', [
+            'last_username' => $lastUsername,
+            'error'         => $error,
+        ]);
+    }
+
+    /**
      * Register
      *
      * @Route("/register", name="user_register")

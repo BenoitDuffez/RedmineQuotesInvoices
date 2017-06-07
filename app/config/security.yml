@@ -30,6 +30,10 @@ security:
                 login_path: user_login
                 check_path: user_login
 
+            logout:
+                path: user_logout
+                target: homepage
+
             #anonymous: ~
             # activate different ways to authenticate
 
