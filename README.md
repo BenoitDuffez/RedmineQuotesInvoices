@@ -25,7 +25,7 @@ Go to `/user/register` and create an admin account
 
 # Project
 
-Highly in WIP. Not useable by anyone but me atm. I'm planning to make this easier to use for other freelancers should the show interest for this project.
+Highly in WIP. Not useable by anyone but me atm. I'm planning to make this easier to use for other freelancers should they show interest for this project.
 
 I initially intended to create this project as a Redmine plugin that would be tightly integrated into Redmine, but I can't stand rails.
 
