@@ -239,6 +239,53 @@ class QuoteController extends Controller
         return $this->redirectToRoute('quote_index');
     }
 
+	/**
+	 * Upload the quote to redmine
+	 *
+	 * @Route("/{id}/upload", name="quote_upload_redmine")
+	 * @param Request $request
+	 * @param Quote $quote
+	 * @return Response
+	 */
+	public function uploadToRedmineAction(Request $request, Quote $quote) {
+		$redmine = new Client($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
+		$issues = [];
+		$categories = [];
+
+		foreach ($redmine->issue_category->all($quote->getProjectId())['issue_categories'] as $cat) {
+			$categories[$cat['name']] = $cat['id'];
+		}
+
+		$suffix = "\n\n---\nCreated from " . $this->generateUrl('quote_show', ['id' => $quote->getId()]);
+
+		foreach ($quote->getSections() as $section) {
+			foreach ($section->getItems() as $item) {
+				if (!isset($categories[$section->getTitle()])) {
+					$categories[$section->getTitle()]
+						= (int) $redmine->issue_category->create(
+							$quote->getProjectId(),
+							[ 'name' => $section->getTitle() ]
+					)->id;
+				}
+				$issues[] = $redmine->issue->create([
+					'project_id' => $quote->getProjectId(),
+					'category_id' => $categories[$section->getTitle()],
+					'tracker_id' => 12,
+					'subject' => explode("\n", $item->getDescription())[0],
+					'description' => $item->getDescription() . $suffix,
+					'is_private' => true,
+					'estimated_hours' => $item->getHours(),
+				]);
+			}
+		}
+
+		$url = sprintf("%s/projects/%s/issues",
+			$this->getParameter('redmine_url'),
+			$quote->getProjectId()
+		);
+		return $this->redirect($url);
+	}
+
     /**
      * Creates a form to delete a quote entity.
      *
