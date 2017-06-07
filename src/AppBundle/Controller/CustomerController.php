@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Redmine\Client;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * Class CustomerController
  * @package AppBundle\Controller
  * @Route("customers")
+ * @Security("has_role('ROLE_USER')")
  */
 class CustomerController extends Controller
 {
