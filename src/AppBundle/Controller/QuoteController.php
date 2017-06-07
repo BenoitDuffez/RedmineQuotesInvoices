@@ -208,10 +208,15 @@ class QuoteController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('quote_edit', array('id' => $quote->getId()));
+			return $this->redirectToRoute('quote_show', array('id' => $quote->getId()));
         }
 
-		return $this->redirectToRoute('quote_show', array('id' => $quote->getId()));
+		return $this->render('quote/edit.html.twig', array(
+			'quote' => $quote,
+			'edit_form' => $editForm->createView(),
+			'delete_form' => $deleteForm->createView(),
+			'redmine_url' => $this->getParameter('redmine_url'),
+		));
     }
 
     /**
