@@ -8,11 +8,9 @@
             <tr>
                 <th>Id</th>
                 <th>Title</th>
-                <th>Datecreation</th>
-                <th>Dateedition</th>
-                <th>Pdfpath</th>
+                <th>Creation Date</th>
                 <th>Customer</th>
-                <th>Projectid</th>
+                <th>Project</th>
                 <th>Description</th>
                 <th>Actions</th>
             </tr>
@@ -23,8 +21,6 @@
                 <td><a href="{{ path('quote_show', { 'id': quote.id }) }}">{{ quote.id }}</a></td>
                 <td>{{ quote.title }}</td>
                 <td>{% if quote.dateCreation %}{{ quote.dateCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{% if quote.dateEdition %}{{ quote.dateEdition|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ quote.pdfPath }}</td>
                 <td>{{ quote.customerField('firstname') }} {{ quote.customerField('lastname') }}</td>
                 <td>{{ quote.projectField('name') }}</td>
                 <td>{{ quote.description }}</td>

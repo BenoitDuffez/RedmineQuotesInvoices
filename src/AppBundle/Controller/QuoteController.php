@@ -69,10 +69,6 @@ class QuoteController extends Controller
 			$quote->setDescription(trim($quote->getDescription()));
 			$quote->setDateCreation(new \DateTime());
 
-			// TODO:
-			$quote->setPdfPath("TODO");
-			$quote->setDateEdition(new \DateTime());
-
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($quote);
 			$em->flush();

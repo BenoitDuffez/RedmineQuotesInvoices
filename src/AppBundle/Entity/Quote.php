@@ -57,20 +57,6 @@ class Quote
     private $dateCreation;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_edition", type="datetime")
-     */
-    private $dateEdition;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="pdf_path", type="string", length=255)
-     */
-    private $pdfPath;
-
-    /**
      * @var int
      *
 	 * @Assert\NotEqualTo(value="0", message="Please select a customer")
@@ -188,54 +174,6 @@ class Quote
     public function getDateCreation()
     {
         return $this->dateCreation;
-    }
-
-    /**
-     * Set dateEdition
-     *
-     * @param \DateTime $dateEdition
-     *
-     * @return Quote
-     */
-    public function setDateEdition($dateEdition)
-    {
-        $this->dateEdition = $dateEdition;
-
-        return $this;
-    }
-
-    /**
-     * Get dateEdition
-     *
-     * @return \DateTime
-     */
-    public function getDateEdition()
-    {
-        return $this->dateEdition;
-    }
-
-    /**
-     * Set pdfPath
-     *
-     * @param string $pdfPath
-     *
-     * @return Quote
-     */
-    public function setPdfPath($pdfPath)
-    {
-        $this->pdfPath = $pdfPath;
-
-        return $this;
-    }
-
-    /**
-     * Get pdfPath
-     *
-     * @return string
-     */
-    public function getPdfPath()
-    {
-        return $this->pdfPath;
     }
 
     /**
