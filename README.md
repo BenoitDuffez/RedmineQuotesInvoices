@@ -1,12 +1,25 @@
 # RedmineQuoteInvoice
 Quote/Invoice Symfony project
 
+![Workflow diagram](workflow_diagram.png)
+
+The quote workflow is simple:
+
+1. The customer requests for a quote
+1. You create a project and a user on Redmine for the customer; add the new user to the project
+1. You create a quote on the web tool:
+   1. Select target project
+   1. Select target customer
+   1. Add sections and items for your quote
+1. The QIV tool will fetch the project and customer information (including custom fields like company identification number, billing address, etc.)
+1. You export the quote to PDF and negociate with the customer  
+If there is no agreement, you need to repeat steps 3-4. The best way to do so is to duplicate the quote created in step 4 to start with a new one. The old one is kept intact and the new one is created with a new quote number.
+1. Once you have reached an agreement with the customer, the QIV tool is able to create one issue per quote item on Redmine so that you can work.
+
 ## Purpose
 
 As a freelancer, create quotes and invoices based off a Redmine database.
 
-1. Create a user 'qiv' (or anything) on Redmine and enable its API key
-1. Create a the custom fields on Redmine users table for some advanced user information (company name, identification, address, etc)
 1. Add the user 'qiv' to the project you want a quote for
 1. Create a new quote on the web tool
 1. Export to PDF and send to the customer
@@ -15,11 +28,13 @@ As a freelancer, create quotes and invoices based off a Redmine database.
 
 ## Installation
 
-1. git clone <repo>
-1. cd <folder>
-1. composer install
-1. fill redmine and Symfony parameters
-1. php bin/console doctrine:schema:update --force
+1. Create a user 'qiv' (or anything) on Redmine and enable its API key
+1. Create a the custom fields on Redmine users table for some advanced user information (company name, identification, address, etc)
+1. `git clone <repo>`
+1. `cd <folder>`
+1. `composer install`
+1. Fill redmine and Symfony parameters (including the API key retrieved in step 1)
+1. `php bin/console doctrine:schema:update --force`
 
 Go to `/user/register` and create an admin account
 
