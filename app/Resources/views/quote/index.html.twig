@@ -38,10 +38,12 @@
         {% endfor %}
         </tbody>
     </table>
+{% endblock %}
 
-    <ul>
+{% block navbar %}
+    <ul class="nav navbar-nav navbar-right">
         <li>
-            <a href="{{ path('quote_new') }}">Create a new quote</a>
+             <a href="{{ path('quote_new') }}"><span class="glyphicon glyphicon-plus"></span> Create a new quote</a>
         </li>
     </ul>
 {% endblock %}
