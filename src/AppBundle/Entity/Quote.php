@@ -79,6 +79,13 @@ class Quote
      */
     private $description;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comments", type="text")
+     */
+    private $comments;
+
 	/**
 	 * @var ArrayCollection
 	 *
@@ -334,5 +341,28 @@ class Quote
 		);
 		return $this;
 	}
-}
 
+    /**
+     * Set comments
+     *
+     * @param string $comments
+     *
+     * @return Quote
+     */
+    public function setComments($comments)
+    {
+        $this->comments = $comments;
+
+        return $this;
+    }
+
+    /**
+     * Get comments
+     *
+     * @return string
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+}

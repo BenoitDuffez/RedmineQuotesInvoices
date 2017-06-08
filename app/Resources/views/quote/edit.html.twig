@@ -15,9 +15,11 @@
         <div class="col-md-6">
             {{ form_row(edit_form.projectId) }}
             {{ form_row(edit_form.description) }}
+            {{ form_row(edit_form.comments) }}
             <div id="project_info">
                 <hr>
                 <h3><a id="project_name" data-redmine-url="{{ redmine_url }}"></a></h3>
+                <a id="project_name" data-redmine-url="{{ redmine_url }}"></a></h3>
                 <p id="project_description"></p>
             </div>
         </div>

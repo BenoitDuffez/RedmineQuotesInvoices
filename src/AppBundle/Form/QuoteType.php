@@ -44,6 +44,10 @@ class QuoteType extends AbstractType
 				'required' => false,
 			]);
 
+        $builder->add('comments', TextareaType::class, [
+				'required' => false,
+			]);
+
 		$builder->add('sections', CollectionType::class, [
 			'entry_type' => SectionType::class,
 			'entry_options'  => array(
