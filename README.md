@@ -23,7 +23,8 @@ Step 3, i and ii: select project and customer that will be linked to the quote:
 ![Select project and customer](select_project_customer.png)
 
 Step 3, iii: add sections and items to your quote. The sections will be exported as issue categories on Redmine. Each item will be exported as an issue on Redmine.  
-You can apply a different rate (say 80€/hour) on each section. On each item, you set how many hours you will charge.
+You can apply a different rate (say 80€/hour) on each section. On each item, you set how many hours you will charge.  
+Each item description text will be parsed using the *Markdown* syntax, so you can have lists, text decoration, etc.
 
 ![Create quote items](create_quote.png)
 
