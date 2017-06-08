@@ -42,10 +42,12 @@ class QuoteType extends AbstractType
         $builder->add('description', TextareaType::class, [
 				'label' => 'Global quote description',
 				'required' => false,
+                'attr' => ['class' => 'markdown'],
 			]);
 
         $builder->add('comments', TextareaType::class, [
 				'required' => false,
+                'attr' => ['class' => 'markdown'],
 			]);
 
 		$builder->add('sections', CollectionType::class, [

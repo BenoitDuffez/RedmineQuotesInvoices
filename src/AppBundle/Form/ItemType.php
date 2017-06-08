@@ -19,7 +19,7 @@ class ItemType extends AbstractType
 			->add('hours')
 			->add('section')
 			->add('description', TextareaType::class, [
-				'attr' => ['rows' => '4']
+				'attr' => ['rows' => '4', 'class' => 'markdown']
 			])
 			->add('position', HiddenType::class, [
 				'attr' => [
