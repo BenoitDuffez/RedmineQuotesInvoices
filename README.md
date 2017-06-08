@@ -16,17 +16,26 @@ The quote workflow is simple:
 If there is no agreement, you need to repeat steps 3-4. The best way to do so is to duplicate the quote created in step 4 to start with a new one. The old one is kept intact and the new one is created with a new quote number.
 1. Once you have reached an agreement with the customer, the QIV tool is able to create one issue per quote item on Redmine so that you can work.
 
-## Purpose
+## Examples
 
-As a freelancer, create quotes and invoices based off a Redmine database.
+Step 3, i and ii: select project and customer that will be linked to the quote:
 
-1. Add the user 'qiv' to the project you want a quote for
-1. Create a new quote on the web tool
-1. Export to PDF and send to the customer
-1. After the customer has agreed to the quote, export the quote items into Redmine tickets for the specification
-1. Convert a quote into one or multiple invoices
+![Select project and customer](select_project_customer.png)
 
-## Installation
+Step 3, iii: add sections and items to your quote. The sections will be exported as issue categories on Redmine. Each item will be exported as an issue on Redmine.  
+You can apply a different rate (say 80€/hour) on each section. On each item, you set how many hours you will charge.
+
+![Create quote items](create_quote.png)
+
+Step 4: the quote is created. It shows the estimated time in a red column, this column will be hidden on the PDF.
+
+![Review quote](quote_created.png)
+
+Step 5: the quote is exported to PDF, ready to be sent to the customer:
+
+![PDF quote](pdf_quote.png)
+
+# Installation
 
 1. Create a user 'qiv' (or anything) on Redmine and enable its API key
 1. Create a the custom fields on Redmine users table for some advanced user information (company name, identification, address, etc)
