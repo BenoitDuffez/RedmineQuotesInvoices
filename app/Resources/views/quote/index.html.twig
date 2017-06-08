@@ -3,11 +3,11 @@
 {% block body %}
     <h1>Quotes list</h1>
 
-    <table class="table table-bordered">
+    <table class="table table-hover">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Title</th>
+                <th>#</th>
+                <th>Identifier</th>
                 <th>Creation Date</th>
                 <th>Customer</th>
                 <th>Project</th>
@@ -17,7 +17,7 @@
         </thead>
         <tbody>
         {% for quote in quotes %}
-            <tr>
+            <tr data-quote="{{ quote.id }}">
                 <td><a href="{{ path('quote_show', { 'id': quote.id }) }}">{{ quote.id }}</a></td>
                 <td>{{ quote.title }}</td>
                 <td>{% if quote.dateCreation %}{{ quote.dateCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
@@ -25,14 +25,10 @@
                 <td>{{ quote.projectField('name') }}</td>
                 <td>{{ quote.description }}</td>
                 <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('quote_show', { 'id': quote.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('quote_edit', { 'id': quote.id }) }}">edit</a>
-                        </li>
-                    </ul>
+                    <div class="btn-group" role="group">
+                        <a class="btn btn-default" href="{{ path('quote_show', { 'id': quote.id }) }}">show</a>
+                        <a class="btn btn-default" href="{{ path('quote_edit', { 'id': quote.id }) }}">edit</a>
+                    </div>
                 </td>
             </tr>
         {% endfor %}
@@ -47,3 +43,14 @@
         </li>
     </ul>
 {% endblock %}
+
+{% block javascripts %}
+    <script>
+$(document).ready(function () {
+    $('tr').on('dblclick', function() {
+        document.location.href = '{{ path('quote_show', { 'id': '0' }) }}'.replace(/0$/, $(this).data('quote'));
+    });
+});
+    </script>
+{% endblock %}
+
