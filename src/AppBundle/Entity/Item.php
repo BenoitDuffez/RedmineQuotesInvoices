@@ -31,7 +31,7 @@ class Item
     /**
      * @var string
      *
-     * @ORM\Column(name="hours", type="decimal", precision=2, scale=1)
+     * @ORM\Column(name="hours", type="decimal", precision=10, scale=2)
      */
     private $hours;
 
