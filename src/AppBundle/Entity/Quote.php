@@ -94,8 +94,17 @@ class Quote
 	 */
 	private $sections;
 
+	/**
+	 * @var ArrayCollection
+	 *
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Invoice", mappedBy="quote", cascade={"all"})
+	 * @ORM\OrderBy({"position" = "ASC"})
+	 */
+	private $invoices;
+
 	public function __construct() {
 		$this->sections = new ArrayCollection();
+		$this->invoices = new ArrayCollection();
 		$this->redmine = null;
 		$this->customer = null;
 	}
@@ -110,9 +119,14 @@ class Quote
 				$itemClone->setQuote($this);
 				$sectionsClone->add($itemClone);
 			}
+            // don't clone invoices
 			$this->sections = $sectionsClone;
 		}
 	}
+
+    public function __toString() {
+        return sprintf("Quote #%s (%s for %s)", $this->getTitle(), $this->getDateCreation()->format("d/m/Y"), $this->getCustomerId());
+    }
 
 	/**
 	 * Init/create the redmine client

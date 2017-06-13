@@ -1,0 +1,5 @@
+{% block _appbundle_invoice_percentage_widget %}
+    <input type="text" id="{{ form.vars.id }}" name="{{ form.vars.full_name }}" {{ form.vars.required ? 'required="required"' : '' }} value="{{ form.vars.value }}" data-slider-id="{{ form.vars.id }}Slider" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="{{ form.vars.value }}"/>
+    <script type="text/javascript">$('#{{ form.vars.id }}').slider();</script>
+{% endblock %}
+

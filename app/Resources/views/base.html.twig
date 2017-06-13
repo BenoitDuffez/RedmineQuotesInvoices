@@ -24,6 +24,9 @@
         <script src="{{ asset('js/moment.js') }}" type="application/javascript"></script>
         <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}" type="application/javascript"></script>
 
+        <link rel="stylesheet" href="{{ asset('css/bootstrap-slider.min.css') }}">
+        <script src="{{ asset('js/bootstrap-slider.min.js') }}" type="application/javascript"></script>
+
         <style type="text/css">
         body {
             padding-top: 70px;
@@ -61,6 +64,7 @@
               <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                   {{ macros.navLi('quote_index', 'Quotes') }}
+                  {{ macros.navLi('invoice_index', 'Invoices') }}
                   {{ macros.navLi('user_index', 'Users') }}
                 </ul>
                 {% block navbar %}{% endblock %}

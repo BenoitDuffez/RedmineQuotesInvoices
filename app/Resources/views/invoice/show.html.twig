@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Invoice</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ invoice.id }}</td>
+            </tr>
+            <tr>
+                <th>Quote</th>
+                <td><a href="{{ path('quote_show', {'id': invoice.quote.id}) }}">{{ invoice.quote.title }}</a></td>
+            </tr>
+            <tr>
+                <th>Billingdate</th>
+                <td>{% if invoice.billingDate %}{{ invoice.billingDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Percentage</th>
+                <td>{{ invoice.percentage }}</td>
+            </tr>
+            <tr>
+                <th>Replacementtext</th>
+                <td>{{ invoice.replacementText }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('invoice_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('invoice_edit', { 'id': invoice.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

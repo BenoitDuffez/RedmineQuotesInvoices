@@ -13,4 +13,11 @@ class QuoteRepository extends \Doctrine\ORM\EntityRepository
     public function findAll() {
         return $this->findBy([], ['dateCreation' => 'desc']);
     }
+
+    public function createAvailableQuotesQueryBuilder() {
+        return $this->createQueryBuilder('q')
+            ->leftJoin('q.invoices', 'i')
+            ->groupBy('q.id')
+            ->having('coalesce(sum(i.percentage), 0) < 100');
+    }
 }

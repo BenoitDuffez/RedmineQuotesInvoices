@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Invoices list</h1>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Quote</th>
+                <th>Billing date</th>
+                <th>Percentage</th>
+                <th>Replacement text</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for invoice in invoices %}
+            <tr>
+                <td><a href="{{ path('invoice_show', { 'id': invoice.id }) }}">{{ invoice.id }}</a></td>
+                <td><a href="{{ path('quote_show', { 'id': invoice.quote.id }) }}">{{ invoice.quote.title }}</a></td>
+                <td>{% if invoice.billingDate %}{{ invoice.billingDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ invoice.percentage }}</td>
+                <td>{{ invoice.replacementText }}</td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a class="btn btn-default" href="{{ path('invoice_show', { 'id': invoice.id }) }}">show</a>
+                        <a class="btn btn-default" href="{{ path('invoice_edit', { 'id': invoice.id }) }}">edit</a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('invoice_new') }}">Create a new invoice</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block navbar %}
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+             <a href="{{ path('invoice_new') }}"><span class="glyphicon glyphicon-plus"></span> Create a new invoice</a>
+        </li>
+    </ul>
+{% endblock %}
+
