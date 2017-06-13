@@ -1,0 +1,49 @@
+<h1 class="text-center">Facture N°{{ invoice.title }}</h1>
+
+<div class="row">
+    <div class="col-md-12 text-right">{{ invoice.billingDate | date('d/m/Y') }}</div>
+</div>
+
+{% if invoice.replacementText | length %}
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Désignation</th>
+                <th class="text-right">Total H.T.</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="col-md-10">
+                    {{ invoice.replacementText | markdown}}
+                </td>
+                <td class="col-md-2 text-right">{{ "%d €" | format(invoice.percentage/100 * invoice.total) }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% else %}
+    {% set quote = invoice.quote %}
+    {{ include(':quote:show_body_main_table.html.twig') }}
+{% endif %}
+
+<table class="table table-bordered">
+    <tr>
+        <th>Paiement</th>
+    </tr>
+    <tr>
+        <td>Paiement par chèque à l'ordre de Benoit Duffez, ou par virement bancaire: FR76 4061 8802 7000 0402 3381 234</td>
+    </tr>
+    <tr>
+        <th>Modalités</th>
+    </tr>
+    <tr>
+        <td>
+            <p>
+                La facture est payable sous 30 jours.<br />
+                Tout règlement effectué après expiration du délai donnera lieu, à titre de pénalité de retard, à l'application d'un intérêt égal à celui appliqué par la Banque Centrale Européenne à son opération de refinancement la plus récente, majoré de 10 points de pourcentage, ainsi qu'à une indemnité forfaitaire pour frais de recouvrement d'un montant de 40 Euros.<br />
+                Les pénalités de retard sont exigibles sans qu'un rappel soit nécessaire.
+            </p>
+        </td>
+    </tr>
+</table>

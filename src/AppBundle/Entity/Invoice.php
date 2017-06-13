@@ -37,7 +37,7 @@ class Invoice
     private $billingDate;
 
     /**
-     * @var string
+     * @var double
      *
      * @ORM\Column(name="percentage", type="decimal", precision=10, scale=2)
      */
@@ -49,6 +49,29 @@ class Invoice
      * @ORM\Column(name="replacement_text", type="text", nullable=true)
      */
     private $replacementText;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="title", type="text")
+	 */
+	private $title;
+
+	public function updateTitle() {
+		$this->setTitle(sprintf("%s%03d", $this->getQuote()->getTitle(), $this->getId()));
+	}
+
+	public function getTotal() {
+		$total = 0;
+		foreach ($this->getQuote()->getSections() as $section) {
+			/* @var Section $section */
+			foreach ($section->getItems() as $item) {
+				/* @var Item $item */
+				$total += $section->getRate() * $item->getHours();
+			}
+		}
+		return $total;
+	}
 
     /**
      * Get id
@@ -155,5 +178,27 @@ class Invoice
     {
         return $this->replacementText;
     }
+
+	/**
+	 * Get title
+	 *
+	 * @return string
+	 */
+	public function getTitle() {
+		return $this->title;
+	}
+
+	/**
+	 * Set title
+	 *
+	 * @param string $title
+	 *
+	 * @return Invoice
+	 */
+	public function setTitle($title) {
+		$this->title = $title;
+
+		return $this;
+	}
 }
 

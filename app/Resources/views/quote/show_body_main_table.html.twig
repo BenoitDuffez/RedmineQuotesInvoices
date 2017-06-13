@@ -1,0 +1,102 @@
+{% set quoteTotal = 0 %}
+{% set quoteHours = 0 %}
+{% set optionId = 0 %}
+{% set quoteOptionsTotal = {} %}
+{% set quoteOptionsHours = {} %}
+{% set quoteTitles = {} %}
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Section</th>
+        <th>Désignation</th>
+        <th class="private">Temps estimé</th>
+        <th class="text-right">Total H.T.</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for section in quote.sections %}
+        {% set sectionTotal = 0 %}
+        {% set sectionHours = 0 %}
+        {% for item in section.items %}
+            <tr>
+                {% if loop.index0 == 0 %}
+                    <td class="col-md-2" rowspan="{{ section.items | length }}">
+                        {% if section.option %}
+                            <strong>OPTION {{ "%d" | format(optionId + 1) }}</strong><br />
+                        {% endif %}
+                        {{ section.title }}
+                    </td>
+                {% endif %}
+                <td class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{ item.description | markdown }}
+                            {% set sectionTotal = sectionTotal + item.hours * section.rate %}
+                            {% set sectionHours = sectionHours + item.hours %}
+                        </div>
+                    </div>
+                </td>
+                <td class="private">{{ "%.2fh" | format(item.hours) }}</td>
+                <td class="text-right col-md-2">{{ "%d €" | format(item.hours * section.rate) }}</td>
+            </tr>
+        {% endfor %}
+        {% if section.isOption %}
+            {% set quoteOptionsTotal = quoteOptionsTotal | merge({(optionId): sectionTotal}) %}
+            {% set quoteOptionsHours = quoteOptionsHours | merge({(optionId): sectionHours}) %}
+            {% set quoteTitles = quoteTitles | merge({(optionId): section.title}) %}
+            {% set optionId = optionId + 1 %}
+        {% else %}
+            {% set quoteTotal = quoteTotal + sectionTotal %}
+            {% set quoteHours = quoteHours + sectionHours %}
+        {% endif %}
+        <tr>
+            <th class="col-md-10 text-right" colspan="2">Total</th>
+            <th class="private">{{ "%.2fh" | format(sectionHours) }}</th>
+            <th class="text-right col-md-2">{{ "%d €" | format(sectionTotal) }}</th>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% macro printTime(time) %}
+    <p>
+        {{ "%.1f h" | format(time) }}<br />
+        {{ "%.1f sem (à 15h / sem)" | format(time / 15) }}
+    </p>
+{% endmacro %}
+{% import _self as macros %}
+
+<table class="table table-bordered">
+    <tr>
+        <td>T.V.A. 0%, non applicable, article 293B du CGI</td>
+        <td class="private">Temps estimé</td>
+        <td class="text-right">{{ "%d €" | format(0) }}</td>
+    </tr>
+    <tr>
+        <td><h3>Total T.T.C. {{ optionId > 0 ? "(socle)" : "" }}</h3></td>
+        <td class="private">{{ macros.printTime(quoteHours) }}</td>
+        <td class="text-right"><h3>{{ "%d €" | format(quoteTotal) }}</h3></td>
+    </tr>
+    {% if optionId > 0 %}
+        {% for total in quoteOptionsTotal %}
+            <tr>
+                <td>
+                    <h2>Total T.T.C avec option {{ loop.index }}</h2>
+                    <p>{{ quoteTitles[loop.index0] }}</p>
+                </td>
+                <td class="private">
+                    {{ macros.printTime(quoteOptionsHours[loop.index0]) }}
+                    <hr />
+                    <strong>{{ macros.printTime(quoteHours + quoteOptionsHours[loop.index0]) }}</strong>
+                </td>
+                <td class="text-right"><h2>{{ "%d €" | format(total + quoteTotal) }}</h2></td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <th><h2>Net à payer</h2></th>
+            <td class="private"></td>
+            <th class="text-right"><h2>{{ "%d €" | format(quoteTotal) }}</h2></th>
+        </tr>
+    {% endif %}
+</table>

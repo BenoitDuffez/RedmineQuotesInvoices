@@ -45,9 +45,15 @@ class InvoiceController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $invoice->setBillingDate(new \DateTime());
+			$invoice->setTitle("");
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($invoice);
             $em->flush();
+
+            $invoice->updateTitle();
+			$em->persist($invoice);
+			$em->flush();
 
             return $this->redirectToRoute('invoice_show', array('id' => $invoice->getId()));
         }
@@ -73,6 +79,43 @@ class InvoiceController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
+	/**
+	 * Finds and displays a invoice entity.
+	 *
+	 * @Route("/{id}/pdf", name="invoice_show_pdf")
+	 * @Method("GET")
+	 * @param Invoice $invoice Invoice to display
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function showPdfAction(Invoice $invoice)
+	{
+		//$invoice->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
+
+		$html = $this->renderView('invoice/show_pdf.html.twig', ['invoice' => $invoice]);
+		$header = $this->renderView('invoice/pdf_header.html.twig', ['invoice' => $invoice]);
+		$footer = $this->renderView('invoice/pdf_footer.html.twig', ['invoice' => $invoice]);
+
+		$filename = sprintf("devis_%s.pdf", $invoice->getTitle());
+
+		$snappy = $this->get('knp_snappy.pdf');
+		$snappy->setOption('header-html', $header);
+		$snappy->setOption('footer-html', $footer);
+		$snappy->setOption('margin-top', 10);
+		$snappy->setOption('margin-bottom', 10);
+		$snappy->setOption('margin-left', 10);
+		$snappy->setOption('margin-right', 10);
+		$snappy->setOption('print-media-type', true);
+
+		return new \Symfony\Component\HttpFoundation\Response(
+			$snappy->getOutputFromHtml($html),
+			200,
+			[
+				'Content-Type'        => 'application/pdf',
+				'Content-Disposition' => sprintf('attachment; filename="%s"', $filename),
+			]
+		);
+	}
 
     /**
      * Displays a form to edit an existing invoice entity.
