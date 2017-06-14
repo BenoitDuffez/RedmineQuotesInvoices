@@ -84,7 +84,7 @@ class Quote
     /**
      * @var string
      *
-     * @ORM\Column(name="comments", type="text")
+     * @ORM\Column(name="comments", type="text", nullable=true)
      */
     private $comments;
 
@@ -107,10 +107,10 @@ class Quote
     /**
      * @var QuoteStateType
      *
-     * @ORM\Column(name="state", type="QuoteStateType", nullable=false)
+     * @ORM\Column(name="state", type="QuoteStateType", nullable=false, options={"default": "DRAFT"})
      * @DoctrineAssert\Enum(entity="AppBundle\DBAL\Types\QuoteStateType")
      */
-    private $state;
+    private $state = QuoteStateType::DRAFT;
 
 	/**
 	 * @var Quote
