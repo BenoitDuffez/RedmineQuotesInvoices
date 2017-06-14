@@ -24,6 +24,7 @@
         "aptoma/twig-markdown": "^2.0",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/orm": "^2.5",
+        "fresh/doctrine-enum-bundle": "~5.0",
         "h4cc/wkhtmltopdf-amd64": "^0.12.3",
         "incenteev/composer-parameter-handler": "^2.0",
         "kbsali/redmine-api": "~1.0",

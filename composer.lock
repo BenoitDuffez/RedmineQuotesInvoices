@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "bddc432b4f6c7a47e88f4ad594597010",
+    "content-hash": "51b170418710e377e8d5c481ea251da9",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -944,6 +944,85 @@
                 "rest"
             ],
             "time": "2016-10-17T18:31:11+00:00"
+        },
+        {
+            "name": "fresh/doctrine-enum-bundle",
+            "version": "v5.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fre5h/DoctrineEnumBundle.git",
+                "reference": "adf387d865730629297b323e0dd5fbf529e774f4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fre5h/DoctrineEnumBundle/zipball/adf387d865730629297b323e0dd5fbf529e774f4",
+                "reference": "adf387d865730629297b323e0dd5fbf529e774f4",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/common": "~2.6",
+                "doctrine/dbal": "~2.5",
+                "php": ">=5.6.0",
+                "symfony/config": "~3.2",
+                "symfony/dependency-injection": "~3.2",
+                "symfony/doctrine-bridge": "~3.2",
+                "symfony/form": "~3.2",
+                "symfony/framework-bundle": "~3.2",
+                "symfony/http-kernel": "~3.2",
+                "symfony/validator": "~3.2",
+                "twig/twig": "~1.30 || ~2.0"
+            },
+            "require-dev": {
+                "escapestudios/symfony2-coding-standard": "~2.9",
+                "phpunit/phpunit": "5.7.*",
+                "squizlabs/php_codesniffer": "~2.7"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Fresh\\DoctrineEnumBundle\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Artem Genvald",
+                    "email": "genvaldartem@gmail.com",
+                    "role": "Creator"
+                },
+                {
+                    "name": "Community",
+                    "homepage": "https://github.com/fre5h/DoctrineEnumBundle/graphs/contributors",
+                    "role": "Contributors"
+                }
+            ],
+            "description": "Provides support of ENUM type for Doctrine2 in Symfony applications.",
+            "homepage": "https://github.com/fre5h/DoctrineEnumBundle",
+            "keywords": [
+                "bundle",
+                "dbal",
+                "doctrine",
+                "entity",
+                "enum",
+                "mssql",
+                "mysql",
+                "postgresql",
+                "sqlite",
+                "symfony",
+                "type"
+            ],
+            "time": "2017-06-06T11:24:50+00:00"
         },
         {
             "name": "h4cc/wkhtmltopdf-amd64",

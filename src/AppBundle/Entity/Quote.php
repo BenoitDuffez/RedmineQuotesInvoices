@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Redmine\Client;
 use Symfony\Component\Validator\Constraints as Assert;
+use AppBundle\DBAL\Types\QuoteStateType;
+use Fresh\DoctrineEnumBundle\Validator\Constraints as DoctrineAssert;
 
 /**
  * Quote
@@ -101,6 +103,14 @@ class Quote
 	 * @ORM\OrderBy({"position" = "ASC"})
 	 */
 	private $invoices;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="state", type="QuoteStateType")
+     * @DoctrineAssert\Enum(entity="AppBundle\DBAL\Types\QuoteStateType")
+     */
+    private $state;
 
 	public function __construct() {
 		$this->sections = new ArrayCollection();
