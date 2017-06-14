@@ -4,6 +4,23 @@
     <div class="col-md-12 text-right">{{ invoice.billingDate | date('d/m/Y') }}</div>
 </div>
 
+<div class="row">
+    <div class="col-md-4">
+        <div class="contact">Benoit Duffez
+            18, allée du Léon
+            35230 Bourgbarré
+
+            SIRET: 53879565900035</div>
+    </div>
+    <div class="col-md-4 col-md-offset-4 text-right">
+        <div class="contact">{{ invoice.quote.customerField('firstname') }} {{ invoice.quote.customerField('lastname') }}
+            {{ invoice.quote.customerField('company_name') }}
+            {{ invoice.quote.customerField('address') }}
+
+            SIRET: {{ invoice.quote.customerField('siret') }}</div>
+    </div>
+</div>
+
 {% if invoice.replacementText | length %}
 
     <table class="table table-bordered">
@@ -34,6 +51,9 @@
     <tr>
         <td>Paiement par chèque à l'ordre de Benoit Duffez, ou par virement bancaire: FR76 4061 8802 7000 0402 3381 234</td>
     </tr>
+</table>
+
+<table class="table table-bordered">
     <tr>
         <th>Modalités</th>
     </tr>

@@ -64,15 +64,17 @@ class InvoiceController extends Controller
         ));
     }
 
-    /**
-     * Finds and displays a invoice entity.
-     *
-     * @Route("/{id}", name="invoice_show")
-     * @Method("GET")
-     */
-    public function showAction(Invoice $invoice)
-    {
-        $deleteForm = $this->createDeleteForm($invoice);
+	/**
+	 * Finds and displays a invoice entity.
+	 *
+	 * @Route("/{id}", name="invoice_show")
+	 * @Method("GET")
+	 * @param Invoice $invoice
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+    public function showAction(Invoice $invoice) {
+    	$invoice->getQuote()->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
+		$deleteForm = $this->createDeleteForm($invoice);
 
         return $this->render('invoice/show.html.twig', array(
             'invoice' => $invoice,
@@ -90,7 +92,7 @@ class InvoiceController extends Controller
 	 */
 	public function showPdfAction(Invoice $invoice)
 	{
-		//$invoice->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
+		$invoice->getQuote()->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
 
 		$html = $this->renderView('invoice/show_pdf.html.twig', ['invoice' => $invoice]);
 		$header = $this->renderView('invoice/pdf_header.html.twig', ['invoice' => $invoice]);
