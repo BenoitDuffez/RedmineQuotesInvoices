@@ -5,10 +5,10 @@ namespace AppBundle\DBAL\Types;
 use Fresh\DoctrineEnumBundle\DBAL\Types\AbstractEnumType;
 
 final class QuoteStateType extends AbstractEnumType {
-    const DRAFT = 'draft';
-    const REJECTED = 'rejected';
-    const REPLACED = 'replaced';
-    const ACCEPTED = 'accepted';
+    const DRAFT = 'DRAFT';
+    const REJECTED = 'REJECTED';
+    const REPLACED = 'REPLACED';
+    const ACCEPTED = 'ACCEPTED';
 
     // Need to change?
     // => https://github.com/fre5h/DoctrineEnumBundle#hook-for-doctrine-migrations

@@ -105,16 +105,32 @@ class Quote
 	private $invoices;
 
     /**
-     * @var string
+     * @var QuoteStateType
      *
-     * @ORM\Column(name="state", type="QuoteStateType")
+     * @ORM\Column(name="state", type="QuoteStateType", nullable=false)
      * @DoctrineAssert\Enum(entity="AppBundle\DBAL\Types\QuoteStateType")
      */
     private $state;
 
+	/**
+	 * @var Quote
+	 *
+	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Quote", inversedBy="children")
+	 * @ORM\JoinColumn(name="parent", referencedColumnName="id")
+	 */
+	private $parent;
+
+	/**
+	 * @var ArrayCollection
+	 *
+	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Quote", mappedBy="parent")
+	 */
+	private $children;
+
 	public function __construct() {
 		$this->sections = new ArrayCollection();
 		$this->invoices = new ArrayCollection();
+		$this->children = new ArrayCollection();
 		$this->redmine = null;
 		$this->customer = null;
 	}
@@ -388,5 +404,124 @@ class Quote
     public function getComments()
     {
         return $this->comments;
+    }
+
+    /**
+     * Set state
+     *
+     * @param string $state
+     *
+     * @return Quote
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return QuoteStateType
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * Add invoice
+     *
+     * @param \AppBundle\Entity\Invoice $invoice
+     *
+     * @return Quote
+     */
+    public function addInvoice(Invoice $invoice)
+    {
+		$invoice->setQuote($this);
+        $this->invoices[] = $invoice;
+
+        return $this;
+    }
+
+    /**
+     * Remove invoice
+     *
+     * @param \AppBundle\Entity\Invoice $invoice
+     */
+    public function removeInvoice(Invoice $invoice)
+    {
+        $this->invoices->removeElement($invoice);
+    }
+
+    /**
+     * Get invoices
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInvoices()
+    {
+        return $this->invoices;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \AppBundle\Entity\Quote $parent
+     *
+     * @return Quote
+     */
+    public function setParent(Quote $parent = null)
+    {
+        $this->parent = $parent;
+		$parent->addChild($this);
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \AppBundle\Entity\Quote
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Add child
+     *
+     * @param \AppBundle\Entity\Quote $child
+     *
+     * @return Quote
+     */
+    public function addChild(Quote $child)
+    {
+		$child->setParent($this);
+        $this->children[] = $child;
+
+        return $this;
+    }
+
+    /**
+     * Remove child
+     *
+     * @param \AppBundle\Entity\Quote $child
+     */
+    public function removeChild(Quote $child)
+    {
+        $this->children->removeElement($child);
+    }
+
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
     }
 }

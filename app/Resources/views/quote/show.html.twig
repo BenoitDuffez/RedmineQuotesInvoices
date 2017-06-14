@@ -23,26 +23,52 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Quote actions <span class="caret"></span></a>
 
             <ul class="dropdown-menu">
-    <li>
-        <a href="{{ path('quote_edit', {'id': quote.id}) }}" title="Edit">
-            <span class="glyphicon glyphicon-edit"></span>
-            Edit
-        </a>
-    </li>
 
-    <li>
-        <a href="{{ path('quote_show_pdf', {'id': quote.id}) }}" title="Download PDF">
-            <span class="glyphicon glyphicon-download-alt"></span>
-            Download PDF
-        </a>
-    </li>
+                {% if quote.state == 'DRAFT' %}
 
-    <li>
-        <a href="{{ path('quote_upload_redmine', {'id': quote.id}) }}" title="Export to Redmine">
-            <span class="glyphicon glyphicon-share"></span>
-            Export to Redmine
-        </a>
-    </li>
+                    <li>
+                        <a href="{{ path('quote_edit', {'id': quote.id}) }}" title="Edit">
+                            <span class="glyphicon glyphicon-edit"></span>
+                            Edit
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('quote_change_state', {'id': quote.id, 'state': 'ACCEPTED'}) }}" title="Mark as accepted">
+                            <span class="glyphicon glyphicon-ok"></span>
+                            Mark as accepted
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('quote_change_state', {'id': quote.id, 'state': 'REJECTED'}) }}" title="Mark as rejected">
+                            <span class="glyphicon glyphicon-remove"></span>
+                            Mark as rejected
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ path('quote_duplicate', {'id': quote.id}) }}" title="Duplicate">
+                            <span class="glyphicon glyphicon-duplicate"></span>
+                            Duplicate
+                        </a>
+                    </li>
+
+                {% elseif quote.state == 'ACCEPTED' %}
+
+                    <li>
+                        <a href="{{ path('quote_show_pdf', {'id': quote.id}) }}" title="Download PDF">
+                            <span class="glyphicon glyphicon-download-alt"></span>
+                            Download PDF
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ path('quote_upload_redmine', {'id': quote.id}) }}" title="Export to Redmine">
+                            <span class="glyphicon glyphicon-share"></span>
+                            Export to Redmine
+                        </a>
+                    </li>
+
+                {% endif %}
 
             </ul>
         </li>

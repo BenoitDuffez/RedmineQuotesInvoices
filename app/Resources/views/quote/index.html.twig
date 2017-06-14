@@ -8,6 +8,7 @@
             <tr>
                 <th>#</th>
                 <th>Identifier</th>
+                <th>State</th>
                 <th>Creation Date</th>
                 <th>Customer</th>
                 <th>Project</th>
@@ -20,6 +21,7 @@
             <tr data-quote="{{ quote.id }}">
                 <td><a href="{{ path('quote_show', { 'id': quote.id }) }}">{{ quote.id }}</a></td>
                 <td>{{ quote.title }}</td>
+                <td>{{ quote.state | readable_enum }}</td>
                 <td>{% if quote.dateCreation %}{{ quote.dateCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{{ quote.customerField('firstname') }} {{ quote.customerField('lastname') }}</td>
                 <td>{{ quote.projectField('name') }}</td>

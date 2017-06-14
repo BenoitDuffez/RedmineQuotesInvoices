@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\DBAL\Types\QuoteStateType;
 use AppBundle\Entity\Quote;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -10,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Redmine\Client;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Quote controller.
@@ -122,8 +124,13 @@ class QuoteController extends Controller
 		$dupe->updateTitle();
 		$dupe->setDateCreation(new \DateTime());
 
+		$quote->setState(QuoteStateType::REPLACED);
+		$quote->addChild($dupe);
+		$dupe->setParent($quote);
+
 		$em = $this->getDoctrine()->getManager();
 		$em->persist($dupe);
+		$em->persist($quote);
 		$em->flush();
 
 		return $this->redirectToRoute('quote_show', array('id' => $dupe->getId()));
@@ -238,6 +245,28 @@ class QuoteController extends Controller
 
         return $this->redirectToRoute('quote_index');
     }
+
+	/**
+	 * @Route("/{id}/mark/{state}", name="quote_change_state")
+	 * @Method("GET")
+	 *
+	 * @param Request $request
+	 * @param Quote $quote
+	 * @param string $state
+	 * @return Response
+	 */
+	public function changeStateAction(Request $request, Quote $quote, $state) {
+		if (!QuoteStateType::isValueExist($state)) {
+			throw $this->createNotFoundException('The target quote state does not exist');
+		}
+
+		$quote->setState($state);
+		$em = $this->getDoctrine()->getManager();
+		$em->persist($quote);
+		$em->flush();
+
+		return $this->redirectToRoute('quote_show', array('id' => $quote->getId()));
+	}
 
 	/**
 	 * Upload the quote to redmine

@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
+use AppBundle\DBAL\Types\QuoteStateType;
 
 /**
  * QuoteRepository
@@ -17,6 +18,8 @@ class QuoteRepository extends \Doctrine\ORM\EntityRepository
     public function createAvailableQuotesQueryBuilder() {
         return $this->createQueryBuilder('q')
             ->leftJoin('q.invoices', 'i')
+			->where('q.state = :state')
+			->setParameter('state', QuoteStateType::ACCEPTED)
             ->groupBy('q.id')
             ->having('coalesce(sum(i.percentage), 0) < 100');
     }
