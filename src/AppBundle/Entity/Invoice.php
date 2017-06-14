@@ -41,7 +41,7 @@ class Invoice
      *
      * @ORM\Column(name="percentage", type="decimal", precision=10, scale=2)
      */
-    private $percentage;
+    private $percentage = 100;
 
     /**
      * @var string

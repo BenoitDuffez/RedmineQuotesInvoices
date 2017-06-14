@@ -1,3 +1,71 @@
+{% block _appbundle_invoice_widget %}
+    <h2>Mandatory parameters</h2>
+    <div class="row">
+        <div class="col-sm-4">
+            <p>Select source quote (must be in state ACCEPTED)</p>
+            {{ form_widget(form.quote) }}
+        </div>
+        <div class="col-sm-8" id="sectionsContainer">
+            <p>Available sections in this quote</p>
+            {{ form_widget(form.selectedSections) }}
+            <div id="quoteSections" class="form-group"></div>
+        </div>
+    </div>
+
+    <h2>Optional parameters</h2>
+    <div class="row">
+        <div class="col-lg-12">
+            <p>Select quote amount percentage</p>
+            {{ form_widget(form.percentage) }}
+
+            <p>Select replacement text (will replace ALL sections and ALL items)</p>
+            {{ form_widget(form.replacementText) }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12 text-right">
+            {% set label = form.vars.value.id ? "Edit" : "Create" %}
+            <input type="submit" value="{{ label }}" class="btn btn-lg btn-default"/>
+        </div>
+    </div>
+
+    {{ dump() }}
+
+    <script type="text/javascript">
+//        $('#sectionsContainer').hide();
+        $(document).on('change', '#{{ form.quote.vars.id }}', function () {
+            onQuoteChanged($(this).val());
+        });
+
+        function onQuoteChanged(quoteId) {
+            $.getJSON('{{ path('quote_list_sections') }}'.replace(/\/0\//, "/" + quoteId + "/"), function (sections) {
+                $('#sectionsContainer').show();
+                var div = $('#{{ form.selectedSections.vars.id }}');
+                div.empty();
+                $.each(sections, function (i, section) {
+                    var checkBox = $('<div>')
+                        .attr('class', 'checkbox' + (section.option ? '' : ' disabled'));
+                    $('<input>')
+                        .attr('type', 'checkbox')
+                        .attr('id', '{{ form.selectedSections.vars.id }}_' + i)
+                        .attr('value', section.id)
+                        .attr('name', '{{ form.selectedSections.vars.full_name }}[]')
+                        .attr('disabled', section.option ? false : 'disabled')
+                        .attr('checked', !section.option)
+                        .appendTo(checkBox);
+                    $('<label>')
+                        .attr('for', '{{ form.selectedSections.vars.id }}_' + i)
+                        .html(section.title)
+                        .appendTo(checkBox);
+
+                    checkBox.appendTo(div);
+                });
+            });
+        }
+    </script>
+{% endblock %}
+
 {% block _appbundle_invoice_percentage_widget %}
     <input type="text" id="{{ form.vars.id }}" name="{{ form.vars.full_name }}" {{ form.vars.required ? 'required="required"' : '' }} value="{{ form.vars.value }}" data-slider-id="{{ form.vars.id }}Slider" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="{{ form.vars.value }}"/>
     <script type="text/javascript">$('#{{ form.vars.id }}').slider();</script>

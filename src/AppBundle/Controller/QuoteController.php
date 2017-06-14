@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\DBAL\Types\QuoteStateType;
 use AppBundle\Entity\Quote;
+use AppBundle\Entity\Section;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -108,6 +109,27 @@ class QuoteController extends Controller
 			'quote' => $quote,
 			'delete_form' => $deleteForm->createView(),
 		));
+	}
+
+	/**
+	 * List the sections
+	 *
+	 * @Route("/{id}/sections.{_format}", name="quote_list_sections", requirements={"_format"="json"}, defaults={"id"=0, "_format"="json"})
+	 * @Method("GET")
+	 * @param Quote $quote Quote to display
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function showSectionsAction(Quote $quote) {
+		$data = [];
+		foreach ($quote->getSections() as $section) {
+			/* @var Section $section */
+			$data[] = [
+				'id' => $section->getId(),
+				'title' => $section->getTitle(),
+				'option' => $section->isOption(),
+			];
+		}
+		return new Response(json_encode($data));
 	}
 
 	/**

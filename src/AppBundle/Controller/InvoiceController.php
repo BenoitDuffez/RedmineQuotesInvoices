@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Invoice;
+use AppBundle\Entity\Section;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -47,15 +48,15 @@ class InvoiceController extends Controller
             $invoice->setBillingDate(new \DateTime());
 			$invoice->setTitle("");
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($invoice);
-            $em->flush();
+//          $em = $this->getDoctrine()->getManager();
+//          $em->persist($invoice);
+//          $em->flush();
+//
+//          $invoice->updateTitle();
+//			$em->persist($invoice);
+//			$em->flush();
 
-            $invoice->updateTitle();
-			$em->persist($invoice);
-			$em->flush();
-
-            return $this->redirectToRoute('invoice_show', array('id' => $invoice->getId()));
+//            return $this->redirectToRoute('invoice_show', array('id' => $invoice->getId()));
         }
 
         return $this->render('invoice/new.html.twig', array(

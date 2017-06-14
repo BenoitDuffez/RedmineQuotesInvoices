@@ -66,6 +66,13 @@ class Section
 	 */
 	private $option;
 
+	/**
+	 * @var boolean
+	 *
+	 * @ORM\Column(name="is_chosen", type="boolean")
+	 */
+	private $chosen;
+
 	public function __construct() {
 		$this->items = new ArrayCollection();
 	}
@@ -236,5 +243,29 @@ class Section
     public function isOption()
     {
         return $this->option;
+    }
+
+    /**
+     * Set chosen
+     *
+     * @param boolean $chosen
+     *
+     * @return Section
+     */
+    public function setChosen($chosen)
+    {
+        $this->chosen = $chosen;
+
+        return $this;
+    }
+
+    /**
+     * Get chosen
+     *
+     * @return boolean
+     */
+    public function getChosen()
+    {
+        return $this->chosen;
     }
 }
