@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\DBAL\Types\QuoteStateType;
+use AppBundle\Entity\Item;
 use AppBundle\Entity\Quote;
 use AppBundle\Entity\Section;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -170,9 +171,13 @@ class QuoteController extends Controller
     {
         $quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
 
-        $html = $this->renderView('quote/show_pdf.html.twig', ['quote' => $quote]);
-        $header = $this->renderView('quote/pdf_header.html.twig', ['quote' => $quote]);
-        $footer = $this->renderView('quote/pdf_footer.html.twig', ['quote' => $quote]);
+		$footerText = "SIRET : 538 795 659 00035 — "
+			. "TVA non applicable, art. 293 B du CGI<br />"
+            . "Dispensé d’immatriculation au registre du commerce et des sociétés (RCS) en application de l'article L.123-1-1 du Code du Commerce";
+
+        $html = $this->renderView('quote/base.html.twig', ['quote' => $quote]);
+        $header = $this->renderView('pdf/header_footer.html.twig', ['title' => $quote->getTitle(), 'text' => '']);
+        $footer = $this->renderView('pdf/header_footer.html.twig', ['quote' => $quote->getTitle(), 'text' => $footerText]);
 
         $filename = sprintf("devis_%s.pdf", $quote->getTitle());
 
@@ -219,15 +224,18 @@ class QuoteController extends Controller
     public function pdfHeaderAction(Quote $quote)
     {
         $quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
-        return $this->render('quote/pdf_header.html.twig', ['quote' => $quote]);
+        return $this->render('quote/header_footer.html.twig', ['quote' => $quote]);
     }
 
-    /**
-     * Displays a form to edit an existing quote entity.
-     *
-     * @Route("/{id}/edit", name="quote_edit")
-     * @Method({"GET", "POST"})
-     */
+	/**
+	 * Displays a form to edit an existing quote entity.
+	 *
+	 * @Route("/{id}/edit", name="quote_edit")
+	 * @Method({"GET", "POST"})
+	 * @param Request $request
+	 * @param Quote $quote
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+	 */
     public function editAction(Request $request, Quote $quote)
     {
         $deleteForm = $this->createDeleteForm($quote);
@@ -248,12 +256,15 @@ class QuoteController extends Controller
 		));
     }
 
-    /**
-     * Deletes a quote entity.
-     *
-     * @Route("/{id}", name="quote_delete")
-     * @Method("DELETE")
-     */
+	/**
+	 * Deletes a quote entity.
+	 *
+	 * @Route("/{id}", name="quote_delete")
+	 * @Method("DELETE")
+	 * @param Request $request
+	 * @param Quote $quote
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 */
     public function deleteAction(Request $request, Quote $quote)
     {
         $form = $this->createDeleteForm($quote);
@@ -311,6 +322,7 @@ class QuoteController extends Controller
 
 		foreach ($quote->getSections() as $section) {
 			foreach ($section->getItems() as $item) {
+				/* @var Item $item */
 				if (!isset($categories[$section->getTitle()])) {
 					$categories[$section->getTitle()]
 						= (int) $redmine->issue_category->create(

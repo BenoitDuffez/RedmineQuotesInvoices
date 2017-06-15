@@ -2,24 +2,6 @@
 
 {% block body %}
     {{ include('invoice/show_body.html.twig') }}
-
-    <ul>
-        <li>
-            <a href="{{ path('invoice_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('invoice_edit', { 'id': invoice.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
-{% endblock %}
-
-{% block stylesheets %}
-    {{ include(':quote:show_head.html.twig') }}
 {% endblock %}
 
 {% block navbar %}

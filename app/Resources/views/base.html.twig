@@ -28,22 +28,7 @@
         <script src="{{ asset('js/bootstrap-slider.min.js') }}" type="application/javascript"></script>
 
         <style type="text/css">
-        body {
-            padding-top: 70px;
-        }
-
-        /* set a max-width for horizontal fluid layout and make it centered */
-        .container-fluid {
-            margin-right: auto;
-            margin-left: auto;
-            max-width: 1280px;
-        }
-
-        .markdown {
-            background: url('{{ asset('md.png') }}');
-            background-repeat: no-repeat;
-            background-position: right 5px bottom 5px;
-        }
+            {{ include('::qiv.css.twig') }}
         </style>
     </head>
     <body>

@@ -1,3 +1,10 @@
+<div class="private row">
+    <div class="col-xs-12">
+        <h3>Comments</h3>
+        <p>{{ quote.comments | markdown }}</p>
+    </div>
+</div>
+
 {% set quoteTotal = 0 %}
 {% set quoteHours = 0 %}
 {% set optionId = 0 %}
@@ -56,47 +63,4 @@
         </tr>
     {% endfor %}
     </tbody>
-</table>
-
-{% macro printTime(time) %}
-    <p>
-        {{ "%.1f h" | format(time) }}<br />
-        {{ "%.1f sem (à 15h / sem)" | format(time / 15) }}
-    </p>
-{% endmacro %}
-{% import _self as macros %}
-
-<table class="table table-bordered">
-    <tr>
-        <td>T.V.A. 0%, non applicable, article 293B du CGI</td>
-        <td class="private">Temps estimé</td>
-        <td class="text-right">{{ "%d €" | format(0) }}</td>
-    </tr>
-    <tr>
-        <td><h3>Total T.T.C. {{ optionId > 0 ? "(socle)" : "" }}</h3></td>
-        <td class="private">{{ macros.printTime(quoteHours) }}</td>
-        <td class="text-right"><h3>{{ "%d €" | format(quoteTotal) }}</h3></td>
-    </tr>
-    {% if optionId > 0 %}
-        {% for total in quoteOptionsTotal %}
-            <tr>
-                <td>
-                    <h2>Total T.T.C avec option {{ loop.index }}</h2>
-                    <p>{{ quoteTitles[loop.index0] }}</p>
-                </td>
-                <td class="private">
-                    {{ macros.printTime(quoteOptionsHours[loop.index0]) }}
-                    <hr />
-                    <strong>{{ macros.printTime(quoteHours + quoteOptionsHours[loop.index0]) }}</strong>
-                </td>
-                <td class="text-right"><h2>{{ "%d €" | format(total + quoteTotal) }}</h2></td>
-            </tr>
-        {% endfor %}
-    {% else %}
-        <tr>
-            <th><h2>Net à payer</h2></th>
-            <td class="private"></td>
-            <th class="text-right"><h2>{{ "%d €" | format(quoteTotal) }}</h2></th>
-        </tr>
-    {% endif %}
 </table>

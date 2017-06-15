@@ -1,9 +1,9 @@
 {% extends ":pdf:base.html.twig" %}
 
 {% block title %}
-    Devis {{ quote.title }}
+    {{ title }}
 {% endblock %}
 
 {% block pdf_body %}
-    {{ include(':quote:show_body.html.twig') }}
+    {{ text }}
 {% endblock %}

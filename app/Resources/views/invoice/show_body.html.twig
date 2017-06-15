@@ -41,7 +41,7 @@
     </table>
 {% else %}
     {% set quote = invoice.quote %}
-    {{ include(':quote:show_body_main_table.html.twig') }}
+    {{ include('::quote:show_main_table.html.twig') }}
 {% endif %}
 
 <table class="table table-bordered">

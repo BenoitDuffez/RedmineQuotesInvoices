@@ -1,0 +1,55 @@
+body {
+    padding-top: 70px;
+}
+
+/* set a max-width for horizontal fluid layout and make it centered */
+.container-fluid {
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1280px;
+}
+
+.markdown {
+    background: url('{{ asset('md.png') }}');
+    background-repeat: no-repeat;
+    background-position: right 5px bottom 5px;
+}
+
+div.container > div.row {
+    padding-bottom: 1em;
+}
+
+.contact {
+    white-space: pre;
+    padding: 1em;
+    margin: .5em;
+    line-height: normal;
+    border: 1px #666 solid;
+    background: #fafafa;
+}
+
+.table {
+    margin-top: 2em;
+}
+
+@media all {
+    .private {
+        background: repeating-linear-gradient(
+                -45deg,
+                rgb(250, 190, 190),
+                rgb(250, 190, 190) 10px,
+                rgb(240, 150, 150) 10px,
+                rgb(240, 150, 150) 20px
+        );
+    }
+}
+
+@media print {
+    .private {
+        display: none;
+    }
+
+    tr {
+        page-break-inside: avoid
+    }
+}
