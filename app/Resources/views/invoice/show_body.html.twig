@@ -32,10 +32,10 @@
         </thead>
         <tbody>
             <tr>
-                <td class="col-md-10">
+                <td class="col-md-8">
                     {{ invoice.replacementText | markdown}}
                 </td>
-                <td class="col-md-2 text-right">{{ "%d €" | format(invoice.percentage/100 * invoice.total) }}</td>
+                <td class="col-md-4 text-right">{{ "%d €" | format(invoice.total) }}</td>
             </tr>
         </tbody>
     </table>
@@ -43,6 +43,21 @@
     {% set quote = invoice.quote %}
     {{ include(':quote:show_body_main_table.html.twig') }}
 {% endif %}
+
+<table class="table table-bordered">
+    <tr>
+        <th class="col-lg-8">Total</th>
+        <td class="col-lg-4 text-right">{{ "%d €" | format(invoice.total) }}</td>
+    </tr>
+    <tr>
+        <td>T.V.A. non applicable, art 293B du C.G.I</td>
+        <td class="text-right">{{ "%d €" | format(0) }}</td>
+    </tr>
+    <tr>
+        <td><h3>Net à payer</h3>
+        <td class="text-right"><h3>{{ "%d €" | format(invoice.percentage/100 * invoice.total) }}</h3></td>
+    </tr>
+</table>
 
 <table class="table table-bordered">
     <tr>
