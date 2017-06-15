@@ -25,7 +25,7 @@
     <div class="row">
         <div class="col-lg-12 text-right">
             {% set label = form.vars.value.id ? "Edit" : "Create" %}
-            <input type="submit" value="{{ label }}" disabled="disabled" class="btn btn-lg btn-default"/>
+            <input type="submit" value="{{ label }}" {{ value.id ? '' : ' disabled="disabled"' }} class="btn btn-lg btn-default"/>
         </div>
     </div>
 
