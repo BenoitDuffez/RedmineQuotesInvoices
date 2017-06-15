@@ -47,30 +47,30 @@ SIRET: 53879565900035</div>
         <td class="text-right">{{ "%d €" | format(0) }}</td>
     </tr>
     <tr>
-        <td><h3>Total T.T.C. {{ optionId > 0 ? "(socle)" : "" }}</h3></td>
-        <td class="private">{{ macros.printTime(quoteHours) }}</td>
-        <td class="text-right"><h3>{{ "%d €" | format(quoteTotal) }}</h3></td>
+        <td><h3>Total T.T.C. {{ quote.hasOptions ? "(socle)" : "" }}</h3></td>
+        <td class="private">{{ macros.printTime(quote.baseHours) }}</td>
+        <td class="text-right"><h3>{{ "%d €" | format(quote.baseTotal) }}</h3></td>
     </tr>
-    {% if optionId > 0 %}
-        {% for total in quoteOptionsTotal %}
+    {% if quote.hasOptions %}
+        {% for option in quote.options %}
             <tr>
                 <td>
                     <h2>Total T.T.C avec option {{ loop.index }}</h2>
-                    <p>{{ quoteTitles[loop.index0] }}</p>
+                    <p>{{ option.title }}</p>
                 </td>
                 <td class="private">
-                    {{ macros.printTime(quoteOptionsHours[loop.index0]) }}
+                    {{ macros.printTime(option.hours) }}
                     <hr />
-                    <strong>{{ macros.printTime(quoteHours + quoteOptionsHours[loop.index0]) }}</strong>
+                    <strong>{{ macros.printTime(quote.baseHours + option.hours) }}</strong>
                 </td>
-                <td class="text-right"><h2>{{ "%d €" | format(total + quoteTotal) }}</h2></td>
+                <td class="text-right"><h2>{{ "%d €" | format(quote.baseTotal + option.total) }}</h2></td>
             </tr>
         {% endfor %}
     {% else %}
         <tr>
             <th><h2>Net à payer</h2></th>
             <td class="private"></td>
-            <th class="text-right"><h2>{{ "%d €" | format(quoteTotal) }}</h2></th>
+            <th class="text-right"><h2>{{ "%d €" | format(quote.baseTotal) }}</h2></th>
         </tr>
     {% endif %}
 </table>

@@ -53,7 +53,7 @@ class Section
 
 	/**
 	 * @var ArrayCollection
-	 * 
+	 *
 	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Item", mappedBy="section", cascade={"all"})
 	 * @ORM\OrderBy({"position" = "ASC"})
 	 */
@@ -311,4 +311,17 @@ class Section
     {
         return $this->invoices;
     }
+
+	/**
+	 * Total number of hours of all items
+	 * @return float
+	 */
+	public function getHours() {
+		$total = 0;
+		foreach ($this->getItems() as $item) {
+			/* @var Item $item */
+			$total += (double) $item->getHours();
+		}
+		return $total;
+	}
 }

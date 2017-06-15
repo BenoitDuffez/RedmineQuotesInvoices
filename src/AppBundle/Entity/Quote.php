@@ -524,4 +524,62 @@ class Quote
     {
         return $this->children;
     }
+
+	/**
+	 * @return bool True if at least one section is optional
+	 */
+    public function hasOptions() {
+		foreach ($this->getSections() as $section) {
+			/* @var Section $section */
+			if ($section->isOption()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public function baseHours() {
+		$total = 0;
+		foreach ($this->getSections() as $section) {
+			/* @var Section $section */
+			if (!$section->isOption()) {
+				$total += $section->getHours();
+			}
+		}
+		return $total;
+	}
+
+	public function baseTotal() {
+		$total = 0;
+		foreach ($this->getSections() as $section) {
+			/* @var Section $section */
+			if (!$section->isOption()) {
+				$total += $section->getHours() * $section->getRate();
+			}
+		}
+		return $total;
+	}
+
+	public function getOptions() {
+    	$options = [];
+		foreach ($this->getSections() as $section) {
+			/* @var Section $section */
+			if ($section->isOption()) {
+				$hours = 0;
+				$total = 0;
+				foreach ($section->getItems() as $item) {
+					/* @var Item $item */
+					$total += (double) $item->getHours() * $section->getRate();
+					$hours += (double) $item->getHours();
+				}
+				$options[] = [
+					'title' => $section->getTitle(),
+					'hours' => $hours,
+					'global_hours' => 0,
+					'total' => $total,
+				];
+			}
+		}
+		return $options;
+	}
 }

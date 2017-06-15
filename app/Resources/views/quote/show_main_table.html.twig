@@ -5,12 +5,6 @@
     </div>
 </div>
 
-{% set quoteTotal = 0 %}
-{% set quoteHours = 0 %}
-{% set optionId = 0 %}
-{% set quoteOptionsTotal = {} %}
-{% set quoteOptionsHours = {} %}
-{% set quoteTitles = {} %}
 <table class="table table-bordered">
     <thead>
     <tr>
@@ -21,15 +15,15 @@
     </tr>
     </thead>
     <tbody>
+    {% set optionId = 0 %}
     {% for section in quote.sections %}
-        {% set sectionTotal = 0 %}
-        {% set sectionHours = 0 %}
         {% for item in section.items %}
             <tr>
                 {% if loop.index0 == 0 %}
                     <td class="col-md-2" rowspan="{{ section.items | length }}">
                         {% if section.option %}
-                            <strong>OPTION {{ "%d" | format(optionId + 1) }}</strong><br />
+                            {% set optionId = optionId + 1 %}
+                            <strong>OPTION {{ "%d" | format(optionId) }}</strong><br />
                         {% endif %}
                         {{ section.title }}
                     </td>
@@ -38,8 +32,6 @@
                     <div class="row">
                         <div class="col-md-12">
                             {{ item.description | markdown }}
-                            {% set sectionTotal = sectionTotal + item.hours * section.rate %}
-                            {% set sectionHours = sectionHours + item.hours %}
                         </div>
                     </div>
                 </td>
@@ -47,19 +39,10 @@
                 <td class="text-right col-md-2">{{ "%d €" | format(item.hours * section.rate) }}</td>
             </tr>
         {% endfor %}
-        {% if section.isOption %}
-            {% set quoteOptionsTotal = quoteOptionsTotal | merge({(optionId): sectionTotal}) %}
-            {% set quoteOptionsHours = quoteOptionsHours | merge({(optionId): sectionHours}) %}
-            {% set quoteTitles = quoteTitles | merge({(optionId): section.title}) %}
-            {% set optionId = optionId + 1 %}
-        {% else %}
-            {% set quoteTotal = quoteTotal + sectionTotal %}
-            {% set quoteHours = quoteHours + sectionHours %}
-        {% endif %}
         <tr>
             <th class="col-md-10 text-right" colspan="2">Total</th>
-            <th class="private">{{ "%.2fh" | format(sectionHours) }}</th>
-            <th class="text-right col-md-2">{{ "%d €" | format(sectionTotal) }}</th>
+            <th class="private">{{ "%.2fh" | format(section.hours) }}</th>
+            <th class="text-right col-md-2">{{ "%d €" | format(section.hours * section.rate) }}</th>
         </tr>
     {% endfor %}
     </tbody>
