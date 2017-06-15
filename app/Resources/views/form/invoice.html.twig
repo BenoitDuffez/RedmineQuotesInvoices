@@ -46,6 +46,11 @@ function onQuoteChanged() {
             $('#{{ form.sections.vars.id }}').replaceWith(
                 $(html).find('#{{ form.sections.vars.id }}')
             );
+            $('div#{{ form.percentage.vars.id }}').remove();
+            $('input#{{ form.percentage.vars.id }}').replaceWith(
+                $(html).find('input#{{ form.percentage.vars.id }}')
+            );
+            $('#{{ form.percentage.vars.id }}').slider({tooltip: 'always'});
 
             $('input[type=submit]').prop('disabled', false);
         }
@@ -61,7 +66,7 @@ function onQuoteChanged() {
 {% endblock %}
 
 {% block _appbundle_invoice_percentage_widget %}
-    <input type="text" id="{{ form.vars.id }}" name="{{ form.vars.full_name }}" {{ form.vars.required ? 'required="required"' : '' }} value="{{ form.vars.value }}" data-slider-id="{{ form.vars.id }}Slider" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="{{ form.vars.value }}"/>
-    <script type="text/javascript">$('#{{ form.vars.id }}').slider();</script>
+    <input type="text" id="{{ form.vars.id }}" name="{{ form.vars.full_name }}" {{ form.vars.required ? 'required="required"' : '' }} value="{{ form.vars.value }}" data-slider-id="{{ form.vars.id }}" data-slider-min="{{ attr['data-slider-min'] | default(0) }}" data-slider-max="{{ attr['data-slider-max'] | default(100) }}" data-slider-step="{{ attr['data-slider-step'] | default(1) }}" data-slider-value="{{ min(attr['data-slider-max'] | default(100), form.vars.value) | default(attr['data-slider-max'] | default(100)) }}"/>
+    <script type="text/javascript">$('#{{ form.vars.id }}').slider({tooltip: 'always'});</script>
 {% endblock %}
 

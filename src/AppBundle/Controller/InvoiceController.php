@@ -46,17 +46,17 @@ class InvoiceController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $invoice->setBillingDate(new \DateTime());
-			$invoice->setTitle("");
+            $invoice->setTitle("");
 
-//          $em = $this->getDoctrine()->getManager();
-//          $em->persist($invoice);
-//          $em->flush();
-//
-//          $invoice->updateTitle();
-//			$em->persist($invoice);
-//			$em->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($invoice);
+            $em->flush();
 
-//            return $this->redirectToRoute('invoice_show', array('id' => $invoice->getId()));
+            $invoice->updateTitle();
+            $em->persist($invoice);
+            $em->flush();
+
+            return $this->redirectToRoute('invoice_show', array('id' => $invoice->getId()));
         }
 
         return $this->render('invoice/new.html.twig', array(

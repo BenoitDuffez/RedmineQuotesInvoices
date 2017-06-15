@@ -57,13 +57,41 @@ class InvoiceType extends AbstractType
                     return $section->getTitle();
                 },
 			));
+            
+            // If a quote was selected, compute the remaining amount billable for that
+            if ($quote !== null) {
+                // First look up all the invoices related to that quote
+                $invoices = [];
+                foreach ($quote->getSections() as $section) {
+                    /* @var Section $section */
+                    foreach ($section->getInvoices() as $invoice) {
+                        /* @var Invoice $invoice */
+                        $invoices[$invoice->getId()] = $invoice;
+                    }
+                }
+                // Then for reach invoice remove the amount already invoiced
+                $remaining = 100;
+                foreach ($invoices as $invoice) {
+                    /* @var Invoice $invoice */
+                    $remaining -= $invoice->getPercentage();
+                }
+
+                // Apply the maximum remaining amount that can be invoiced
+                $p = $form->get('percentage');
+                $options = $p->getConfig()->getOptions();
+                $options['attr'] = array_merge($options['attr'], [
+                    'data-slider-max' => $remaining,
+                ]);
+                $form->add('percentage', null, $options);
+            }
 		};
 
 		$builder->addEventListener(
 			FormEvents::PRE_SET_DATA,
 			function (FormEvent $event) use ($formModifier) {
-				$data = $event->getData();
-				$formModifier($event->getForm(), $data->getQuote());
+				$invoice = $event->getData();
+                /* @var Invoice $data */
+				$formModifier($event->getForm(), $invoice->getQuote());
 			}
 		);
 
@@ -71,6 +99,7 @@ class InvoiceType extends AbstractType
 			FormEvents::POST_SUBMIT,
 			function (FormEvent $event) use ($formModifier) {
 				$quote = $event->getForm()->getData();
+                /* var Quote $quote */
 				$formModifier($event->getForm()->getParent(), $quote);
 			}
 		);
