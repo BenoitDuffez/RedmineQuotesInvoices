@@ -54,7 +54,7 @@
         <td class="text-right">{{ "%d €" | format(0) }}</td>
     </tr>
     {% for prev in invoice.quote.invoices %}
-        {% if prev.id != invoice.id %}
+        {% if prev.id != invoice.id and prev.billingDate < invoice.billingDate %}
             <tr>
                 <td><strong>Facture {{ prev.title }}</strong>
                     émise le {{ prev.billingDate | date('d/m/Y') }} pour {{ "%.0f %%" | format(prev.percentage) }} du total</td>
@@ -63,7 +63,12 @@
         {% endif %}
     {% endfor %}
     <tr>
-        <td><h3>Net à payer</h3></td>
+        <td>
+            <h3>Net à payer</h3>
+            {% if invoice.percentage < 100 %}
+                <p>{{ "%.0f %%" | format(invoice.percentage) }} du total</p>
+            {% endif %}
+        </td>
         <td class="text-right"><h3>{{ "%d €" | format(invoice.percentage/100 * invoice.total) }}</h3></td>
     </tr>
 </table>

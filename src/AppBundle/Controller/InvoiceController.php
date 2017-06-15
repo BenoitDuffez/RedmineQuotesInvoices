@@ -95,9 +95,13 @@ class InvoiceController extends Controller
 	{
 		$invoice->getQuote()->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
 
+		$footerText = "SIRET : 538 795 659 00035 — "
+			. "TVA non applicable, art. 293 B du CGI<br />"
+			. "Dispensé d’immatriculation au registre du commerce et des sociétés (RCS) en application de l'article L.123-1-1 du Code du Commerce";
+
 		$html = $this->renderView('invoice/show_pdf.html.twig', ['invoice' => $invoice]);
-		$header = $this->renderView('invoice/pdf_header.html.twig', ['invoice' => $invoice]);
-		$footer = $this->renderView('invoice/pdf_footer.html.twig', ['invoice' => $invoice]);
+		$header = $this->renderView('pdf/header_footer.html.twig', ['title' => $invoice->getTitle(), 'text' => '']);
+		$footer = $this->renderView('pdf/header_footer.html.twig', ['quote' => $invoice->getTitle(), 'text' => $footerText]);
 
 		$filename = sprintf("devis_%s.pdf", $invoice->getTitle());
 
