@@ -73,8 +73,16 @@ class Section
 	 */
 	private $chosen;
 
+	/**
+	 * @var ArrayCollection
+	 *
+	 * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Invoice", mappedBy="sections", cascade={"persist"})
+	 */
+	private $invoices;
+
 	public function __construct() {
 		$this->items = new ArrayCollection();
+		$this->invoices = new ArrayCollection();
 	}
 
 	public function __clone() {
@@ -267,5 +275,40 @@ class Section
     public function getChosen()
     {
         return $this->chosen;
+    }
+
+    /**
+     * Add invoice
+     *
+     * @param Invoice $invoice
+     *
+     * @return Section
+     */
+    public function addInvoice(Invoice $invoice)
+    {
+		$invoice->addSection($this);
+        $this->invoices[] = $invoice;
+
+        return $this;
+    }
+
+    /**
+     * Remove invoice
+     *
+     * @param Invoice $invoice
+     */
+    public function removeInvoice(Invoice $invoice)
+    {
+        $this->invoices->removeElement($invoice);
+    }
+
+    /**
+     * Get invoices
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInvoices()
+    {
+        return $this->invoices;
     }
 }

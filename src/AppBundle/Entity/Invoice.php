@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,7 +23,7 @@ class Invoice
     private $id;
 
     /**
-     * @var int
+     * @var Quote
      *
 	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Quote", inversedBy="invoices")
 	 * @ORM\JoinColumn(name="quote_id", referencedColumnName="id")
@@ -56,6 +57,19 @@ class Invoice
 	 * @ORM\Column(name="title", type="text")
 	 */
 	private $title;
+
+	/**
+	 * @var ArrayCollection
+	 *
+	 * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Section", inversedBy="invoices", cascade={"persist"})
+	 * @ORM\JoinTable(name="invoice_section", joinColumns={@ORM\JoinColumn(name="invoice_id", referencedColumnName="id")},
+	 *	 inverseJoinColumns={@ORM\JoinColumn(name="section_id", referencedColumnName="id")})
+	 */
+	private $sections;
+
+	public function __construct() {
+		$this->sections = new ArrayCollection();
+	}
 
 	public function updateTitle() {
 		$this->setTitle(sprintf("%s%03d", $this->getQuote()->getTitle(), $this->getId()));
@@ -200,5 +214,39 @@ class Invoice
 
 		return $this;
 	}
-}
 
+    /**
+     * Add section
+     *
+     * @param Section $section
+     *
+     * @return Invoice
+     */
+    public function addSection(Section $section)
+    {
+		$section->addInvoice($this);
+        $this->sections[] = $section;
+
+        return $this;
+    }
+
+    /**
+     * Remove section
+     *
+     * @param Section $section
+     */
+    public function removeSection(Section $section)
+    {
+        $this->sections->removeElement($section);
+    }
+
+    /**
+     * Get sections
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSections()
+    {
+        return $this->sections;
+    }
+}
