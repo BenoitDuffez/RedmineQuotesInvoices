@@ -101,9 +101,9 @@ class InvoiceController extends Controller
 
 		$html = $this->renderView('invoice/show_pdf.html.twig', ['invoice' => $invoice]);
 		$header = $this->renderView('pdf/header_footer.html.twig', ['title' => $invoice->getTitle(), 'text' => '']);
-		$footer = $this->renderView('pdf/header_footer.html.twig', ['quote' => $invoice->getTitle(), 'text' => $footerText]);
+		$footer = $this->renderView('pdf/header_footer.html.twig', ['title' => $invoice->getTitle(), 'text' => $footerText]);
 
-		$filename = sprintf("devis_%s.pdf", $invoice->getTitle());
+		$filename = sprintf("F%s.pdf", $invoice->getTitle());
 
 		$snappy = $this->get('knp_snappy.pdf');
 		$snappy->setOption('header-html', $header);

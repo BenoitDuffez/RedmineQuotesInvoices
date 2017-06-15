@@ -177,9 +177,9 @@ class QuoteController extends Controller
 
         $html = $this->renderView('quote/show_pdf.html.twig', ['quote' => $quote]);
         $header = $this->renderView('pdf/header_footer.html.twig', ['title' => $quote->getTitle(), 'text' => '']);
-        $footer = $this->renderView('pdf/header_footer.html.twig', ['quote' => $quote->getTitle(), 'text' => $footerText]);
+        $footer = $this->renderView('pdf/header_footer.html.twig', ['title' => $quote->getTitle(), 'text' => $footerText]);
 
-        $filename = sprintf("devis_%s.pdf", $quote->getTitle());
+        $filename = sprintf("D%s.pdf", $quote->getTitle());
 
         $snappy = $this->get('knp_snappy.pdf');
         $snappy->setOption('header-html', $header);
