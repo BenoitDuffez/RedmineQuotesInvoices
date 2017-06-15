@@ -40,7 +40,8 @@ class InvoiceType extends AbstractType
 
 		$formModifier = function (FormInterface $form, Quote $quote = null) {
 			$sections = null === $quote ? array() : $quote->getSections();
-			$form->add('sections', ChoiceType::class, array(
+			$form->add('sections', EntityType::class, array(
+                'class'       => 'AppBundle:Section',
 				'multiple'    => true,
 				'expanded' 	  => true,
 				'choices'     => $sections,
