@@ -247,6 +247,6 @@ class Invoice
      */
     public function getSections()
     {
-        return $this->sections;
+        return $this->sections->toArray();
     }
 }

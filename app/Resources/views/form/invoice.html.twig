@@ -7,8 +7,7 @@
         </div>
         <div class="col-sm-8" id="sectionsContainer">
             <p>Available sections in this quote</p>
-            {{ form_widget(form.selectedSections) }}
-            <div id="quoteSections" class="form-group"></div>
+            {{ form_widget(form.sections) }}
         </div>
     </div>
 
@@ -26,44 +25,39 @@
     <div class="row">
         <div class="col-lg-12 text-right">
             {% set label = form.vars.value.id ? "Edit" : "Create" %}
-            <input type="submit" value="{{ label }}" class="btn btn-lg btn-default"/>
+            <input type="submit" value="{{ label }}" disabled="disabled" class="btn btn-lg btn-default"/>
         </div>
     </div>
 
-    {{ dump() }}
-
     <script type="text/javascript">
-//        $('#sectionsContainer').hide();
-        $(document).on('change', '#{{ form.quote.vars.id }}', function () {
-            onQuoteChanged($(this).val());
-        });
+var $quote = $('#{{ form.quote.vars.id }}');
+$quote.change(onQuoteChanged);
 
-        function onQuoteChanged(quoteId) {
-            $.getJSON('{{ path('quote_list_sections') }}'.replace(/\/0\//, "/" + quoteId + "/"), function (sections) {
-                $('#sectionsContainer').show();
-                var div = $('#{{ form.selectedSections.vars.id }}');
-                div.empty();
-                $.each(sections, function (i, section) {
-                    var checkBox = $('<div>')
-                        .attr('class', 'checkbox' + (section.option ? '' : ' disabled'));
-                    $('<input>')
-                        .attr('type', 'checkbox')
-                        .attr('id', '{{ form.selectedSections.vars.id }}_' + i)
-                        .attr('value', section.id)
-                        .attr('name', '{{ form.selectedSections.vars.full_name }}[]')
-                        .attr('disabled', section.option ? false : 'disabled')
-                        .attr('checked', !section.option)
-                        .appendTo(checkBox);
-                    $('<label>')
-                        .attr('for', '{{ form.selectedSections.vars.id }}_' + i)
-                        .html(section.title)
-                        .appendTo(checkBox);
+function onQuoteChanged() {
+    var $form = $(this).closest('form');
+    var data = {};
+    data[$quote.attr('name')] = $quote.val();
 
-                    checkBox.appendTo(div);
-                });
-            });
+    $.ajax({
+        url: $form.attr('action'),
+        type: $form.attr('method'),
+        data: data,
+        success: function(html) {
+            $('#{{ form.sections.vars.id }}').replaceWith(
+                $(html).find('#{{ form.sections.vars.id }}')
+            );
+
+            $('input[type=submit]').prop('disabled', false);
         }
+    });
+}
     </script>
+{% endblock %}
+
+{% block _appbundle_invoice_sections_entry_widget %}
+    <div class="checkbox">
+        {{ form_widget(form) }}
+    </div>
 {% endblock %}
 
 {% block _appbundle_invoice_percentage_widget %}

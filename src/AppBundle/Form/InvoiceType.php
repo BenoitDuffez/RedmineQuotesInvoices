@@ -40,13 +40,21 @@ class InvoiceType extends AbstractType
 
 		$formModifier = function (FormInterface $form, Quote $quote = null) {
 			$sections = null === $quote ? array() : $quote->getSections();
-
-			$form->add('section', ChoiceType::class, array(
-				'class'       => 'AppBundle:Quote',
-				'placeholder' => '',
+			$form->add('sections', ChoiceType::class, array(
 				'multiple'    => true,
 				'expanded' 	  => true,
 				'choices'     => $sections,
+                'choice_attr' => function($section, $key, $index) {
+                    /* @var Section $section */
+                    return [
+                        'disabled' => $section->isOption() ? false : 'disabled',
+                        'checked' => $section->isOption() ? false : 'checked',
+                    ];
+                },
+                'choice_label' => function($section, $key, $index) {
+                    /* @var Section $section */
+                    return $section->getTitle();
+                },
 			));
 		};
 
@@ -54,7 +62,6 @@ class InvoiceType extends AbstractType
 			FormEvents::PRE_SET_DATA,
 			function (FormEvent $event) use ($formModifier) {
 				$data = $event->getData();
-
 				$formModifier($event->getForm(), $data->getQuote());
 			}
 		);
@@ -62,12 +69,7 @@ class InvoiceType extends AbstractType
 		$builder->get('quote')->addEventListener(
 			FormEvents::POST_SUBMIT,
 			function (FormEvent $event) use ($formModifier) {
-				// It's important here to fetch $event->getForm()->getData(), as
-				// $event->getData() will get you the client data (that is, the ID)
 				$quote = $event->getForm()->getData();
-
-				// since we've added the listener to the child, we'll have to pass on
-				// the parent to the callback functions!
 				$formModifier($event->getForm()->getParent(), $quote);
 			}
 		);
