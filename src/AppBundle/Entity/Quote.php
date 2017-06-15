@@ -100,7 +100,6 @@ class Quote
 	 * @var ArrayCollection
 	 *
 	 * @ORM\OneToMany(targetEntity="AppBundle\Entity\Invoice", mappedBy="quote", cascade={"all"})
-	 * @ORM\OrderBy({"position" = "ASC"})
 	 */
 	private $invoices;
 

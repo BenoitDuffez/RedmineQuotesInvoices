@@ -53,8 +53,17 @@
         <td>T.V.A. non applicable, art 293B du C.G.I</td>
         <td class="text-right">{{ "%d €" | format(0) }}</td>
     </tr>
+    {% for prev in invoice.quote.invoices %}
+        {% if prev.id != invoice.id %}
+            <tr>
+                <td><strong>Facture {{ prev.title }}</strong>
+                    émise le {{ prev.billingDate | date('d/m/Y') }} pour {{ "%.0f %%" | format(prev.percentage) }} du total</td>
+                <td class="text-right"><strong>{{ "%d €" | format(- prev.percentage/100 * invoice.total) }}</strong></td>
+            </tr>
+        {% endif %}
+    {% endfor %}
     <tr>
-        <td><h3>Net à payer</h3>
+        <td><h3>Net à payer</h3></td>
         <td class="text-right"><h3>{{ "%d €" | format(invoice.percentage/100 * invoice.total) }}</h3></td>
     </tr>
 </table>
