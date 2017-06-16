@@ -95,18 +95,13 @@ class InvoiceController extends Controller
 	{
 		$invoice->getQuote()->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
 
-		$footerText = "SIRET : 538 795 659 00035 — "
-			. "TVA non applicable, art. 293 B du CGI<br />"
-			. "Dispensé d’immatriculation au registre du commerce et des sociétés (RCS) en application de l'article L.123-1-1 du Code du Commerce";
-
 		$html = $this->renderView('invoice/show_pdf.html.twig', ['invoice' => $invoice]);
-		$header = $this->renderView('pdf/header_footer.html.twig', ['title' => $invoice->getTitle(), 'text' => '']);
-		$footer = $this->renderView('pdf/header_footer.html.twig', ['title' => $invoice->getTitle(), 'text' => $footerText]);
+		$header = $this->renderView('pdf/header_footer.html.twig', ['title' => $invoice->getTitle()]);
+		$footer = $this->renderView('pdf/header_footer.html.twig', ['title' => $invoice->getTitle(), 'type' => 'footer']);
 
 		$filename = sprintf("F%s.pdf", $invoice->getTitle());
 
 		$snappy = $this->get('knp_snappy.pdf');
-		$snappy->setOption('header-html', $header);
 		$snappy->setOption('footer-html', $footer);
 		$snappy->setOption('margin-top', 10);
 		$snappy->setOption('margin-bottom', 10);

@@ -5,5 +5,7 @@
 {% endblock %}
 
 {% block pdf_body %}
-    {{ include(':invoice:show_body.html.twig') }}
+    <div id="pdf_body">
+        {{ include(':invoice:show_body.html.twig') }}
+    </div>
 {% endblock %}

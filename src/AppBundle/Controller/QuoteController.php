@@ -171,13 +171,9 @@ class QuoteController extends Controller
     {
         $quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
 
-		$footerText = "SIRET : 538 795 659 00035 — "
-			. "TVA non applicable, art. 293 B du CGI<br />"
-            . "Dispensé d’immatriculation au registre du commerce et des sociétés (RCS) en application de l'article L.123-1-1 du Code du Commerce";
-
         $html = $this->renderView('quote/show_pdf.html.twig', ['quote' => $quote]);
-        $header = $this->renderView('pdf/header_footer.html.twig', ['title' => $quote->getTitle(), 'text' => '']);
-        $footer = $this->renderView('pdf/header_footer.html.twig', ['title' => $quote->getTitle(), 'text' => $footerText]);
+		$header = $this->renderView('pdf/header_footer.html.twig', ['title' => $invoice->getTitle()]);
+		$footer = $this->renderView('pdf/header_footer.html.twig', ['title' => $invoice->getTitle(), 'type' => 'footer']);
 
         $filename = sprintf("D%s.pdf", $quote->getTitle());
 

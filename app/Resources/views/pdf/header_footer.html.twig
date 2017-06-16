@@ -5,5 +5,10 @@
 {% endblock %}
 
 {% block pdf_body %}
-    {{ text }}
+    <div class="header_footer">
+        {% if type | default('') == "footer" %}
+            SIRET : 538 795 659 00035 — TVA non applicable, art. 293 B du CGI<br />
+            Dispensé d’immatriculation au registre du commerce et des sociétés (RCS) en application de l'article L.123-1-1 du Code du Commerce
+        {% endif %}
+    </div>
 {% endblock %}
