@@ -32,6 +32,7 @@
     <script type="text/javascript">
 var $quote = $('#{{ form.quote.vars.id }}');
 $quote.change(onQuoteChanged);
+$quote.prepend("<option value='' selected='selected' disabled='disabled'>Select quote</option>");
 
 function onQuoteChanged() {
     var $form = $(this).closest('form');
