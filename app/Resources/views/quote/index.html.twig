@@ -76,7 +76,9 @@ $(document).ready(function () {
     $('.state-rejected td.state span.glyphicon').addClass('glyphicon-remove');
     $('.state-draft    td.state span.glyphicon').addClass('glyphicon-pencil');
 
-    $('table.table').DataTable();
+    $('table.table').DataTable({
+        'order': [[3, 'desc']] // Creation Date
+    });
 });
     </script>
 {% endblock %}
