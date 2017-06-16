@@ -59,6 +59,9 @@
 .state-rejected td.state { color: #a33; }
 .state-draft    td.state { color: #333; }
 </style>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.15/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.15/datatables.min.js"></script>
 {% endblock%}
 
 {% block javascripts %}
@@ -72,6 +75,8 @@ $(document).ready(function () {
     $('.state-replaced td.state span.glyphicon').addClass('glyphicon-random');
     $('.state-rejected td.state span.glyphicon').addClass('glyphicon-remove');
     $('.state-draft    td.state span.glyphicon').addClass('glyphicon-pencil');
+
+    $('table.table').DataTable();
 });
     </script>
 {% endblock %}
