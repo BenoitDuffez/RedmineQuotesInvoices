@@ -18,10 +18,13 @@
         </thead>
         <tbody>
         {% for quote in quotes %}
-            <tr data-quote="{{ quote.id }}">
+            <tr data-quote="{{ quote.id }}" class="state-{{ quote.state | lower }}">
                 <td><a href="{{ path('quote_show', { 'id': quote.id }) }}">{{ quote.id }}</a></td>
                 <td>{{ quote.title }}</td>
-                <td>{{ quote.state | readable_enum }}</td>
+                <td class="state">
+                    <span class="glyphicon"></span>&nbsp;
+                    {{ quote.state | readable_enum }}
+                </td>
                 <td>{% if quote.dateCreation %}{{ quote.dateCreation|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{{ quote.customerField('firstname') }} {{ quote.customerField('lastname') }}</td>
                 <td>{{ quote.projectField('name') }}</td>
@@ -46,12 +49,29 @@
     </ul>
 {% endblock %}
 
+{% block stylesheets %}
+<style type="text/css">
+.state-accepted { background: #efe; }
+.state-rejected { background: #fee; }
+.state-replaced { background: #eee; }
+.state-accepted td.state { color: #3a3; }
+.state-replaced td.state { color: #999; }
+.state-rejected td.state { color: #a33; }
+.state-draft    td.state { color: #333; }
+</style>
+{% endblock%}
+
 {% block javascripts %}
     <script>
 $(document).ready(function () {
     $('tr').on('dblclick', function() {
         document.location.href = '{{ path('quote_show', { 'id': '0' }) }}'.replace(/0$/, $(this).data('quote'));
     });
+
+    $('.state-accepted td.state span.glyphicon').addClass('glyphicon-ok');
+    $('.state-replaced td.state span.glyphicon').addClass('glyphicon-random');
+    $('.state-rejected td.state span.glyphicon').addClass('glyphicon-remove');
+    $('.state-draft    td.state span.glyphicon').addClass('glyphicon-pencil');
 });
     </script>
 {% endblock %}
