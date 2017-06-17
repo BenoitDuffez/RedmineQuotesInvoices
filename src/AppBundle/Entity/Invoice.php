@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\DBAL\Types\InvoiceStateType;
+use Fresh\DoctrineEnumBundle\Validator\Constraints as DoctrineAssert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -66,6 +68,14 @@ class Invoice
 	 *	 inverseJoinColumns={@ORM\JoinColumn(name="section_id", referencedColumnName="id")})
 	 */
 	private $sections;
+
+	/**
+	 * @var InvoiceStateType
+	 *
+	 * @ORM\Column(name="state", type="InvoiceStateType", nullable=false, options={"default": "SENT"})
+	 * @DoctrineAssert\Enum(entity="AppBundle\DBAL\Types\InvoiceStateType")
+	 */
+	private $state = InvoiceStateType::SENT;
 
 	public function __construct() {
 		$this->sections = new ArrayCollection();
@@ -248,5 +258,29 @@ class Invoice
     public function getSections()
     {
         return $this->sections;
+    }
+
+    /**
+     * Set state
+     *
+     * @param string $state
+     *
+     * @return Invoice
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return InvoiceStateType
+     */
+    public function getState()
+    {
+        return $this->state;
     }
 }

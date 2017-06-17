@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <p>Invoice state: {{ invoice.state | readable_enum }}</p>
     {{ include('invoice/show_body.html.twig') }}
 {% endblock %}
 
@@ -23,6 +24,15 @@
                         Download PDF
                     </a>
                 </li>
+
+                {% if invoice.state == 'SENT' %}
+                <li>
+                    <a href="{{ path('invoice_change_state', {'id': invoice.id, 'state': 'PAID'}) }}" title="Mark as paid">
+                        <span class="glyphicon glyphicon-ok"></span>
+                        Mark as paid
+                    </a>
+                </li>
+                {% endif %}
 
             </ul>
         </li>

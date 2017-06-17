@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\DBAL\Types\InvoiceStateType;
 use AppBundle\Entity\Invoice;
 use AppBundle\Entity\Section;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -117,6 +118,28 @@ class InvoiceController extends Controller
 				'Content-Disposition' => sprintf('attachment; filename="%s"', $filename),
 			]
 		);
+	}
+
+	/**
+	 * @Route("/{id}/mark/{state}", name="invoice_change_state")
+	 * @Method("GET")
+	 *
+	 * @param Request $request
+	 * @param Invoice $invoice
+	 * @param string $state
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
+	 */
+	public function changeStateAction(Request $request, Invoice $invoice, $state) {
+		if (!InvoiceStateType::isValueExist($state)) {
+			throw $this->createNotFoundException('The target invoice state does not exist');
+		}
+
+		$invoice->setState($state);
+		$em = $this->getDoctrine()->getManager();
+		$em->persist($invoice);
+		$em->flush();
+
+		return $this->redirectToRoute('invoice_show', array('id' => $invoice->getId()));
 	}
 
     /**

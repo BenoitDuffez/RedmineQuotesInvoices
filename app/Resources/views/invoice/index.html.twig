@@ -7,6 +7,7 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>State</th>
                 <th>Quote</th>
                 <th>Billing date</th>
                 <th>Percentage</th>
@@ -16,8 +17,12 @@
         </thead>
         <tbody>
         {% for invoice in invoices %}
-            <tr>
+            <tr data-invoice="{{ invoice.id }}" class="state-{{ invoice.state | lower }}">
                 <td><a href="{{ path('invoice_show', { 'id': invoice.id }) }}">{{ invoice.id }}</a></td>
+                <td class="state">
+                    <span class="glyphicon"></span>&nbsp;
+                    {{ invoice.state | readable_enum }}
+                </td>
                 <td><a href="{{ path('quote_show', { 'id': invoice.quote.id }) }}">{{ invoice.quote.title }}</a></td>
                 <td>{% if invoice.billingDate %}{{ invoice.billingDate|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{{ invoice.percentage }}</td>
@@ -43,8 +48,36 @@
 {% block navbar %}
     <ul class="nav navbar-nav navbar-right">
         <li>
-             <a href="{{ path('invoice_new') }}"><span class="glyphicon glyphicon-plus"></span> Create a new invoice</a>
+            <a href="{{ path('invoice_new') }}"><span class="glyphicon glyphicon-plus"></span> Create a new invoice</a>
         </li>
     </ul>
+{% endblock %}
+
+{% block stylesheets %}
+    <style type="text/css">
+        .state-paid { background: #efe; }
+        .state-paid td.state { color: #3a3; }
+        .state-sent td.state { color: #333; }
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.15/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.15/datatables.min.js"></script>
+{% endblock%}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            $('tr').on('dblclick', function() {
+                document.location.href = '{{ path('quote_show', { 'id': '0' }) }}'.replace(/0$/, $(this).data('quote'));
+            });
+
+            $('.state-paid td.state span.glyphicon').addClass('glyphicon-ok');
+            $('.state-sent td.state span.glyphicon').addClass('glyphicon-pencil');
+
+            $('table.table').DataTable({
+                'order': [[3, 'desc']] // Billing Date
+            });
+        });
+    </script>
 {% endblock %}
 

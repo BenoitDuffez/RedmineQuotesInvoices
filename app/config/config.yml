@@ -50,6 +50,7 @@ doctrine:
         charset: UTF8
         types:
             QuoteStateType: AppBundle\DBAL\Types\QuoteStateType
+            InvoiceStateType: AppBundle\DBAL\Types\InvoiceStateType
         # if using pdo_sqlite as your database driver:
         #   1. add the path in parameters.yml
         #     e.g. database_path: "%kernel.project_dir%/var/data/data.sqlite"
