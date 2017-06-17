@@ -38,11 +38,9 @@
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('invoice_new') }}">Create a new invoice</a>
-        </li>
-    </ul>
+    <p><strong>Total invoiced</strong>: {{ "%.2f €" | format(totalInvoiced) }} (incl. {{ "%.2f €" | format(totalInvoicedOption) }} optional)</p>
+    <p><strong>Total paid</strong>: {{ "%.2f €" | format(totalPaid) }} (incl. {{ "%.2f €" | format(totalPaidOption) }} optional)</p>
+    <p><strong>Total pending</strong>: {{ "%.2f €" | format(totalPending) }} (incl. {{ "%.2f €" | format(totalPendingOption) }} optional)</p>
 {% endblock %}
 
 {% block navbar %}

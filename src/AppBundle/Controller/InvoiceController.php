@@ -4,10 +4,11 @@ namespace AppBundle\Controller;
 
 use AppBundle\DBAL\Types\InvoiceStateType;
 use AppBundle\Entity\Invoice;
-use AppBundle\Entity\Section;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\Repository\InvoiceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Invoice controller.
@@ -26,10 +27,24 @@ class InvoiceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $invoices = $em->getRepository('AppBundle:Invoice')->findAll();
+		$total = $em->getRepository(Invoice::class)->amountByState();
+		$totalPaidOption = $total[InvoiceStateType::PAID][InvoiceRepository::OPTIONAL];
+		$totalPaid = $totalPaidOption + $total[InvoiceStateType::PAID][InvoiceRepository::BASE];
+		$totalPendingOption = $total[InvoiceStateType::SENT][InvoiceRepository::OPTIONAL];
+		$totalPending = $totalPendingOption + $total[InvoiceStateType::SENT][InvoiceRepository::BASE];
+		$totalInvoiced = $totalPaid + $totalPending;
+		$totalInvoicedOption = $totalPaidOption + $totalPendingOption;
+
+		$invoices = $em->getRepository('AppBundle:Invoice')->findAll();
 
         return $this->render('invoice/index.html.twig', array(
             'invoices' => $invoices,
+			'totalPaidOption' => $totalPaidOption,
+			'totalPaid' => $totalPaid,
+			'totalPendingOption' => $totalPendingOption,
+			'totalPending' => $totalPending,
+			'totalInvoicedOption' => $totalInvoicedOption,
+			'totalInvoiced' => $totalInvoiced,
         ));
     }
 
