@@ -69,7 +69,7 @@ class Section
 	/**
 	 * @var boolean
 	 *
-	 * @ORM\Column(name="is_chosen", type="boolean")
+	 * @ORM\Column(name="is_chosen", type="boolean", nullable=true)
 	 */
 	private $chosen;
 
