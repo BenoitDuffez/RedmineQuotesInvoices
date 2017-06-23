@@ -172,8 +172,8 @@ class QuoteController extends Controller
         $quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
 
         $html = $this->renderView('quote/show_pdf.html.twig', ['quote' => $quote]);
-		$header = $this->renderView('pdf/header_footer.html.twig', ['title' => $invoice->getTitle()]);
-		$footer = $this->renderView('pdf/header_footer.html.twig', ['title' => $invoice->getTitle(), 'type' => 'footer']);
+		$header = $this->renderView('pdf/header_footer.html.twig', ['title' => $quote->getTitle()]);
+		$footer = $this->renderView('pdf/header_footer.html.twig', ['title' => $quote->getTitle(), 'type' => 'footer']);
 
         $filename = sprintf("D%s.pdf", $quote->getTitle());
 
