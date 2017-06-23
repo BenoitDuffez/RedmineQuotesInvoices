@@ -28,12 +28,21 @@
                             Edit
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ path('quote_show_pdf', {'id': quote.id}) }}" title="Download PDF">
+                            <span class="glyphicon glyphicon-download-alt"></span>
+                            Download PDF
+                        </a>
+                    </li>
+
                     <li>
                         <a href="{{ path('quote_change_state', {'id': quote.id, 'state': 'ACCEPTED'}) }}" title="Mark as accepted">
                             <span class="glyphicon glyphicon-ok"></span>
                             Mark as accepted
                         </a>
                     </li>
+
                     <li>
                         <a href="{{ path('quote_change_state', {'id': quote.id, 'state': 'REJECTED'}) }}" title="Mark as rejected">
                             <span class="glyphicon glyphicon-remove"></span>
@@ -49,13 +58,6 @@
                     </li>
 
                 {% elseif quote.state == 'ACCEPTED' %}
-
-                    <li>
-                        <a href="{{ path('quote_show_pdf', {'id': quote.id}) }}" title="Download PDF">
-                            <span class="glyphicon glyphicon-download-alt"></span>
-                            Download PDF
-                        </a>
-                    </li>
 
                     <li>
                         <a href="{{ path('quote_upload_redmine', {'id': quote.id}) }}" title="Export to Redmine">
