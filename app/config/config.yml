@@ -10,7 +10,7 @@ parameters:
 
 framework:
     #esi: ~
-    #translator: { fallbacks: ['%locale%'] }
+    translator: { fallbacks: ['%locale%'] }
     secret: '%secret%'
     router:
         resource: '%kernel.project_dir%/app/config/routing.yml'
@@ -78,4 +78,12 @@ knp_snappy:
         options:
             - { name: 'viewport-size', value: '1024x768' }
             - { name: 'page-size', value: 'A4' }
+
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: AppBundle\Entity\User
+    from_email:
+        address: '%mailer_user%'
+        sender_name: '%mailer_user%'
 
