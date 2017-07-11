@@ -185,21 +185,29 @@ class InvoiceController extends Controller
     /**
      * Deletes a invoice entity.
      *
-     * @Route("/{id}", name="invoice_delete")
-     * @Method("DELETE")
+     * @Route("/delete/{id}", name="invoice_delete")
+     * @Method({"DELETE", "GET"})
      */
     public function deleteAction(Request $request, Invoice $invoice)
     {
         $form = $this->createDeleteForm($invoice);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($invoice);
-            $em->flush();
+        if ($request->getMethod() == "DELETE") {
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($invoice);
+                $em->flush();
+            }
+
+            $this->addFlash('notice', 'Invoice deleted successfully');
+            return $this->redirectToRoute('invoice_index');
         }
 
-        return $this->redirectToRoute('invoice_index');
+        return $this->render(':invoice:delete_confirm.html.twig', [
+            'delete_form' => $form->createView(),
+            'invoice' => $invoice,
+        ]);
     }
 
     /**

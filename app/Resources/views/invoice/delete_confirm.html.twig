@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ form_start(delete_form) }}
+
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title">Delete this invoice?</h3>
+			</div>
+
+			<div class="modal-body">
+				<p>
+					Are you sure you want to delete  '{{ invoice.title }}'?<br/>
+					This cannot be undone.
+				</p>
+			</div>
+
+			<div class="modal-footer text-right">
+				<div>
+					<button type="submit" class="btn btn-danger" title="Click to proceed!">
+						<i class="icon-trash"></i> Delete
+					</button>
+				</div>
+			</div>
+	</div>
+
+	{{ form_end(delete_form) }}
+
+{% endblock %}
+
