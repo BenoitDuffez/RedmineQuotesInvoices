@@ -4,15 +4,6 @@
     </div>
 </div>
 
-{% if quote.description | length %}
-    <div class="row">
-        <div class="col-md-12">
-            <h3>Description</h3>
-            <div class="contact">{{ quote.description | markdown }}</div>
-        </div>
-    </div>
-{% endif %}
-
 <div class="row">
     <div class="col-md-4">
         <div class="contact">Benoit Duffez
@@ -29,6 +20,15 @@ SIRET: 53879565900035</div>
             SIRET: {{ quote.customerField('siret') }}</div>
     </div>
 </div>
+
+{% if quote.description | length %}
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Description</h3>
+            <div class="description">{{ quote.description | markdown }}</div>
+        </div>
+    </div>
+{% endif %}
 
 {{ include(':quote:show_main_table.html.twig') }}
 
