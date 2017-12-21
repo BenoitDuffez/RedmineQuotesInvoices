@@ -8,42 +8,41 @@
 {% block navbar %}
     <ul class="nav navbar-nav">
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Invoice actions <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+               aria-expanded="false">Invoice actions <span class="caret"></span></a>
 
             <ul class="dropdown-menu">
                 <li>
-                    <a href="{{ path('invoice_delete', {'id': invoice.id }) }}">
-                        <span class="glyphicon glyphicon-trash"></span>&nbsp;Delete
+                    <a href="{{ path('invoice_edit', {'id': invoice.id}) }}" title="Edit">
+                        <span class="glyphicon glyphicon-edit"></span>
+                        Edit
                     </a>
+                </li>
+
                 <li>
+                    <a href="{{ path('invoice_show_pdf', {'id': invoice.id}) }}" title="Download PDF">
+                        <span class="glyphicon glyphicon-download-alt"></span>
+                        Download PDF
+                    </a>
+                </li>
+
+                {% if invoice.state == 'SENT' %}
+                    <li>
+                        <a href="{{ path('invoice_change_state', {'id': invoice.id, 'state': 'PAID'}) }}"
+                           title="Mark as paid">
+                            <span class="glyphicon glyphicon-ok"></span>
+                            Mark as paid
+                        </a>
+                    </li>
+                {% endif %}
+
             </ul>
         </li>
     </ul>
 
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            <a class="btn" href="{{ path('invoice_edit', {'id': invoice.id}) }}" title="Edit">
-                <span class="glyphicon glyphicon-edit"></span>
-                Edit
-            </a>
-        </li>
-
-        <li>
-            <a class="btn" href="{{ path('invoice_show_pdf', {'id': invoice.id}) }}" title="Download PDF">
-                <span class="glyphicon glyphicon-download-alt"></span>
-                Download PDF
-            </a>
-        </li>
-
-        {% if invoice.state == 'SENT' %}
-        <li>
-            <a class="btn" href="{{ path('invoice_change_state', {'id': invoice.id, 'state': 'PAID'}) }}" title="Mark as paid">
-                <span class="glyphicon glyphicon-ok"></span>
-                Mark as paid
-            </a>
-        </li>
-        {% endif %}
-    </ul>
-
+    {{ form_start(delete_form, {'attr': {'class': 'navbar-form navbar-right'}}) }}
+    <button class="btn btn-danger" type="submit" value="Delete">
+        <span class="glyphicon glyphicon-trash"></span>&nbsp;
+    </button>
+    {{ form_end(delete_form) }}
 {% endblock %}
-

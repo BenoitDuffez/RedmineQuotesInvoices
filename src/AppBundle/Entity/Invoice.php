@@ -3,9 +3,9 @@
 namespace AppBundle\Entity;
 
 use AppBundle\DBAL\Types\InvoiceStateType;
-use Fresh\DoctrineEnumBundle\Validator\Constraints as DoctrineAssert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Fresh\DoctrineEnumBundle\Validator\Constraints as DoctrineAssert;
 
 /**
  * Invoice
@@ -13,45 +13,44 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="invoice")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\InvoiceRepository")
  */
-class Invoice
-{
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+class Invoice {
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="id", type="integer")
+	 * @ORM\Id
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	private $id;
 
-    /**
-     * @var Quote
-     *
+	/**
+	 * @var Quote
+	 *
 	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Quote", inversedBy="invoices")
 	 * @ORM\JoinColumn(name="quote_id", referencedColumnName="id")
-     */
-    private $quote;
+	 */
+	private $quote;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="billing_date", type="datetime")
-     */
-    private $billingDate;
+	/**
+	 * @var \DateTime
+	 *
+	 * @ORM\Column(name="billing_date", type="datetime")
+	 */
+	private $billingDate;
 
-    /**
-     * @var double
-     *
-     * @ORM\Column(name="percentage", type="decimal", precision=10, scale=2)
-     */
-    private $percentage = 100;
+	/**
+	 * @var double
+	 *
+	 * @ORM\Column(name="percentage", type="decimal", precision=10, scale=2)
+	 */
+	private $percentage = 100;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="replacement_text", type="text", nullable=true)
-     */
-    private $replacementText;
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="replacement_text", type="text", nullable=true)
+	 */
+	private $replacementText;
 
 	/**
 	 * @var string
@@ -65,7 +64,7 @@ class Invoice
 	 *
 	 * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Section", inversedBy="invoices", cascade={"persist"})
 	 * @ORM\JoinTable(name="invoice_section", joinColumns={@ORM\JoinColumn(name="invoice_id", referencedColumnName="id")},
-	 *	 inverseJoinColumns={@ORM\JoinColumn(name="section_id", referencedColumnName="id")})
+	 *     inverseJoinColumns={@ORM\JoinColumn(name="section_id", referencedColumnName="id")})
 	 */
 	private $sections;
 
@@ -82,12 +81,45 @@ class Invoice
 	}
 
 	public function updateTitle() {
-		$this->setTitle(sprintf("%s%03d", $this->getQuote()->getTitle(), $this->getId()));
+		$this->setTitle(sprintf("%s%03d", $this->getQuote()
+											   ->getTitle(), $this->getId()));
+	}
+
+	/**
+	 * Get quote
+	 *
+	 * @return Quote
+	 */
+	public function getQuote() {
+		return $this->quote;
+	}
+
+	/**
+	 * Set quote
+	 *
+	 * @param Quote $quote
+	 *
+	 * @return Invoice
+	 */
+	public function setQuote($quote) {
+		$this->quote = $quote;
+
+		return $this;
+	}
+
+	/**
+	 * Get id
+	 *
+	 * @return int
+	 */
+	public function getId() {
+		return $this->id;
 	}
 
 	public function getTotal() {
 		$total = 0;
-		foreach ($this->getQuote()->getSections() as $section) {
+		foreach ($this->getQuote()
+					  ->getSections() as $section) {
 			/* @var Section $section */
 			foreach ($section->getItems() as $item) {
 				/* @var Item $item */
@@ -97,111 +129,71 @@ class Invoice
 		return $total;
 	}
 
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+	/**
+	 * Get billingDate
+	 *
+	 * @return \DateTime
+	 */
+	public function getBillingDate() {
+		return $this->billingDate;
+	}
 
-    /**
-     * Set quote
-     *
-     * @param Quote $quote
-     *
-     * @return Invoice
-     */
-    public function setQuote($quote)
-    {
-        $this->quote = $quote;
+	/**
+	 * Set billingDate
+	 *
+	 * @param \DateTime $billingDate
+	 *
+	 * @return Invoice
+	 */
+	public function setBillingDate($billingDate) {
+		$this->billingDate = $billingDate;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get quote
-     *
-     * @return Quote
-     */
-    public function getQuote()
-    {
-        return $this->quote;
-    }
+	/**
+	 * Get percentage
+	 *
+	 * @return string
+	 */
+	public function getPercentage() {
+		return $this->percentage;
+	}
 
-    /**
-     * Set billingDate
-     *
-     * @param \DateTime $billingDate
-     *
-     * @return Invoice
-     */
-    public function setBillingDate($billingDate)
-    {
-        $this->billingDate = $billingDate;
+	/**
+	 * Set percentage
+	 *
+	 * @param string $percentage
+	 *
+	 * @return Invoice
+	 */
+	public function setPercentage($percentage) {
+		$this->percentage = $percentage;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get billingDate
-     *
-     * @return \DateTime
-     */
-    public function getBillingDate()
-    {
-        return $this->billingDate;
-    }
+	/**
+	 * Get replacementText
+	 *
+	 * @return string
+	 */
+	public function getReplacementText() {
+		return $this->replacementText;
+	}
 
-    /**
-     * Set percentage
-     *
-     * @param string $percentage
-     *
-     * @return Invoice
-     */
-    public function setPercentage($percentage)
-    {
-        $this->percentage = $percentage;
+	/**
+	 * Set replacementText
+	 *
+	 * @param string $replacementText
+	 *
+	 * @return Invoice
+	 */
+	public function setReplacementText($replacementText) {
+		$this->replacementText = $replacementText;
 
-        return $this;
-    }
-
-    /**
-     * Get percentage
-     *
-     * @return string
-     */
-    public function getPercentage()
-    {
-        return $this->percentage;
-    }
-
-    /**
-     * Set replacementText
-     *
-     * @param string $replacementText
-     *
-     * @return Invoice
-     */
-    public function setReplacementText($replacementText)
-    {
-        $this->replacementText = $replacementText;
-
-        return $this;
-    }
-
-    /**
-     * Get replacementText
-     *
-     * @return string
-     */
-    public function getReplacementText()
-    {
-        return $this->replacementText;
-    }
+		return $this;
+	}
 
 	/**
 	 * Get title
@@ -225,62 +217,57 @@ class Invoice
 		return $this;
 	}
 
-    /**
-     * Add section
-     *
-     * @param Section $section
-     *
-     * @return Invoice
-     */
-    public function addSection(Section $section)
-    {
+	/**
+	 * Add section
+	 *
+	 * @param Section $section
+	 *
+	 * @return Invoice
+	 */
+	public function addSection(Section $section) {
 		$section->addInvoice($this);
-        $this->sections[] = $section;
+		$this->sections[] = $section;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Remove section
-     *
-     * @param Section $section
-     */
-    public function removeSection(Section $section)
-    {
-        $this->sections->removeElement($section);
-    }
+	/**
+	 * Remove section
+	 *
+	 * @param Section $section
+	 */
+	public function removeSection(Section $section) {
+		$this->sections->removeElement($section);
+	}
 
-    /**
-     * Get sections
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSections()
-    {
-        return $this->sections;
-    }
+	/**
+	 * Get sections
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getSections() {
+		return $this->sections;
+	}
 
-    /**
-     * Set state
-     *
-     * @param string $state
-     *
-     * @return Invoice
-     */
-    public function setState($state)
-    {
-        $this->state = $state;
+	/**
+	 * Get state
+	 *
+	 * @return InvoiceStateType
+	 */
+	public function getState() {
+		return $this->state;
+	}
 
-        return $this;
-    }
+	/**
+	 * Set state
+	 *
+	 * @param string $state
+	 *
+	 * @return Invoice
+	 */
+	public function setState($state) {
+		$this->state = $state;
 
-    /**
-     * Get state
-     *
-     * @return InvoiceStateType
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
+		return $this;
+	}
 }

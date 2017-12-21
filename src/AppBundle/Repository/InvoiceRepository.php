@@ -19,16 +19,13 @@ class InvoiceRepository extends \Doctrine\ORM\EntityRepository {
 
 	public function amountByState() {
 		$amounts = $this->createQueryBuilder('i')
-			->leftJoin('i.quote', 'q')
-			->leftJoin('q.sections', 's')
-			->leftJoin('s.items', 'it')
-
-			->select('i.state, s.option, SUM(i.percentage/100 * s.rate * it.hours) AS amount')
-
-			->groupBy('i.state, s.option')
-
-			->getQuery()
-			->getResult();
+						->leftJoin('i.quote', 'q')
+						->leftJoin('q.sections', 's')
+						->leftJoin('s.items', 'it')
+						->select('i.state, s.option, SUM(i.percentage/100 * s.rate * it.hours) AS amount')
+						->groupBy('i.state, s.option')
+						->getQuery()
+						->getResult();
 
 		$total = [];
 		foreach ($amounts as $amount) {

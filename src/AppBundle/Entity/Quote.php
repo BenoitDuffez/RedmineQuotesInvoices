@@ -2,12 +2,12 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\DBAL\Types\QuoteStateType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Fresh\DoctrineEnumBundle\Validator\Constraints as DoctrineAssert;
 use Redmine\Client;
 use Symfony\Component\Validator\Constraints as Assert;
-use AppBundle\DBAL\Types\QuoteStateType;
-use Fresh\DoctrineEnumBundle\Validator\Constraints as DoctrineAssert;
 
 /**
  * Quote
@@ -15,8 +15,7 @@ use Fresh\DoctrineEnumBundle\Validator\Constraints as DoctrineAssert;
  * @ORM\Table(name="quote")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\QuoteRepository")
  */
-class Quote
-{
+class Quote {
 	/**
 	 * Not a column. Some kind of singleton. Used to retrieve data from Redmine
 	 * @var Client
@@ -35,58 +34,58 @@ class Quote
 	 */
 	private $project;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="id", type="integer")
+	 * @ORM\Id
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	private $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255)
-     */
-    private $title;
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="title", type="string", length=255)
+	 */
+	private $title;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_creation", type="datetime")
-     */
-    private $dateCreation;
+	/**
+	 * @var \DateTime
+	 *
+	 * @ORM\Column(name="date_creation", type="datetime")
+	 */
+	private $dateCreation;
 
-    /**
-     * @var int
-     *
+	/**
+	 * @var int
+	 *
 	 * @Assert\NotEqualTo(value="0", message="Please select a customer")
 	 * @Assert\NotBlank()
-     * @ORM\Column(name="customer_id", type="integer")
-     */
-    private $customerId;
+	 * @ORM\Column(name="customer_id", type="integer")
+	 */
+	private $customerId;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="project_id", type="integer")
-     */
-    private $projectId;
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="project_id", type="integer")
+	 */
+	private $projectId;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="text")
-     */
-    private $description;
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="description", type="text")
+	 */
+	private $description;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="comments", type="text", nullable=true)
-     */
-    private $comments;
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="comments", type="text", nullable=true)
+	 */
+	private $comments;
 
 	/**
 	 * @var ArrayCollection
@@ -103,13 +102,13 @@ class Quote
 	 */
 	private $invoices;
 
-    /**
-     * @var QuoteStateType
-     *
-     * @ORM\Column(name="state", type="QuoteStateType", nullable=false, options={"default": "DRAFT"})
-     * @DoctrineAssert\Enum(entity="AppBundle\DBAL\Types\QuoteStateType")
-     */
-    private $state = QuoteStateType::DRAFT;
+	/**
+	 * @var QuoteStateType
+	 *
+	 * @ORM\Column(name="state", type="QuoteStateType", nullable=false, options={"default": "DRAFT"})
+	 * @DoctrineAssert\Enum(entity="AppBundle\DBAL\Types\QuoteStateType")
+	 */
+	private $state = QuoteStateType::DRAFT;
 
 	/**
 	 * @var Quote
@@ -144,14 +143,81 @@ class Quote
 				$itemClone->setQuote($this);
 				$sectionsClone->add($itemClone);
 			}
-            // don't clone invoices
+			// don't clone invoices
 			$this->sections = $sectionsClone;
 		}
 	}
 
-    public function __toString() {
-        return sprintf("Quote #%s (%s for %s)", $this->getTitle(), $this->getDateCreation()->format("d/m/Y"), $this->getCustomerId());
-    }
+	public function __toString() {
+		return sprintf("Quote #%s (%s for %s)", $this->getTitle(), $this->getDateCreation()
+																		->format("d/m/Y"), $this->getCustomerId());
+	}
+
+	/**
+	 * Get title
+	 *
+	 * @return string
+	 */
+	public function getTitle() {
+		return $this->title;
+	}
+
+	/**
+	 * Set title
+	 *
+	 * @param string $title
+	 *
+	 * @return Quote
+	 */
+	public function setTitle($title) {
+		$this->title = $title;
+
+		return $this;
+	}
+
+	/**
+	 * Get dateCreation
+	 *
+	 * @return \DateTime
+	 */
+	public function getDateCreation() {
+		return $this->dateCreation;
+	}
+
+	/**
+	 * Set dateCreation
+	 *
+	 * @param \DateTime $dateCreation
+	 *
+	 * @return Quote
+	 */
+	public function setDateCreation($dateCreation) {
+		$this->dateCreation = $dateCreation;
+
+		return $this;
+	}
+
+	/**
+	 * Get customerId
+	 *
+	 * @return int
+	 */
+	public function getCustomerId() {
+		return $this->customerId;
+	}
+
+	/**
+	 * Set customerId
+	 *
+	 * @param integer $customerId
+	 *
+	 * @return Quote
+	 */
+	public function setCustomerId($customerId) {
+		$this->customerId = $customerId;
+
+		return $this;
+	}
 
 	/**
 	 * Init/create the redmine client
@@ -162,111 +228,6 @@ class Quote
 		if ($this->redmine == null) {
 			$this->redmine = new Client($url, $apiKey);
 		}
-	}
-
-	/**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     *
-     * @return Quote
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Set dateCreation
-     *
-     * @param \DateTime $dateCreation
-     *
-     * @return Quote
-     */
-    public function setDateCreation($dateCreation)
-    {
-        $this->dateCreation = $dateCreation;
-
-        return $this;
-    }
-
-    /**
-     * Get dateCreation
-     *
-     * @return \DateTime
-     */
-    public function getDateCreation()
-    {
-        return $this->dateCreation;
-    }
-
-    /**
-     * Set customerId
-     *
-     * @param integer $customerId
-     *
-     * @return Quote
-     */
-    public function setCustomerId($customerId)
-    {
-        $this->customerId = $customerId;
-
-        return $this;
-    }
-
-    /**
-     * Get customerId
-     *
-     * @return int
-     */
-    public function getCustomerId()
-    {
-        return $this->customerId;
-    }
-
-	/**
-	 * Retrieve the customer from Redmine based on $this->customerId
-	 * Asks for the custom fields too
-	 * @return array
-	 */
-	private function getCustomer() {
-		if ($this->customer == null) {
-			$this->customer = $this->redmine->user->show($this->getCustomerId(), ['include' => ['custom_fields']]);
-		}
-		return $this->customer;
-	}
-
-	/**
-	 * Retrieve the project from Redmine based on $this->projectId
-	 * @return array
-	 */
-	private function getProject() {
-		if ($this->project == null) {
-			$this->project = $this->redmine->project->show($this->getProjectId());
-		}
-		return $this->project;
 	}
 
 	/**
@@ -293,6 +254,18 @@ class Quote
 		return "";
 	}
 
+	/**
+	 * Retrieve the customer from Redmine based on $this->customerId
+	 * Asks for the custom fields too
+	 * @return array
+	 */
+	private function getCustomer() {
+		if ($this->customer == null) {
+			$this->customer = $this->redmine->user->show($this->getCustomerId(), ['include' => ['custom_fields']]);
+		}
+		return $this->customer;
+	}
+
 	public function getProjectField($field) {
 		$project = $this->getProject();
 		if (is_array($project['project']) && isset($project['project'][$field])) {
@@ -301,233 +274,221 @@ class Quote
 		return "";
 	}
 
-    /**
-     * Set projectId
-     *
-     * @param integer $projectId
-     *
-     * @return Quote
-     */
-    public function setProjectId($projectId)
-    {
-        $this->projectId = $projectId;
-
-        return $this;
-    }
-
-    /**
-     * Get projectId
-     *
-     * @return int
-     */
-    public function getProjectId()
-    {
-        return $this->projectId;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return Quote
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
+	/**
+	 * Retrieve the project from Redmine based on $this->projectId
+	 * @return array
+	 */
+	private function getProject() {
+		if ($this->project == null) {
+			$this->project = $this->redmine->project->show($this->getProjectId());
+		}
+		return $this->project;
+	}
 
 	/**
-	 * @return ArrayCollection
+	 * Get projectId
+	 *
+	 * @return int
 	 */
-	public function getSections() {
-		return $this->sections;
+	public function getProjectId() {
+		return $this->projectId;
 	}
-    
-	public function addSection(Section $section)
-	{
+
+	/**
+	 * Set projectId
+	 *
+	 * @param integer $projectId
+	 *
+	 * @return Quote
+	 */
+	public function setProjectId($projectId) {
+		$this->projectId = $projectId;
+
+		return $this;
+	}
+
+	/**
+	 * Get description
+	 *
+	 * @return string
+	 */
+	public function getDescription() {
+		return $this->description;
+	}
+
+	/**
+	 * Set description
+	 *
+	 * @param string $description
+	 *
+	 * @return Quote
+	 */
+	public function setDescription($description) {
+		$this->description = $description;
+
+		return $this;
+	}
+
+	public function addSection(Section $section) {
 		$section->setQuote($this);
 		$this->sections->add($section);
 		return $this;
 	}
 
-	public function removeSection(Section $section)
-	{
+	public function removeSection(Section $section) {
 		$this->sections->removeElement($section);
 		return $this;
 	}
 
 	public function updateTitle() {
-		$this->setTitle(
-			sprintf("%d%03d%03d%03d",
-				date('Y'),
-				$this->getCustomerId(),
-				$this->getProjectId(),
-				$this->getId()
-			)
-		);
+		$this->setTitle(sprintf("%d%03d%03d%03d", date('Y'), $this->getCustomerId(), $this->getProjectId(), $this->getId()));
 		return $this;
 	}
 
-    /**
-     * Set comments
-     *
-     * @param string $comments
-     *
-     * @return Quote
-     */
-    public function setComments($comments)
-    {
-        $this->comments = $comments;
+	/**
+	 * Get id
+	 *
+	 * @return int
+	 */
+	public function getId() {
+		return $this->id;
+	}
 
-        return $this;
-    }
+	/**
+	 * Get comments
+	 *
+	 * @return string
+	 */
+	public function getComments() {
+		return $this->comments;
+	}
 
-    /**
-     * Get comments
-     *
-     * @return string
-     */
-    public function getComments()
-    {
-        return $this->comments;
-    }
+	/**
+	 * Set comments
+	 *
+	 * @param string $comments
+	 *
+	 * @return Quote
+	 */
+	public function setComments($comments) {
+		$this->comments = $comments;
 
-    /**
-     * Set state
-     *
-     * @param string $state
-     *
-     * @return Quote
-     */
-    public function setState($state)
-    {
-        $this->state = $state;
+		return $this;
+	}
 
-        return $this;
-    }
+	/**
+	 * Get state
+	 *
+	 * @return QuoteStateType
+	 */
+	public function getState() {
+		return $this->state;
+	}
 
-    /**
-     * Get state
-     *
-     * @return QuoteStateType
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
+	/**
+	 * Set state
+	 *
+	 * @param string $state
+	 *
+	 * @return Quote
+	 */
+	public function setState($state) {
+		$this->state = $state;
 
-    /**
-     * Add invoice
-     *
-     * @param \AppBundle\Entity\Invoice $invoice
-     *
-     * @return Quote
-     */
-    public function addInvoice(Invoice $invoice)
-    {
+		return $this;
+	}
+
+	/**
+	 * Add invoice
+	 *
+	 * @param \AppBundle\Entity\Invoice $invoice
+	 *
+	 * @return Quote
+	 */
+	public function addInvoice(Invoice $invoice) {
 		$invoice->setQuote($this);
-        $this->invoices[] = $invoice;
+		$this->invoices[] = $invoice;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Remove invoice
-     *
-     * @param \AppBundle\Entity\Invoice $invoice
-     */
-    public function removeInvoice(Invoice $invoice)
-    {
-        $this->invoices->removeElement($invoice);
-    }
+	/**
+	 * Remove invoice
+	 *
+	 * @param \AppBundle\Entity\Invoice $invoice
+	 */
+	public function removeInvoice(Invoice $invoice) {
+		$this->invoices->removeElement($invoice);
+	}
 
-    /**
-     * Get invoices
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getInvoices()
-    {
-        return $this->invoices;
-    }
+	/**
+	 * Get invoices
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getInvoices() {
+		return $this->invoices;
+	}
 
-    /**
-     * Set parent
-     *
-     * @param \AppBundle\Entity\Quote $parent
-     *
-     * @return Quote
-     */
-    public function setParent(Quote $parent = null)
-    {
-        $this->parent = $parent;
+	/**
+	 * Get parent
+	 *
+	 * @return \AppBundle\Entity\Quote
+	 */
+	public function getParent() {
+		return $this->parent;
+	}
+
+	/**
+	 * Set parent
+	 *
+	 * @param \AppBundle\Entity\Quote $parent
+	 *
+	 * @return Quote
+	 */
+	public function setParent(Quote $parent = null) {
+		$this->parent = $parent;
 		$parent->addChild($this);
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Get parent
-     *
-     * @return \AppBundle\Entity\Quote
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
-     * Add child
-     *
-     * @param \AppBundle\Entity\Quote $child
-     *
-     * @return Quote
-     */
-    public function addChild(Quote $child)
-    {
+	/**
+	 * Add child
+	 *
+	 * @param \AppBundle\Entity\Quote $child
+	 *
+	 * @return Quote
+	 */
+	public function addChild(Quote $child) {
 		$child->setParent($this);
-        $this->children[] = $child;
+		$this->children[] = $child;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Remove child
-     *
-     * @param \AppBundle\Entity\Quote $child
-     */
-    public function removeChild(Quote $child)
-    {
-        $this->children->removeElement($child);
-    }
+	/**
+	 * Remove child
+	 *
+	 * @param \AppBundle\Entity\Quote $child
+	 */
+	public function removeChild(Quote $child) {
+		$this->children->removeElement($child);
+	}
 
-    /**
-     * Get children
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getChildren()
-    {
-        return $this->children;
-    }
+	/**
+	 * Get children
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getChildren() {
+		return $this->children;
+	}
 
 	/**
 	 * @return bool True if at least one section is optional
 	 */
-    public function hasOptions() {
+	public function hasOptions() {
 		foreach ($this->getSections() as $section) {
 			/* @var Section $section */
 			if ($section->isOption()) {
@@ -535,6 +496,13 @@ class Quote
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * @return ArrayCollection
+	 */
+	public function getSections() {
+		return $this->sections;
 	}
 
 	public function baseHours() {
@@ -560,7 +528,7 @@ class Quote
 	}
 
 	public function getOptions() {
-    	$options = [];
+		$options = [];
 		foreach ($this->getSections() as $section) {
 			/* @var Section $section */
 			if ($section->isOption()) {
@@ -568,8 +536,8 @@ class Quote
 				$total = 0;
 				foreach ($section->getItems() as $item) {
 					/* @var Item $item */
-					$total += (double) $item->getHours() * $section->getRate();
-					$hours += (double) $item->getHours();
+					$total += (double)$item->getHours() * $section->getRate();
+					$hours += (double)$item->getHours();
 				}
 				$options[] = [
 					'title' => $section->getTitle(),

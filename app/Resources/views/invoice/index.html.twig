@@ -5,15 +5,15 @@
 
     <table class="table table-hover">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>State</th>
-                <th>Quote</th>
-                <th>Billing date</th>
-                <th>Percentage</th>
-                <th>Replacement text</th>
-                <th>Actions</th>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <th>State</th>
+            <th>Quote</th>
+            <th>Billing date</th>
+            <th>Percentage</th>
+            <th>Replacement text</th>
+            <th>Actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for invoice in invoices %}
@@ -38,9 +38,12 @@
         </tbody>
     </table>
 
-    <p><strong>Total invoiced</strong>: {{ "%.2f €" | format(totalInvoiced) }} (incl. {{ "%.2f €" | format(totalInvoicedOption) }} optional)</p>
-    <p><strong>Total paid</strong>: {{ "%.2f €" | format(totalPaid) }} (incl. {{ "%.2f €" | format(totalPaidOption) }} optional)</p>
-    <p><strong>Total pending</strong>: {{ "%.2f €" | format(totalPending) }} (incl. {{ "%.2f €" | format(totalPendingOption) }} optional)</p>
+    <p><strong>Total invoiced</strong>: {{ "%.2f €" | format(totalInvoiced) }}
+        (incl. {{ "%.2f €" | format(totalInvoicedOption) }} optional)</p>
+    <p><strong>Total paid</strong>: {{ "%.2f €" | format(totalPaid) }} (incl. {{ "%.2f €" | format(totalPaidOption) }}
+        optional)</p>
+    <p><strong>Total pending</strong>: {{ "%.2f €" | format(totalPending) }}
+        (incl. {{ "%.2f €" | format(totalPendingOption) }} optional)</p>
 {% endblock %}
 
 {% block navbar %}
@@ -53,20 +56,28 @@
 
 {% block stylesheets %}
     <style type="text/css">
-        .state-paid { background: #efe; }
-        .state-paid td.state { color: #3a3; }
-        .state-sent td.state { color: #333; }
+        .state-paid {
+            background: #efe;
+        }
+
+        .state-paid td.state {
+            color: #3a3;
+        }
+
+        .state-sent td.state {
+            color: #333;
+        }
     </style>
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.15/datatables.min.css"/>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.15/datatables.min.js"></script>
-{% endblock%}
+{% endblock %}
 
 {% block javascripts %}
     <script>
         $(document).ready(function () {
-            $('tr').on('dblclick', function() {
-                document.location.href = '{{ path('invoice_show', { 'id': '0' }) }}'.replace(/0$/, $(this).data('invoice'));
+            $('tr').on('dblclick', function () {
+                document.location.href = '{{ path('quote_show', { 'id': '0' }) }}'.replace(/0$/, $(this).data('quote'));
             });
 
             $('.state-paid td.state span.glyphicon').addClass('glyphicon-ok');

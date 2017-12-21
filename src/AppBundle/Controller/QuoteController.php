@@ -6,14 +6,13 @@ use AppBundle\DBAL\Types\QuoteStateType;
 use AppBundle\Entity\Item;
 use AppBundle\Entity\Quote;
 use AppBundle\Entity\Section;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Redmine\Client;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Redmine\Client;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Quote controller.
@@ -21,27 +20,27 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  * @Route("quote")
  * @Security("has_role('ROLE_USER')")
  */
-class QuoteController extends Controller
-{
+class QuoteController extends Controller {
 	/**
-     * Lists all quote entities.
-     *
-     * @Route("/", name="quote_index")
-     * @Method("GET")
-     */
-    public function indexAction()
-    {
-        $em = $this->getDoctrine()->getManager();
+	 * Lists all quote entities.
+	 *
+	 * @Route("/", name="quote_index")
+	 * @Method("GET")
+	 */
+	public function indexAction() {
+		$em = $this->getDoctrine()
+				   ->getManager();
 
-        $quotes = $em->getRepository('AppBundle:Quote')->findAll();
+		$quotes = $em->getRepository('AppBundle:Quote')
+					 ->findAll();
 		foreach ($quotes as $quote) {
 			$quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
 		}
 
-        return $this->render('quote/index.html.twig', array(
-            'quotes' => $quotes,
-        ));
-    }
+		return $this->render('quote/index.html.twig', array(
+			'quotes' => $quotes,
+		));
+	}
 
 	/**
 	 * Creates a new quote entity.
@@ -51,13 +50,12 @@ class QuoteController extends Controller
 	 * @param Request $request
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
 	 */
-    public function newAction(Request $request)
-    {
-    	$options = [];
-    	$project = null;
+	public function newAction(Request $request) {
+		$options = [];
+		$project = null;
 
-        $redmine = new Client($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
-        $projectsList = $redmine->project->all(['limit' => 1000]);
+		$redmine = new Client($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
+		$projectsList = $redmine->project->all(['limit' => 1000]);
 		if (isset($projectsList['projects'])) {
 			$projects = [];
 			foreach ($projectsList['projects'] as $p) {
@@ -66,16 +64,17 @@ class QuoteController extends Controller
 			$options['projects_choices'] = $projects;
 		}
 
-        $quote = new Quote();
-        $form = $this->createForm('AppBundle\Form\QuoteType', $quote, $options);
-        $form->handleRequest($request);
+		$quote = new Quote();
+		$form = $this->createForm('AppBundle\Form\QuoteType', $quote, $options);
+		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
 			$quote->setTitle(sprintf("%d%03d%02d%02d", date('Y'), $quote->getCustomerId(), $quote->getProjectId(), $quote->getId()));
 			$quote->setDescription(trim($quote->getDescription()));
 			$quote->setDateCreation(new \DateTime());
 
-			$em = $this->getDoctrine()->getManager();
+			$em = $this->getDoctrine()
+					   ->getManager();
 			$em->persist($quote);
 			$em->flush();
 
@@ -86,12 +85,12 @@ class QuoteController extends Controller
 			return $this->redirectToRoute('quote_show', array('id' => $quote->getId()));
 		}
 
-        return $this->render('quote/new.html.twig', array(
-            'quote' => $quote,
-            'form' => $form->createView(),
+		return $this->render('quote/new.html.twig', array(
+			'quote' => $quote,
+			'form' => $form->createView(),
 			'redmine_url' => $this->getParameter('redmine_url'),
-        ));
-    }
+		));
+	}
 
 	/**
 	 * Finds and displays a quote entity.
@@ -101,8 +100,7 @@ class QuoteController extends Controller
 	 * @param Quote $quote Quote to display
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function showAction(Quote $quote)
-	{
+	public function showAction(Quote $quote) {
 		$quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
 		$deleteForm = $this->createDeleteForm($quote);
 
@@ -110,6 +108,20 @@ class QuoteController extends Controller
 			'quote' => $quote,
 			'delete_form' => $deleteForm->createView(),
 		));
+	}
+
+	/**
+	 * Creates a form to delete a quote entity.
+	 *
+	 * @param Quote $quote The quote entity
+	 *
+	 * @return \Symfony\Component\Form\Form The form
+	 */
+	private function createDeleteForm(Quote $quote) {
+		return $this->createFormBuilder()
+					->setAction($this->generateUrl('quote_delete', array('id' => $quote->getId())))
+					->setMethod('DELETE')
+					->getForm();
 	}
 
 	/**
@@ -141,8 +153,7 @@ class QuoteController extends Controller
 	 * @param Quote $quote Quote to display
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function duplicateAction(Quote $quote)
-	{
+	public function duplicateAction(Quote $quote) {
 		$dupe = clone $quote;
 		$dupe->updateTitle();
 		$dupe->setDateCreation(new \DateTime());
@@ -151,7 +162,8 @@ class QuoteController extends Controller
 		$quote->addChild($dupe);
 		$dupe->setParent($quote);
 
-		$em = $this->getDoctrine()->getManager();
+		$em = $this->getDoctrine()
+				   ->getManager();
 		$em->persist($dupe);
 		$em->persist($quote);
 		$em->flush();
@@ -167,33 +179,31 @@ class QuoteController extends Controller
 	 * @param Quote $quote Quote to display
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-    public function showPdfAction(Quote $quote)
-    {
-        $quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
+	public function showPdfAction(Quote $quote) {
+		$quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
 
-        $html = $this->renderView('quote/show_pdf.html.twig', ['quote' => $quote]);
-		$header = $this->renderView('pdf/header_footer.html.twig', ['title' => $quote->getTitle()]);
-		$footer = $this->renderView('pdf/header_footer.html.twig', ['title' => $quote->getTitle(), 'type' => 'footer']);
+		$html = $this->renderView('quote/show_pdf.html.twig', ['quote' => $quote]);
+		$header = $this->renderView('pdf/header_footer.html.twig', ['title' => $invoice->getTitle()]);
+		$footer = $this->renderView('pdf/header_footer.html.twig', [
+			'title' => $invoice->getTitle(),
+			'type' => 'footer'
+		]);
 
-        $filename = sprintf("D%s.pdf", $quote->getTitle());
+		$filename = sprintf("D%s.pdf", $quote->getTitle());
 
-        $snappy = $this->get('knp_snappy.pdf');
-        $snappy->setOption('header-html', $header);
-        $snappy->setOption('footer-html', $footer);
-        $snappy->setOption('margin-top', 10);
-        $snappy->setOption('margin-bottom', 10);
-        $snappy->setOption('margin-left', 10);
-        $snappy->setOption('margin-right', 10);
-        $snappy->setOption('print-media-type', true);
-        return new Response(
-            $snappy->getOutputFromHtml($html),
-            200,
-            [
-                'Content-Type'        => 'application/pdf',
-                'Content-Disposition' => sprintf('attachment; filename="%s"', $filename),
-            ]
-        );
-    }
+		$snappy = $this->get('knp_snappy.pdf');
+		$snappy->setOption('header-html', $header);
+		$snappy->setOption('footer-html', $footer);
+		$snappy->setOption('margin-top', 10);
+		$snappy->setOption('margin-bottom', 10);
+		$snappy->setOption('margin-left', 10);
+		$snappy->setOption('margin-right', 10);
+		$snappy->setOption('print-media-type', true);
+		return new Response($snappy->getOutputFromHtml($html), 200, [
+				'Content-Type' => 'application/pdf',
+				'Content-Disposition' => sprintf('attachment; filename="%s"', $filename),
+			]);
+	}
 
 	/**
 	 * Finds and displays a quote entity.
@@ -203,11 +213,10 @@ class QuoteController extends Controller
 	 * @param Quote $quote Quote to display
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-    public function pdfFooterAction(Quote $quote)
-    {
-        $quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
-        return $this->render('quote/pdf_footer.html.twig', ['quote' => $quote]);
-    }
+	public function pdfFooterAction(Quote $quote) {
+		$quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
+		return $this->render('quote/pdf_footer.html.twig', ['quote' => $quote]);
+	}
 
 	/**
 	 * Finds and displays a quote entity.
@@ -217,11 +226,10 @@ class QuoteController extends Controller
 	 * @param Quote $quote Quote to display
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-    public function pdfHeaderAction(Quote $quote)
-    {
-        $quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
-        return $this->render('quote/header_footer.html.twig', ['quote' => $quote]);
-    }
+	public function pdfHeaderAction(Quote $quote) {
+		$quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
+		return $this->render('quote/header_footer.html.twig', ['quote' => $quote]);
+	}
 
 	/**
 	 * Displays a form to edit an existing quote entity.
@@ -232,17 +240,18 @@ class QuoteController extends Controller
 	 * @param Quote $quote
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
 	 */
-    public function editAction(Request $request, Quote $quote)
-    {
-        $deleteForm = $this->createDeleteForm($quote);
-        $editForm = $this->createForm('AppBundle\Form\QuoteType', $quote);
-        $editForm->handleRequest($request);
+	public function editAction(Request $request, Quote $quote) {
+		$deleteForm = $this->createDeleteForm($quote);
+		$editForm = $this->createForm('AppBundle\Form\QuoteType', $quote);
+		$editForm->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+		if ($editForm->isSubmitted() && $editForm->isValid()) {
+			$this->getDoctrine()
+				 ->getManager()
+				 ->flush();
 
 			return $this->redirectToRoute('quote_show', array('id' => $quote->getId()));
-        }
+		}
 
 		return $this->render('quote/edit.html.twig', array(
 			'quote' => $quote,
@@ -250,7 +259,7 @@ class QuoteController extends Controller
 			'delete_form' => $deleteForm->createView(),
 			'redmine_url' => $this->getParameter('redmine_url'),
 		));
-    }
+	}
 
 	/**
 	 * Deletes a quote entity.
@@ -261,19 +270,19 @@ class QuoteController extends Controller
 	 * @param Quote $quote
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
 	 */
-    public function deleteAction(Request $request, Quote $quote)
-    {
-        $form = $this->createDeleteForm($quote);
-        $form->handleRequest($request);
+	public function deleteAction(Request $request, Quote $quote) {
+		$form = $this->createDeleteForm($quote);
+		$form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($quote);
-            $em->flush();
-        }
+		if ($form->isSubmitted() && $form->isValid()) {
+			$em = $this->getDoctrine()
+					   ->getManager();
+			$em->remove($quote);
+			$em->flush();
+		}
 
-        return $this->redirectToRoute('quote_index');
-    }
+		return $this->redirectToRoute('quote_index');
+	}
 
 	/**
 	 * @Route("/{id}/mark/{state}", name="quote_change_state")
@@ -290,7 +299,8 @@ class QuoteController extends Controller
 		}
 
 		$quote->setState($state);
-		$em = $this->getDoctrine()->getManager();
+		$em = $this->getDoctrine()
+				   ->getManager();
 		$em->persist($quote);
 		$em->flush();
 
@@ -320,11 +330,7 @@ class QuoteController extends Controller
 			foreach ($section->getItems() as $item) {
 				/* @var Item $item */
 				if (!isset($categories[$section->getTitle()])) {
-					$categories[$section->getTitle()]
-						= (int) $redmine->issue_category->create(
-							$quote->getProjectId(),
-							[ 'name' => $section->getTitle() ]
-					)->id;
+					$categories[$section->getTitle()] = (int)$redmine->issue_category->create($quote->getProjectId(), ['name' => $section->getTitle()])->id;
 				}
 				$issues[] = $redmine->issue->create([
 					'project_id' => $quote->getProjectId(),
@@ -338,26 +344,7 @@ class QuoteController extends Controller
 			}
 		}
 
-		$url = sprintf("%s/projects/%s/issues",
-			$this->getParameter('redmine_url'),
-			$quote->getProjectId()
-		);
+		$url = sprintf("%s/projects/%s/issues", $this->getParameter('redmine_url'), $quote->getProjectId());
 		return $this->redirect($url);
 	}
-
-    /**
-     * Creates a form to delete a quote entity.
-     *
-     * @param Quote $quote The quote entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Quote $quote)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('quote_delete', array('id' => $quote->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
 }

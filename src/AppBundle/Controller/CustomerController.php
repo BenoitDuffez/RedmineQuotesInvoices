@@ -15,8 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * @Route("customers")
  * @Security("has_role('ROLE_USER')")
  */
-class CustomerController extends Controller
-{
+class CustomerController extends Controller {
 	/**
 	 * Get detailed information about one customer (plus custom fields)
 	 *
@@ -41,10 +40,7 @@ class CustomerController extends Controller
 	 */
 	public function customerInProjectAction($projectId) {
 		$redmine = new Client($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
-		$data = array_merge(
-			$redmine->membership->all($projectId, ['limit' => 1000]),
-			$redmine->project->show($projectId)
-		);
+		$data = array_merge($redmine->membership->all($projectId, ['limit' => 1000]), $redmine->project->show($projectId));
 		$response = new JsonResponse($data);
 		return $response;
 	}

@@ -1,7 +1,8 @@
 {# This prevents the "0", "1", ... label from being printed before each section #}
 {% block _appbundle_quote_sections_widget %}
     {% if form.vars.prototype is defined %}
-        <div id="{{ form.vars.id }}" class="sections" data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}">
+        <div id="{{ form.vars.id }}" class="sections"
+             data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}">
             {% for section in form %}
                 {{ form_widget(section) }} {# print only the widget, not the label #}
             {% endfor %}
@@ -10,7 +11,8 @@
 {% endblock %}
 
 {% block _appbundle_quote_sections_entry_widget %}
-    <div id="{{ form.vars.id }}" class="row with-3d-shadow" style="box-shadow: 5px 5px 10px #999; background: #eee; padding: 1em 0 0 1em;">
+    <div id="{{ form.vars.id }}" class="row with-3d-shadow"
+         style="box-shadow: 5px 5px 10px #999; background: #eee; padding: 1em 0 0 1em;">
         <div class="col-md-2">
             {{ form_row(form.title) }}
             {{ form_row(form.rate) }}
@@ -28,9 +30,11 @@
 {# This prevents the "0", "1", ... label from being printed before each section item #}
 {% block _appbundle_quote_sections_entry_items_widget %}
     {% if form.vars.prototype is defined %}
-        <div id="{{ form.vars.id }}" class="items" data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}">
+        <div id="{{ form.vars.id }}" class="items"
+             data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}">
             {% for item in form %}
-                <div class="form-group ui-sortable-handle" style="background: {{ loop.index0 is even ? "#eee" : "#ddd" }}">
+                <div class="form-group ui-sortable-handle"
+                     style="background: {{ loop.index0 is even ? "#eee" : "#ddd" }}">
                     {{ form_widget(item) }} {# print only the widget, not the label #}
                 </div>
             {% endfor %}

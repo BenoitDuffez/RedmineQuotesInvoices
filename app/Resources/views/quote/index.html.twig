@@ -5,16 +5,16 @@
 
     <table class="table table-hover">
         <thead>
-            <tr>
-                <th>#</th>
-                <th>Identifier</th>
-                <th>State</th>
-                <th>Creation Date</th>
-                <th>Customer</th>
-                <th>Project</th>
-                <th>Internal comments</th>
-                <th>Actions</th>
-            </tr>
+        <tr>
+            <th>#</th>
+            <th>Identifier</th>
+            <th>State</th>
+            <th>Creation Date</th>
+            <th>Customer</th>
+            <th>Project</th>
+            <th>Internal comments</th>
+            <th>Actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for quote in quotes %}
@@ -44,42 +44,62 @@
 {% block navbar %}
     <ul class="nav navbar-nav navbar-right">
         <li>
-             <a href="{{ path('quote_new') }}"><span class="glyphicon glyphicon-plus"></span> Create a new quote</a>
+            <a href="{{ path('quote_new') }}"><span class="glyphicon glyphicon-plus"></span> Create a new quote</a>
         </li>
     </ul>
 {% endblock %}
 
 {% block stylesheets %}
-<style type="text/css">
-.state-accepted { background: #efe; }
-.state-rejected { background: #fee; }
-.state-replaced { background: #eee; }
-.state-accepted td.state { color: #3a3; }
-.state-replaced td.state { color: #999; }
-.state-rejected td.state { color: #a33; }
-.state-draft    td.state { color: #333; }
-</style>
+    <style type="text/css">
+        .state-accepted {
+            background: #efe;
+        }
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.15/datatables.min.css"/>
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.15/datatables.min.js"></script>
-{% endblock%}
+        .state-rejected {
+            background: #fee;
+        }
+
+        .state-replaced {
+            background: #eee;
+        }
+
+        .state-accepted td.state {
+            color: #3a3;
+        }
+
+        .state-replaced td.state {
+            color: #999;
+        }
+
+        .state-rejected td.state {
+            color: #a33;
+        }
+
+        .state-draft td.state {
+            color: #333;
+        }
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.15/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.15/datatables.min.js"></script>
+{% endblock %}
 
 {% block javascripts %}
     <script>
-$(document).ready(function () {
-    $('tr').on('dblclick', function() {
-        document.location.href = '{{ path('quote_show', { 'id': '0' }) }}'.replace(/0$/, $(this).data('quote'));
-    });
+        $(document).ready(function () {
+            $('tr').on('dblclick', function () {
+                document.location.href = '{{ path('quote_show', { 'id': '0' }) }}'.replace(/0$/, $(this).data('quote'));
+            });
 
-    $('.state-accepted td.state span.glyphicon').addClass('glyphicon-ok');
-    $('.state-replaced td.state span.glyphicon').addClass('glyphicon-random');
-    $('.state-rejected td.state span.glyphicon').addClass('glyphicon-remove');
-    $('.state-draft    td.state span.glyphicon').addClass('glyphicon-pencil');
+            $('.state-accepted td.state span.glyphicon').addClass('glyphicon-ok');
+            $('.state-replaced td.state span.glyphicon').addClass('glyphicon-random');
+            $('.state-rejected td.state span.glyphicon').addClass('glyphicon-remove');
+            $('.state-draft    td.state span.glyphicon').addClass('glyphicon-pencil');
 
-    $('table.table').DataTable({
-        'order': [[3, 'desc']] // Creation Date
-    });
-});
+            $('table.table').DataTable({
+                'order': [[3, 'desc']] // Creation Date
+            });
+        });
     </script>
 {% endblock %}
 

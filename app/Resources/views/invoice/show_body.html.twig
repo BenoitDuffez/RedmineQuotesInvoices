@@ -10,7 +10,8 @@
             18, allée du Léon
             35230 Bourgbarré
 
-            SIRET: 53879565900035</div>
+            SIRET: 53879565900035
+        </div>
     </div>
     <div class="col-md-4 col-md-offset-4 text-right">
         <div class="contact">{{ invoice.quote.customerField('firstname') }} {{ invoice.quote.customerField('lastname') }}
@@ -25,18 +26,18 @@
 
     <table class="table table-bordered">
         <thead>
-            <tr>
-                <th>Désignation</th>
-                <th class="text-right">Total H.T.</th>
-            </tr>
+        <tr>
+            <th>Désignation</th>
+            <th class="text-right">Total H.T.</th>
+        </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="col-md-8">
-                    {{ invoice.replacementText | markdown}}
-                </td>
-                <td class="col-md-4 text-right">{{ "%d €" | format(invoice.total) }}</td>
-            </tr>
+        <tr>
+            <td class="col-md-8">
+                {{ invoice.replacementText | markdown }}
+            </td>
+            <td class="col-md-4 text-right">{{ "%d €" | format(invoice.total) }}</td>
+        </tr>
         </tbody>
     </table>
 {% else %}
@@ -57,8 +58,11 @@
         {% if prev.id != invoice.id and prev.billingDate < invoice.billingDate %}
             <tr>
                 <td><strong>Facture {{ prev.title }}</strong>
-                    émise le {{ prev.billingDate | date('d/m/Y') }} pour {{ "%.0f %%" | format(prev.percentage) }} du total</td>
-                <td class="text-right"><strong>{{ "%d €" | format(- prev.percentage/100 * invoice.total) }}</strong></td>
+                    émise le {{ prev.billingDate | date('d/m/Y') }} pour {{ "%.0f %%" | format(prev.percentage) }} du
+                    total
+                </td>
+                <td class="text-right"><strong>{{ "%d €" | format(- prev.percentage/100 * invoice.total) }}</strong>
+                </td>
             </tr>
         {% endif %}
     {% endfor %}
@@ -78,7 +82,9 @@
         <th>Paiement</th>
     </tr>
     <tr>
-        <td>Paiement par chèque à l'ordre de Benoit Duffez, ou par virement bancaire: FR76 4061 8802 7000 0402 3381 234</td>
+        <td>Paiement par chèque à l'ordre de Benoit Duffez, ou par virement bancaire: FR76 4061 8802 7000 0402 3381
+            234
+        </td>
     </tr>
 </table>
 
@@ -89,8 +95,11 @@
     <tr>
         <td>
             <p>
-                La facture est payable sous 30 jours.<br />
-                Tout règlement effectué après expiration du délai donnera lieu, à titre de pénalité de retard, à l'application d'un intérêt égal à celui appliqué par la Banque Centrale Européenne à son opération de refinancement la plus récente, majoré de 10 points de pourcentage, ainsi qu'à une indemnité forfaitaire pour frais de recouvrement d'un montant de 40 Euros.<br />
+                La facture est payable sous 30 jours.<br/>
+                Tout règlement effectué après expiration du délai donnera lieu, à titre de pénalité de retard, à
+                l'application d'un intérêt égal à celui appliqué par la Banque Centrale Européenne à son opération de
+                refinancement la plus récente, majoré de 10 points de pourcentage, ainsi qu'à une indemnité forfaitaire
+                pour frais de recouvrement d'un montant de 40 Euros.<br/>
                 Les pénalités de retard sont exigibles sans qu'un rappel soit nécessaire.
             </p>
         </td>

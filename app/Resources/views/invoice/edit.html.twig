@@ -4,8 +4,8 @@
     <h1>Invoice {{ invoice.title }}</h1>
 
     {{ form_start(edit_form) }}
-    {% form_theme edit_form 'form/invoice.html.twig' %} 
-        {{ form_widget(edit_form) }}
+    {% form_theme edit_form 'form/invoice.html.twig' %}
+    {{ form_widget(edit_form) }}
     {{ form_end(edit_form) }}
 
 {% endblock %}

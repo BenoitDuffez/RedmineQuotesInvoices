@@ -5,22 +5,22 @@
 
     <table>
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Username</th>
-                <td>{{ user.username }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ user.password }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <td>{{ user.id }}</td>
+        </tr>
+        <tr>
+            <th>Username</th>
+            <td>{{ user.username }}</td>
+        </tr>
+        <tr>
+            <th>Password</th>
+            <td>{{ user.password }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ user.email }}</td>
+        </tr>
         </tbody>
     </table>
 
@@ -33,7 +33,7 @@
         </li>
         <li>
             {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
+            <input type="submit" value="Delete">
             {{ form_end(delete_form) }}
         </li>
     </ul>

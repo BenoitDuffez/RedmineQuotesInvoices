@@ -11,45 +11,44 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="section")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\SectionRepository")
  */
-class Section
-{
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+class Section {
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="id", type="integer")
+	 * @ORM\Id
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	private $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255)
-     */
-    private $title;
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="title", type="string", length=255)
+	 */
+	private $title;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="position", type="integer")
-     */
-    private $position;
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="position", type="integer")
+	 */
+	private $position;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="rate", type="integer")
-     */
-    private $rate;
+	/**
+	 * @var int
+	 *
+	 * @ORM\Column(name="rate", type="integer")
+	 */
+	private $rate;
 
-    /**
-     * @var int
-     *
+	/**
+	 * @var int
+	 *
 	 * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Quote", inversedBy="sections")
 	 * @ORM\JoinColumn(name="quote_id", referencedColumnName="id")
-     */
-    private $quote;
+	 */
+	private $quote;
 
 	/**
 	 * @var ArrayCollection
@@ -100,127 +99,109 @@ class Section
 	}
 
 	/**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     *
-     * @return Section
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Set position
-     *
-     * @param integer $position
-     *
-     * @return Section
-     */
-    public function setPosition($position)
-    {
-        $this->position = $position;
-
-        return $this;
-    }
-
-    /**
-     * Get position
-     *
-     * @return int
-     */
-    public function getPosition()
-    {
-        return $this->position;
-    }
-
-    /**
-     * Set rate
-     *
-     * @param integer $rate
-     *
-     * @return Section
-     */
-    public function setRate($rate)
-    {
-        $this->rate = $rate;
-
-        return $this;
-    }
-
-    /**
-     * Get rate
-     *
-     * @return int
-     */
-    public function getRate()
-    {
-        return $this->rate;
-    }
-
-    /**
-     * Set quote
-     *
-     * @param Quote $quote
-     *
-     * @return Section
-     */
-    public function setQuote($quote)
-    {
-        $this->quote = $quote;
-
-        return $this;
-    }
-
-    /**
-     * Get quote
-     *
-     * @return int
-     */
-    public function getQuote()
-    {
-        return $this->quote;
-    }
-
-	/**
-	 * @return mixed
+	 * Get id
+	 *
+	 * @return int
 	 */
-	public function getItems() {
-		return $this->items;
+	public function getId() {
+		return $this->id;
 	}
 
-	public function addItem(Item $item)
-	{
+	/**
+	 * Get title
+	 *
+	 * @return string
+	 */
+	public function getTitle() {
+		return $this->title;
+	}
+
+	/**
+	 * Set title
+	 *
+	 * @param string $title
+	 *
+	 * @return Section
+	 */
+	public function setTitle($title) {
+		$this->title = $title;
+
+		return $this;
+	}
+
+	/**
+	 * Get position
+	 *
+	 * @return int
+	 */
+	public function getPosition() {
+		return $this->position;
+	}
+
+	/**
+	 * Set position
+	 *
+	 * @param integer $position
+	 *
+	 * @return Section
+	 */
+	public function setPosition($position) {
+		$this->position = $position;
+
+		return $this;
+	}
+
+	/**
+	 * Get rate
+	 *
+	 * @return int
+	 */
+	public function getRate() {
+		return $this->rate;
+	}
+
+	/**
+	 * Set rate
+	 *
+	 * @param integer $rate
+	 *
+	 * @return Section
+	 */
+	public function setRate($rate) {
+		$this->rate = $rate;
+
+		return $this;
+	}
+
+	/**
+	 * Get quote
+	 *
+	 * @return int
+	 */
+	public function getQuote() {
+		return $this->quote;
+	}
+
+	/**
+	 * Set quote
+	 *
+	 * @param Quote $quote
+	 *
+	 * @return Section
+	 */
+	public function setQuote($quote) {
+		$this->quote = $quote;
+
+		return $this;
+	}
+
+	public function addItem(Item $item) {
 		$item->setSection($this);
 		$this->items->add($item);
 		return $this;
 	}
 
-	public function removeItem(Item $item)
-	{
+	public function removeItem(Item $item) {
 		$this->items->removeElement($item);
 		return $this;
 	}
@@ -229,88 +210,81 @@ class Section
 		return "SECTION LOL";
 	}
 
-    /**
-     * Set option
-     *
-     * @param boolean $option
-     *
-     * @return Section
-     */
-    public function setOption($option)
-    {
-        $this->option = $option;
+	/**
+	 * Get isOption
+	 *
+	 * @return boolean
+	 */
+	public function isOption() {
+		return $this->option;
+	}
 
-        return $this;
-    }
+	/**
+	 * Set option
+	 *
+	 * @param boolean $option
+	 *
+	 * @return Section
+	 */
+	public function setOption($option) {
+		$this->option = $option;
 
-    /**
-     * Get isOption
-     *
-     * @return boolean
-     */
-    public function isOption()
-    {
-        return $this->option;
-    }
+		return $this;
+	}
 
-    /**
-     * Set chosen
-     *
-     * @param boolean $chosen
-     *
-     * @return Section
-     */
-    public function setChosen($chosen)
-    {
-        $this->chosen = $chosen;
+	/**
+	 * Get chosen
+	 *
+	 * @return boolean
+	 */
+	public function getChosen() {
+		return $this->chosen;
+	}
 
-        return $this;
-    }
+	/**
+	 * Set chosen
+	 *
+	 * @param boolean $chosen
+	 *
+	 * @return Section
+	 */
+	public function setChosen($chosen) {
+		$this->chosen = $chosen;
 
-    /**
-     * Get chosen
-     *
-     * @return boolean
-     */
-    public function getChosen()
-    {
-        return $this->chosen;
-    }
+		return $this;
+	}
 
-    /**
-     * Add invoice
-     *
-     * @param Invoice $invoice
-     *
-     * @return Section
-     */
-    public function addInvoice(Invoice $invoice)
-    {
+	/**
+	 * Add invoice
+	 *
+	 * @param Invoice $invoice
+	 *
+	 * @return Section
+	 */
+	public function addInvoice(Invoice $invoice) {
 		$invoice->addSection($this);
-        $this->invoices[] = $invoice;
+		$this->invoices[] = $invoice;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Remove invoice
-     *
-     * @param Invoice $invoice
-     */
-    public function removeInvoice(Invoice $invoice)
-    {
-        $this->invoices->removeElement($invoice);
-    }
+	/**
+	 * Remove invoice
+	 *
+	 * @param Invoice $invoice
+	 */
+	public function removeInvoice(Invoice $invoice) {
+		$this->invoices->removeElement($invoice);
+	}
 
-    /**
-     * Get invoices
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getInvoices()
-    {
-        return $this->invoices;
-    }
+	/**
+	 * Get invoices
+	 *
+	 * @return \Doctrine\Common\Collections\Collection
+	 */
+	public function getInvoices() {
+		return $this->invoices;
+	}
 
 	/**
 	 * Total number of hours of all items
@@ -320,8 +294,15 @@ class Section
 		$total = 0;
 		foreach ($this->getItems() as $item) {
 			/* @var Item $item */
-			$total += (double) $item->getHours();
+			$total += (double)$item->getHours();
 		}
 		return $total;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getItems() {
+		return $this->items;
 	}
 }

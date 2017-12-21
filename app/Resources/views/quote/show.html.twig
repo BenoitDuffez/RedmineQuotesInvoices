@@ -7,8 +7,9 @@
     <hr>
 
     <p align="center">
-        SIRET : 538 795 659 00035<br />
-        Dispensé d’immatriculation au registre du commerce et des sociétés (RCS) en application de l'article L.123-1-1 du Code du Commerce TVA non applicable, art. 293 B du CGI
+        SIRET : 538 795 659 00035<br/>
+        Dispensé d’immatriculation au registre du commerce et des sociétés (RCS) en application de l'article L.123-1-1
+        du Code du Commerce TVA non applicable, art. 293 B du CGI
     </p>
 
 {% endblock %}
@@ -16,7 +17,8 @@
 {% block navbar %}
     <ul class="nav navbar-nav">
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Quote actions <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+               aria-expanded="false">Quote actions <span class="caret"></span></a>
 
             <ul class="dropdown-menu">
 
@@ -37,14 +39,16 @@
                     </li>
 
                     <li>
-                        <a href="{{ path('quote_change_state', {'id': quote.id, 'state': 'ACCEPTED'}) }}" title="Mark as accepted">
+                        <a href="{{ path('quote_change_state', {'id': quote.id, 'state': 'ACCEPTED'}) }}"
+                           title="Mark as accepted">
                             <span class="glyphicon glyphicon-ok"></span>
                             Mark as accepted
                         </a>
                     </li>
 
                     <li>
-                        <a href="{{ path('quote_change_state', {'id': quote.id, 'state': 'REJECTED'}) }}" title="Mark as rejected">
+                        <a href="{{ path('quote_change_state', {'id': quote.id, 'state': 'REJECTED'}) }}"
+                           title="Mark as rejected">
                             <span class="glyphicon glyphicon-remove"></span>
                             Mark as rejected
                         </a>
@@ -73,8 +77,8 @@
     </ul>
 
     {{ form_start(delete_form, {'attr': {'class': 'navbar-form navbar-right'}}) }}
-        <button class="btn btn-danger" type="submit" value="Delete">
-            <span class="glyphicon glyphicon-trash"></span>&nbsp;
-        </button>
+    <button class="btn btn-danger" type="submit" value="Delete">
+        <span class="glyphicon glyphicon-trash"></span>&nbsp;
+    </button>
     {{ form_end(delete_form) }}
 {% endblock %}

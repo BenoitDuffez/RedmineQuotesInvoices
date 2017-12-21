@@ -5,10 +5,9 @@
 
     {{ form_start(form) }}
     {% form_theme form
-        'form/quote.html.twig'
-        'bootstrap_3_layout.html.twig'
-        'form/jquery.collection.html.twig'
-    %}
+    'form/quote.html.twig'
+    'bootstrap_3_layout.html.twig'
+    'form/jquery.collection.html.twig' %}
 
     <h2>General information</h2>
     <div class="row">
@@ -27,12 +26,12 @@
 
             <div id="customer_info">
                 <p>
-                    <strong>SIRET:</strong><br />
-                    <pre id="siret"></pre>
+                    <strong>SIRET:</strong><br/>
+                <pre id="siret"></pre>
                 </p>
                 <p>
-                    <strong>Address:</strong><br />
-                    <pre id="address"></pre>
+                    <strong>Address:</strong><br/>
+                <pre id="address"></pre>
                 </p>
             </div>
         </div>
@@ -46,7 +45,7 @@
         </div>
     </div>
 
-    <hr />
+    <hr/>
 
     <div class="row">
         <div class="col-xs-12 text-right">
@@ -78,45 +77,45 @@
         $('#customer_info').hide();
         $('#project_info').hide();
 
-        $(document).on('change', 'select#{{ form.projectId.vars.id }}', function() {
+        $(document).on('change', 'select#{{ form.projectId.vars.id }}', function () {
             onProjectSelected($(this), '{{ path('customer_list') }}', 'select#{{ form.customerId.vars.id }}');
         });
 
-        $(document).on('change', 'select#{{ form.customerId.vars.id }}', function() {
+        $(document).on('change', 'select#{{ form.customerId.vars.id }}', function () {
             onCustomerSelected($(this), '{{ path('customer_info') }}');
         });
 
-    $('.sections').collection({
-        prototype_name: '{{ form.sections.vars.prototype.vars.name }}',
-        name_prefix: '{{ form.sections.vars.full_name }}',
-        allow_add: true,
-        allow_remove: true,
-        add_at_the_end: true,
-        fade_in: true,
-        fade_out: true,
-        prefix: 'sections',
-        init_with_n_elements: 1,
-        up: '',
-        down: '',
-        add: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Add section</a>',
-        remove: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> Remove section</a>',
-        position_field_selector: '.section-position',
-        drag_drop: true,
-        children: [{
-            selector: '.items',
-            prototype_name: '{{  form.sections.vars.prototype.items.vars.prototype.vars.name }}',
-            name_prefix: '{{ form.sections.vars.prototype.items.vars.full_name }}',
-            init_with_n_elements: 1,
+        $('.sections').collection({
+            prototype_name: '{{ form.sections.vars.prototype.vars.name }}',
+            name_prefix: '{{ form.sections.vars.full_name }}',
+            allow_add: true,
+            allow_remove: true,
+            add_at_the_end: true,
             fade_in: true,
             fade_out: true,
+            prefix: 'sections',
+            init_with_n_elements: 1,
             up: '',
             down: '',
-            add: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus-sign"> Add new item in this section</span></a>',
-            remove: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span></a>',
-            position_field_selector: '.item-position',
-            add_at_the_end: true,
-            prefix: 'items'
-        }]
-    });
+            add: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> Add section</a>',
+            remove: '<a href="#" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span> Remove section</a>',
+            position_field_selector: '.section-position',
+            drag_drop: true,
+            children: [{
+                selector: '.items',
+                prototype_name: '{{ form.sections.vars.prototype.items.vars.prototype.vars.name }}',
+                name_prefix: '{{ form.sections.vars.prototype.items.vars.full_name }}',
+                init_with_n_elements: 1,
+                fade_in: true,
+                fade_out: true,
+                up: '',
+                down: '',
+                add: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus-sign"> Add new item in this section</span></a>',
+                remove: '<a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span></a>',
+                position_field_selector: '.item-position',
+                add_at_the_end: true,
+                prefix: 'items'
+            }]
+        });
     </script>
 {% endblock %}

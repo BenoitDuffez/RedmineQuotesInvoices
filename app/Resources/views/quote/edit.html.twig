@@ -7,9 +7,8 @@
     {% form_theme edit_form
     'form/quote.html.twig'
     'bootstrap_3_layout.html.twig'
-    'form/jquery.collection.html.twig'
-    %}
-    
+    'form/jquery.collection.html.twig' %}
+
     <h2>General information</h2>
     <div class="row">
         <div class="col-md-6">
@@ -28,11 +27,11 @@
 
             <div id="customer_info">
                 <p>
-                    <strong>SIRET:</strong><br />
+                    <strong>SIRET:</strong><br/>
                 <pre id="siret"></pre>
                 </p>
                 <p>
-                    <strong>Address:</strong><br />
+                    <strong>Address:</strong><br/>
                 <pre id="address"></pre>
                 </p>
             </div>
@@ -47,14 +46,14 @@
         </div>
     </div>
 
-    <hr />
+    <hr/>
 
     <div class="row">
         <div class="col-xs-12 text-right">
             {{ form_widget(edit_form.submit) }}
         </div>
     </div>
-        <input type="submit" value="Edit" />
+    <input type="submit" value="Edit"/>
     {{ form_end(edit_form) }}
 
     <ul>
@@ -63,7 +62,7 @@
         </li>
         <li>
             {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
+            <input type="submit" value="Delete">
             {{ form_end(delete_form) }}
         </li>
     </ul>
@@ -81,9 +80,9 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            loadProjectInfo('{{ path('customer_list') }}/{{  edit_form.projectId.vars.value }}', 'select#{{ edit_form.customerId.vars.id }}');
+            loadProjectInfo('{{ path('customer_list') }}/{{ edit_form.projectId.vars.value }}', 'select#{{ edit_form.customerId.vars.id }}');
         });
-        $(document).on('change', 'select#{{ edit_form.customerId.vars.id }}', function() {
+        $(document).on('change', 'select#{{ edit_form.customerId.vars.id }}', function () {
             onCustomerSelected($(this), '{{ path('customer_info') }}');
         });
 
@@ -105,7 +104,7 @@
             drag_drop: true,
             children: [{
                 selector: '.items',
-                prototype_name: '{{  edit_form.sections.vars.prototype.items.vars.prototype.vars.name }}',
+                prototype_name: '{{ edit_form.sections.vars.prototype.items.vars.prototype.vars.name }}',
                 name_prefix: '{{ edit_form.sections.vars.prototype.items.vars.full_name }}',
                 init_with_n_elements: 1,
                 fade_in: true,
