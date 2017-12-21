@@ -8,7 +8,9 @@ use AppBundle\Repository\InvoiceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Invoice controller.
@@ -54,6 +56,8 @@ class InvoiceController extends Controller {
 	 *
 	 * @Route("/new", name="invoice_new")
 	 * @Method({"GET", "POST"})
+	 * @param Request $request
+	 * @return RedirectResponse|Response
 	 */
 	public function newAction(Request $request) {
 		$invoice = new Invoice();
@@ -121,7 +125,7 @@ class InvoiceController extends Controller {
 	 * @Route("/{id}/pdf", name="invoice_show_pdf")
 	 * @Method("GET")
 	 * @param Invoice $invoice Invoice to display
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @return Response
 	 */
 	public function showPdfAction(Invoice $invoice) {
 		$invoice->getQuote()
@@ -144,22 +148,21 @@ class InvoiceController extends Controller {
 		$snappy->setOption('margin-right', 10);
 		$snappy->setOption('print-media-type', true);
 
-		return new \Symfony\Component\HttpFoundation\Response($snappy->getOutputFromHtml($html), 200, [
-				'Content-Type' => 'application/pdf',
-				'Content-Disposition' => sprintf('attachment; filename="%s"', $filename),
-			]);
+		return new Response($snappy->getOutputFromHtml($html), 200, [
+			'Content-Type' => 'application/pdf',
+			'Content-Disposition' => sprintf('attachment; filename="%s"', $filename),
+		]);
 	}
 
 	/**
 	 * @Route("/{id}/mark/{state}", name="invoice_change_state")
 	 * @Method("GET")
 	 *
-	 * @param Request $request
 	 * @param Invoice $invoice
 	 * @param string $state
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
 	 */
-	public function changeStateAction(Request $request, Invoice $invoice, $state) {
+	public function changeStateAction(Invoice $invoice, $state) {
 		if (!InvoiceStateType::isValueExist($state)) {
 			throw $this->createNotFoundException('The target invoice state does not exist');
 		}
@@ -178,6 +181,9 @@ class InvoiceController extends Controller {
 	 *
 	 * @Route("/{id}/edit", name="invoice_edit")
 	 * @Method({"GET", "POST"})
+	 * @param Request $request
+	 * @param Invoice $invoice
+	 * @return RedirectResponse|Response
 	 */
 	public function editAction(Request $request, Invoice $invoice) {
 		$deleteForm = $this->createDeleteForm($invoice);
@@ -204,6 +210,9 @@ class InvoiceController extends Controller {
 	 *
 	 * @Route("/{id}", name="invoice_delete")
 	 * @Method("DELETE")
+	 * @param Request $request
+	 * @param Invoice $invoice
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse
 	 */
 	public function deleteAction(Request $request, Invoice $invoice) {
 		$form = $this->createDeleteForm($invoice);

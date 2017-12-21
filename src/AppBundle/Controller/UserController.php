@@ -9,7 +9,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -24,8 +26,10 @@ class UserController extends Controller {
 	 * Log in
 	 *
 	 * @Route("/login", name="user_login")
+	 * @param AuthenticationUtils $authUtils
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function loginAction(Request $request, AuthenticationUtils $authUtils) {
+	public function loginAction(AuthenticationUtils $authUtils) {
 		$error = $authUtils->getLastAuthenticationError();
 		$lastUsername = $authUtils->getLastUsername();
 
@@ -39,8 +43,10 @@ class UserController extends Controller {
 	 * Log out
 	 *
 	 * @Route("/logout", name="user_logout")
+	 * @param AuthenticationUtils $authUtils
+	 * @return Response
 	 */
-	public function logoutAction(Request $request, AuthenticationUtils $authUtils) {
+	public function logoutAction(AuthenticationUtils $authUtils) {
 		$error = $authUtils->getLastAuthenticationError();
 		$lastUsername = $authUtils->getLastUsername();
 
@@ -54,6 +60,10 @@ class UserController extends Controller {
 	 * Register
 	 *
 	 * @Route("/register", name="user_register")
+	 * @param Request $request
+	 * @param UserPasswordEncoderInterface $passwordEncoder
+	 * @param EntityManagerInterface $em
+	 * @return RedirectResponse|Response
 	 */
 	public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $em) {
 		// 1) build the form
@@ -106,6 +116,8 @@ class UserController extends Controller {
 	 * @Route("/new", name="user_new")
 	 * @Security("has_role('ROLE_ADMIN')")
 	 * @Method({"GET", "POST"})
+	 * @param Request $request
+	 * @return RedirectResponse|Response
 	 */
 	public function newAction(Request $request) {
 		$user = new User();
@@ -133,6 +145,8 @@ class UserController extends Controller {
 	 * @Route("/{id}", name="user_show")
 	 * @Security("has_role('ROLE_ADMIN')")
 	 * @Method("GET")
+	 * @param User $user
+	 * @return Response
 	 */
 	public function showAction(User $user) {
 		$deleteForm = $this->createDeleteForm($user);
@@ -163,6 +177,9 @@ class UserController extends Controller {
 	 * @Route("/{id}/edit", name="user_edit")
 	 * @Security("has_role('ROLE_ADMIN')")
 	 * @Method({"GET", "POST"})
+	 * @param Request $request
+	 * @param User $user
+	 * @return RedirectResponse|Response
 	 */
 	public function editAction(Request $request, User $user) {
 		$deleteForm = $this->createDeleteForm($user);
@@ -190,6 +207,9 @@ class UserController extends Controller {
 	 * @Route("/{id}", name="user_delete")
 	 * @Security("has_role('ROLE_ADMIN')")
 	 * @Method("DELETE")
+	 * @param Request $request
+	 * @param User $user
+	 * @return RedirectResponse
 	 */
 	public function deleteAction(Request $request, User $user) {
 		$form = $this->createDeleteForm($user);

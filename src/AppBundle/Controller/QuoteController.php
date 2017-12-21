@@ -200,9 +200,9 @@ class QuoteController extends Controller {
 		$snappy->setOption('margin-right', 10);
 		$snappy->setOption('print-media-type', true);
 		return new Response($snappy->getOutputFromHtml($html), 200, [
-				'Content-Type' => 'application/pdf',
-				'Content-Disposition' => sprintf('attachment; filename="%s"', $filename),
-			]);
+			'Content-Type' => 'application/pdf',
+			'Content-Disposition' => sprintf('attachment; filename="%s"', $filename),
+		]);
 	}
 
 	/**
@@ -288,12 +288,11 @@ class QuoteController extends Controller {
 	 * @Route("/{id}/mark/{state}", name="quote_change_state")
 	 * @Method("GET")
 	 *
-	 * @param Request $request
 	 * @param Quote $quote
 	 * @param string $state
 	 * @return Response
 	 */
-	public function changeStateAction(Request $request, Quote $quote, $state) {
+	public function changeStateAction(Quote $quote, $state) {
 		if (!QuoteStateType::isValueExist($state)) {
 			throw $this->createNotFoundException('The target quote state does not exist');
 		}
@@ -311,11 +310,10 @@ class QuoteController extends Controller {
 	 * Upload the quote to redmine
 	 *
 	 * @Route("/{id}/upload", name="quote_upload_redmine")
-	 * @param Request $request
 	 * @param Quote $quote
 	 * @return Response
 	 */
-	public function uploadToRedmineAction(Request $request, Quote $quote) {
+	public function uploadToRedmineAction(Quote $quote) {
 		$redmine = new Client($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
 		$issues = [];
 		$categories = [];
