@@ -4,6 +4,7 @@ namespace AppBundle\Form;
 
 use AppBundle\Entity\Invoice;
 use AppBundle\Entity\Quote;
+use AppBundle\Entity\Section;
 use AppBundle\Repository\QuoteRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -20,7 +21,7 @@ class InvoiceType extends AbstractType {
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder->add('quote', EntityType::class, [
-				'class' => 'AppBundle:Quote',
+				'class' => Quote::class,
 				'query_builder' => function (QuoteRepository $ir) {
 					return $ir->createAvailableQuotesQueryBuilder();
 				},
@@ -37,7 +38,7 @@ class InvoiceType extends AbstractType {
 		$formModifier = function (FormInterface $form, Quote $quote = null) {
 			$sections = null === $quote ? array() : $quote->getSections();
 			$form->add('sections', EntityType::class, array(
-				'class' => 'AppBundle:Section',
+				'class' => Section::class,
 				'multiple' => true,
 				'expanded' => true,
 				'choices' => $sections,
@@ -104,7 +105,7 @@ class InvoiceType extends AbstractType {
 	 */
 	public function configureOptions(OptionsResolver $resolver) {
 		$resolver->setDefaults(array(
-			'data_class' => 'AppBundle\Entity\Invoice',
+			'data_class' => Invoice::class,
 			'availableSections' => [],
 		));
 	}

@@ -6,6 +6,7 @@ use AppBundle\DBAL\Types\QuoteStateType;
 use AppBundle\Entity\Item;
 use AppBundle\Entity\Quote;
 use AppBundle\Entity\Section;
+use AppBundle\Form\QuoteType;
 use Redmine\Client;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -31,7 +32,7 @@ class QuoteController extends Controller {
 		$em = $this->getDoctrine()
 				   ->getManager();
 
-		$quotes = $em->getRepository('AppBundle:Quote')
+		$quotes = $em->getRepository(Quote::class)
 					 ->findAll();
 		foreach ($quotes as $quote) {
 			$quote->initRedmine($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
@@ -65,7 +66,7 @@ class QuoteController extends Controller {
 		}
 
 		$quote = new Quote();
-		$form = $this->createForm('AppBundle\Form\QuoteType', $quote, $options);
+		$form = $this->createForm(QuoteType::class, $quote, $options);
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
@@ -216,7 +217,7 @@ class QuoteController extends Controller {
 	 */
 	public function editAction(Request $request, Quote $quote) {
 		$deleteForm = $this->createDeleteForm($quote);
-		$editForm = $this->createForm('AppBundle\Form\QuoteType', $quote);
+		$editForm = $this->createForm(QuoteType::class, $quote);
 		$editForm->handleRequest($request);
 
 		if ($editForm->isSubmitted() && $editForm->isValid()) {

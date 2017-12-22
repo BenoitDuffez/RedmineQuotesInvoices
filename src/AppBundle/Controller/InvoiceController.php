@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\DBAL\Types\InvoiceStateType;
 use AppBundle\Entity\Invoice;
+use AppBundle\Form\InvoiceType;
 use AppBundle\Repository\InvoiceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -37,7 +38,7 @@ class InvoiceController extends Controller {
 		$totalInvoiced = $totalPaid + $totalPending;
 		$totalInvoicedOption = $totalPaidOption + $totalPendingOption;
 
-		$invoices = $em->getRepository('AppBundle:Invoice')
+		$invoices = $em->getRepository(Invoice::class)
 					   ->findAll();
 
 		return $this->render('invoice/index.html.twig', array(
@@ -61,7 +62,7 @@ class InvoiceController extends Controller {
 	 */
 	public function newAction(Request $request) {
 		$invoice = new Invoice();
-		$form = $this->createForm('AppBundle\Form\InvoiceType', $invoice);
+		$form = $this->createForm(InvoiceType::class, $invoice);
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
@@ -187,7 +188,7 @@ class InvoiceController extends Controller {
 	 */
 	public function editAction(Request $request, Invoice $invoice) {
 		$deleteForm = $this->createDeleteForm($invoice);
-		$editForm = $this->createForm('AppBundle\Form\InvoiceType', $invoice);
+		$editForm = $this->createForm(InvoiceType::class, $invoice);
 		$editForm->handleRequest($request);
 
 		if ($editForm->isSubmitted() && $editForm->isValid()) {
