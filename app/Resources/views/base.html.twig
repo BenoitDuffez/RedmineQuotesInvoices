@@ -63,6 +63,19 @@
         </div><!--/.container-fluid -->
     </nav>
 
+    {% set flashes = app.flashes %}
+    {% if flashes is not empty %}
+        <div style="padding: 2em;">
+            {% for label, messages in flashes %}
+                {% for message in messages %}
+                    <div class="callout callout-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
     {% block body %}{% endblock %}
 </div>
 {% block javascripts %}{% endblock %}
