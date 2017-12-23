@@ -225,7 +225,6 @@ class Invoice {
 	 * @return Invoice
 	 */
 	public function addSection(Section $section) {
-		$section->addInvoice($this);
 		$this->sections[] = $section;
 
 		return $this;

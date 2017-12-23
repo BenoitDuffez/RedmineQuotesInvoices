@@ -4,8 +4,11 @@ namespace AppBundle\Controller;
 
 use AppBundle\DBAL\Types\InvoiceStateType;
 use AppBundle\Entity\Invoice;
+use AppBundle\Entity\Item;
+use AppBundle\Entity\Section;
 use AppBundle\Form\InvoiceType;
 use AppBundle\Repository\InvoiceRepository;
+use Redmine\Client;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -71,6 +74,47 @@ class InvoiceController extends Controller {
 
 			$em = $this->getDoctrine()
 					   ->getManager();
+
+			if ($form->get('time_billing')
+					 ->getData()) {
+				$response = $this->getTimeEntries($invoice);
+				if (is_string($response)) {
+					$this->addFlash('danger', $response);
+					return $this->render('invoice/new.html.twig', array(
+						'invoice' => $invoice,
+						'form' => $form->createView(),
+					));
+				}
+
+				$timeSpent = [];
+				foreach ($response['time_entries'] as $timeEntry) {
+					$issueInfo = sprintf("\\#%d: %s", $timeEntry['issue']['id'], $timeEntry['issue']['subject']);
+					if (!isset($timeSpent[$issueInfo])) {
+						$timeSpent[$issueInfo] = 0;
+					}
+					$timeSpent[$issueInfo] += $timeEntry['hours'];
+				}
+
+				$section = new Section();
+				$section->addInvoice($invoice);
+				$section->setQuote($invoice->getQuote());
+				$section->setTitle("Développements depuis le " . $invoice->getReplacementText());
+				$section->setRate(50);
+				$section->setPosition(0);
+				$section->setOption(false);
+				$section->setChosen(true);
+				$position = 0;
+				foreach ($timeSpent as $issueId => $hours) {
+					$item = new Item();
+					$item->setDescription($issueId);
+					$item->setHours($hours);
+					$item->setPosition($position++);
+					$section->addItem($item);
+					$em->persist($item);
+				}
+				$em->persist($section);
+			}
+
 			$em->persist($invoice);
 			$em->flush();
 
@@ -85,6 +129,46 @@ class InvoiceController extends Controller {
 			'invoice' => $invoice,
 			'form' => $form->createView(),
 		));
+	}
+
+	/**
+	 * Can be called only if the invoice is a time-based invoice
+	 * Will take the start date from the replacement text and get all the time entries from that date til the end of the month
+	 * @param Invoice $invoice
+	 * @return array|string error message or time entries
+	 */
+	private function getTimeEntries(Invoice $invoice) {
+		$startDate = $invoice->getReplacementText();
+		if (!preg_match("#^\d{4}/\d{2}/\d{2}$#", $startDate)) {
+			return "For time billing, the replacement text must be the start date";
+		}
+
+		$start = \DateTime::createFromFormat("Y/m/d", $startDate);
+		$end = \DateTime::createFromFormat("Y/m/d", $startDate);
+		$end->add(new \DateInterval("P1M"));
+		$end->sub(new \DateInterval("P1D"));
+
+		$redmine = new Client($this->getParameter('redmine_url'), $this->getParameter('redmine_api_key'));
+		$response = $redmine->time_entry->all([
+			'project_id' => $invoice->getQuote()
+									->getProjectId(),
+			'spent_on' => sprintf("<>%s|%s", $start->format("Y/m/d"), $end->format("Y/m/d")),
+			'limit' => 1000,
+		]);
+		if (!is_array($response) || !is_array($response['time_entries'])) {
+			return "Couldn't retrieve time entries from Redmine";
+		}
+
+		$issues = [];
+		foreach ($response['time_entries'] as $id => $time_entry) {
+			$issueId = $time_entry['issue']['id'];
+			if (!isset($issue[$issueId])) {
+				$issues[$issueId] = $redmine->issue->show($issueId)['issue'];
+			}
+			$response['time_entries'][$id]['issue'] = $issues[$issueId];
+		}
+
+		return $response;
 	}
 
 	/**

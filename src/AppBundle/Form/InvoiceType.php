@@ -8,6 +8,7 @@ use AppBundle\Entity\Section;
 use AppBundle\Repository\QuoteRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -33,6 +34,11 @@ class InvoiceType extends AbstractType {
 						'class' => 'markdown form-control'
 					],
 					'required' => false,
+				])
+				->add('time_billing', CheckboxType::class, [
+					'mapped' => false,
+					'required' => false,
+					'label' => "Charge time spent (instead of quote value)?",
 				]);
 
 		$formModifier = function (FormInterface $form, Quote $quote = null) {
