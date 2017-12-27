@@ -40,14 +40,14 @@ if grep -vqP 'v\d+\.\d+' <<<"$nextTag"; then
 fi
 
 # Print tags and changelog
+changelog=$(git log --pretty=format:'  * [%an] %s' HEAD...${lastTag} | grep -v 'Merge branch')
 echo "Previous version: $lastTag"
 echo "New version: $nextTag"
-echo "Changelog:"
-git log --pretty=format:'  * [%an] %s' HEAD...${lastTag} | grep -v 'Merge branch'
+echo "Changelog: $changelog"
 
 # Provide help to install next tag
 echo "If all looks good, create a tag and push it:"
 echo
-echo "  git push && git tag $nextTag && git push --tags && git checkout develop"
+echo "  git push && git tag -a $nextTag -m '$(echo $changelog | sed "s/'/\\'/g")' && git push --tags && git checkout develop"
 echo
 

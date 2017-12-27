@@ -33,7 +33,7 @@ monolog:
         swift:
             type: swift_mailer
             from_email: 'qiv@upactivity.com'
-            to_email: 'qiv@upactivity.com'
+            to_email: 'benoit.duffez@upactivity.com'
             subject: '%%message%%'
             level: debug
             content_type: text/html

@@ -18,10 +18,12 @@ class QuoteRepository extends EntityRepository {
 
 	public function createAvailableQuotesQueryBuilder() {
 		return $this->createQueryBuilder('q')
+					->select('q, i')
 					->leftJoin('q.invoices', 'i')
 					->where('q.state = :state')
 					->setParameter('state', QuoteStateType::ACCEPTED)
 					->groupBy('q.id')
-					->having('coalesce(sum(i.percentage), 0) < 100');
+					->having('coalesce(sum(i.percentage), 0) < 100')
+					->orHaving('i.timeBilling = 1');
 	}
 }
