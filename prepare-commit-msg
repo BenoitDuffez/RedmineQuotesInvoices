@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# Only care for merge commits on master
+branch=$(git branch | grep '*' | sed 's/* //')
+if [ "$branch" != "master" ] || [ "$2" != "merge" ]; then
+    exit 0
+fi
+
+# Get current/next tag
+lastTag=$(git tag --list | sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4n | tail -1)
+nextTag=$(echo "$lastTag" | awk -F. 'BEGIN{OFS="."}{$NF=($NF+1); print $0}')
+
+# Print tags and changelog
+{
+    echo "# Previous version: $lastTag"
+    echo "$nextTag"
+    echo
+    echo "# Changelog:"
+    git log --pretty=format:'  * [%an] %s' develop...$lastTag | grep -v 'Merge branch'
+} >"$1"
+
