@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e65139dccd3b48aec6218b22070d237",
+    "content-hash": "4d06766bba84d97eadd290575275698c",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -1541,6 +1541,62 @@
             "time": "2017-06-19T01:22:40+00:00"
         },
         {
+            "name": "nikolaposa/version",
+            "version": "2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nikolaposa/version.git",
+                "reference": "139e37a1f8f535c38cbdcbba320db24ccc3d652c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nikolaposa/version/zipball/139e37a1f8f535c38cbdcbba320db24ccc3d652c",
+                "reference": "139e37a1f8f535c38cbdcbba320db24ccc3d652c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^1.11",
+                "phpunit/phpunit": "^4.7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Version\\": "src/"
+                },
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nikola Poša",
+                    "email": "posa.nikola@gmail.com",
+                    "homepage": "http://www.nikolaposa.in.rs"
+                }
+            ],
+            "description": "Value Object representing a version number that is in compliance with the SemVer specification.",
+            "homepage": "https://github.com/nikolaposa/version",
+            "keywords": [
+                "semantic",
+                "semver",
+                "version",
+                "versioning"
+            ],
+            "time": "2017-01-01T15:53:22+00:00"
+        },
+        {
             "name": "ninsuo/symfony-collection",
             "version": "2.1.10",
             "source": {
@@ -2026,6 +2082,58 @@
             ],
             "description": "A security checker for your composer.lock",
             "time": "2017-03-31T14:50:32+00:00"
+        },
+        {
+            "name": "shivas/versioning-bundle",
+            "version": "2.0.0",
+            "target-dir": "Shivas/VersioningBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shivas/versioning-bundle.git",
+                "reference": "79fa73bd5ba41022b83eae225c9e280ab7e5a1e5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shivas/versioning-bundle/zipball/79fa73bd5ba41022b83eae225c9e280ab7e5a1e5",
+                "reference": "79fa73bd5ba41022b83eae225c9e280ab7e5a1e5",
+                "shasum": ""
+            },
+            "require": {
+                "nikolaposa/version": "~2.2",
+                "php": ">=5.3.3",
+                "symfony/process": "~2.2|~3.0",
+                "symfony/symfony": "~2.8|~3.0"
+            },
+            "require-dev": {
+                "composer/composer": "^1.0",
+                "phpunit/phpunit": "^5.5"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Shivas\\VersioningBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Audrius Karabanovas",
+                    "email": "audrius@karabanovas.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Symfony2|3 application versioning, simple console command to manage version (with providers e.g. git tag) of your application using Semantic Versioning 2.0.0 recomendations",
+            "homepage": "https://github.com/shivas/versioning-bundle",
+            "keywords": [
+                "semantic",
+                "semver",
+                "version",
+                "versioning"
+            ],
+            "time": "2017-11-19T17:28:33+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
