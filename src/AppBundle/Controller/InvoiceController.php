@@ -87,7 +87,13 @@ class InvoiceController extends Controller {
 
 				$timeSpent = [];
 				foreach ($response['time_entries'] as $timeEntry) {
-					$issueInfo = sprintf("\\#%d: %s", $timeEntry['issue']['id'], $timeEntry['issue']['subject']);
+					$issueInfo = "";
+					if (isset($timeEntry['issue']['id'])) {
+						$issueInfo .= sprintf("\\#%d: ", $timeEntry['issue']['id']);
+					}
+					if (isset($timeEntry['issue']['subject'])) {
+						$issueInfo .= $timeEntry['issue']['subject'];
+					}
 					if (!isset($timeSpent[$issueInfo])) {
 						$timeSpent[$issueInfo] = 0;
 					}
@@ -158,10 +164,10 @@ class InvoiceController extends Controller {
 			return "Couldn't retrieve time entries from Redmine";
 		}
 
-		$issues = [];
+		$issues = [0 => ['subject' => 'Divers']];
 		foreach ($response['time_entries'] as $id => $time_entry) {
-			$issueId = $time_entry['issue']['id'];
-			if (!isset($issue[$issueId])) {
+			$issueId = isset($time_entry['issue']) ? $time_entry['issue']['id'] : 0;
+			if (!isset($issues[$issueId]) && $issueId > 0) {
 				$issues[$issueId] = $redmine->issue->show($issueId)['issue'];
 			}
 			$response['time_entries'][$id]['issue'] = $issues[$issueId];
