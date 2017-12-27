@@ -7,7 +7,6 @@ use AppBundle\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -95,7 +94,6 @@ class UserController extends Controller {
 	 * Lists all user entities.
 	 *
 	 * @Route("/", name="user_index")
-	 * @Security("has_role('ROLE_ADMIN')")
 	 * @Method("GET")
 	 */
 	public function indexAction() {
@@ -114,7 +112,6 @@ class UserController extends Controller {
 	 * Creates a new user entity.
 	 *
 	 * @Route("/new", name="user_new")
-	 * @Security("has_role('ROLE_ADMIN')")
 	 * @Method({"GET", "POST"})
 	 * @param Request $request
 	 * @return RedirectResponse|Response
@@ -143,7 +140,6 @@ class UserController extends Controller {
 	 * Finds and displays a user entity.
 	 *
 	 * @Route("/{id}", name="user_show")
-	 * @Security("has_role('ROLE_ADMIN')")
 	 * @Method("GET")
 	 * @param User $user
 	 * @return Response
@@ -161,7 +157,6 @@ class UserController extends Controller {
 	 * Creates a form to delete a user entity.
 	 *
 	 * @param User $user The user entity
-	 *
 	 * @return \Symfony\Component\Form\Form The form
 	 */
 	private function createDeleteForm(User $user) {
@@ -175,7 +170,6 @@ class UserController extends Controller {
 	 * Displays a form to edit an existing user entity.
 	 *
 	 * @Route("/{id}/edit", name="user_edit")
-	 * @Security("has_role('ROLE_ADMIN')")
 	 * @Method({"GET", "POST"})
 	 * @param Request $request
 	 * @param User $user
@@ -205,7 +199,6 @@ class UserController extends Controller {
 	 * Deletes a user entity.
 	 *
 	 * @Route("/{id}", name="user_delete")
-	 * @Security("has_role('ROLE_ADMIN')")
 	 * @Method("DELETE")
 	 * @param Request $request
 	 * @param User $user

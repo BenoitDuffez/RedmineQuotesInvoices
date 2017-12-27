@@ -47,7 +47,5 @@ security:
         - { path: ^register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
-        - { path: ^/quote/, role: ROLE_ADMIN }
-        - { path: ^/invoice/, role: ROLE_ADMIN }
-        - { path: ^/user/, role: ROLE_ADMIN }
+        - { path: ^/, role: ROLE_USER }
 
