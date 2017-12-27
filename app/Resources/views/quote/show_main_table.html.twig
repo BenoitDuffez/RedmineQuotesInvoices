@@ -5,12 +5,14 @@
     </div>
 </div>
 
+{% set privateClass = invoice.timeBilling ? '' : ' class="private"' %}
+
 <table class="table table-bordered">
     <thead>
     <tr>
         <th>Section</th>
         <th>Désignation</th>
-        <th class="private">Temps estimé</th>
+        <th{{ privateClass }}>Temps {{ invoice.timeBilling ? 'passé' : 'estimé' }}</th>
         <th class="text-right">Total H.T.</th>
     </tr>
     </thead>
@@ -35,13 +37,13 @@
                         </div>
                     </div>
                 </td>
-                <td class="private">{{ "%.2fh" | format(item.hours) }}</td>
+                <td{{ privateClass }}>{{ "%.2fh" | format(item.hours) }}</td>
                 <td class="text-right col-md-2">{{ "%d €" | format(item.hours * section.rate) }}</td>
             </tr>
         {% endfor %}
         <tr>
             <th class="col-md-10 text-right" colspan="2">Total</th>
-            <th class="private">{{ "%.2fh" | format(section.hours) }}</th>
+            <th{{ privateClass }}>{{ "%.2fh" | format(section.hours) }}</th>
             <th class="text-right col-md-2">{{ "%d €" | format(section.hours * section.rate) }}</th>
         </tr>
     {% endfor %}
