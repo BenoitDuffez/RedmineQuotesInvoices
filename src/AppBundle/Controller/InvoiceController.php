@@ -75,8 +75,7 @@ class InvoiceController extends Controller {
 			$em = $this->getDoctrine()
 					   ->getManager();
 
-			if ($form->get('time_billing')
-					 ->getData()) {
+			if ($invoice->isTimeBilling()) {
 				$response = $this->getTimeEntries($invoice);
 				if (is_string($response)) {
 					$this->addFlash('danger', $response);

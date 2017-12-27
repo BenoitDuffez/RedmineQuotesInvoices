@@ -36,7 +36,6 @@ class InvoiceType extends AbstractType {
 					'required' => false,
 				])
 				->add('time_billing', CheckboxType::class, [
-					'mapped' => false,
 					'required' => false,
 					'label' => "Charge time spent (instead of quote value)?",
 				]);

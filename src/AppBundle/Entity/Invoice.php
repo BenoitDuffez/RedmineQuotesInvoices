@@ -76,6 +76,16 @@ class Invoice {
 	 */
 	private $state = InvoiceStateType::SENT;
 
+
+	/**
+	 * @var boolean
+	 * @ORM\Column(name="time_billing", type="boolean")
+	 */
+	private $timeBilling = false;
+
+	/**
+	 * Invoice constructor.
+	 */
 	public function __construct() {
 		$this->sections = new ArrayCollection();
 	}
@@ -266,6 +276,28 @@ class Invoice {
 	 */
 	public function setState($state) {
 		$this->state = $state;
+
+		return $this;
+	}
+
+	/**
+	 * Get timeBilling
+	 *
+	 * @return boolean
+	 */
+	public function isTimeBilling() {
+		return $this->timeBilling;
+	}
+
+	/**
+	 * Set timeBilling
+	 *
+	 * @param boolean $timeBilling
+	 *
+	 * @return Invoice
+	 */
+	public function setTimeBilling($timeBilling) {
+		$this->timeBilling = $timeBilling;
 
 		return $this;
 	}

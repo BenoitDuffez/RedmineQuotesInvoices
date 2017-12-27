@@ -22,7 +22,7 @@
     </div>
 </div>
 
-{% if invoice.replacementText | length and not invoice.replacementText matches '{^\d{4}/\d{2}/\d{2}$}' %}
+{% if invoice.replacementText | length and not invoice.timeBilling %}
 
     <table class="table table-bordered">
         <thead>
