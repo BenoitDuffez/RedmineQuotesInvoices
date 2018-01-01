@@ -161,7 +161,7 @@ class InvoiceController extends Controller {
 		$response = $redmine->time_entry->all([
 			'project_id' => $invoice->getQuote()
 									->getProjectId(),
-			'spent_on' => sprintf("<>%s|%s", $start->format("Y/m/d"), $end->format("Y/m/d")),
+			'spent_on' => sprintf("><%s|%s", $start->format("Y/m/d"), $end->format("Y/m/d")),
 			'limit' => 1000,
 		]);
 		if (!is_array($response) || !is_array($response['time_entries'])) {
