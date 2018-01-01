@@ -48,6 +48,6 @@ echo "Changelog: $changelog"
 # Provide help to install next tag
 echo "If all looks good, create a tag and push it:"
 echo
-echo "  git push && git tag -a $nextTag -m '$(echo $changelog | sed "s/'/\\'/g")' && git push --tags && git checkout develop"
+echo "  git push && git tag -a $nextTag -m \"$changelog\" && git push --tags && git checkout develop"
 echo
 

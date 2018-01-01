@@ -103,20 +103,24 @@ class InvoiceController extends Controller {
 				$section = new Section();
 				$section->addInvoice($invoice);
 				$section->setQuote($invoice->getQuote());
-				$section->setTitle("Développements depuis le " . $invoice->getReplacementText());
+				$section->setTitle("Projet Telecapêche");
 				$section->setRate(50);
 				$section->setPosition(0);
 				$section->setOption(false);
 				$section->setChosen(true);
 				$position = 0;
+
+				$total = 0;
 				foreach ($timeSpent as $issueId => $hours) {
-					$item = new Item();
-					$item->setDescription($issueId);
-					$item->setHours($hours);
-					$item->setPosition($position++);
-					$section->addItem($item);
-					$em->persist($item);
+					$total += $hours;
 				}
+				$item = new Item();
+				$item->setDescription("Developpements depuis le " . $invoice->getReplacementText());
+				$item->setHours($total);
+				$item->setPosition($position++);
+				$section->addItem($item);
+				$em->persist($item);
+
 				$em->persist($section);
 			}
 
