@@ -2,9 +2,13 @@
 Quote/Invoice Symfony project
 
 ![diagram invoicing](diagram_invoicing.png)
+
 ![diagram payment](diagram_payment.png)
+
 ![diagram quote approval](diagram_quote_approval.png)
+
 ![diagram quote request](diagram_quote_request.png)
+
 ![diagram quote update](diagram_quote_update.png)
 
 The quote workflow is simple:
