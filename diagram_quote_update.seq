@@ -1,0 +1,8 @@
+title: modification request
+
+Customer->You: wants a modification
+You->QIV: clone quote
+You->QIV: make edits to clone
+QIV->You: PDF quote
+You->Customer: send updated quote to customer
+

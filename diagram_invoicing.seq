@@ -1,0 +1,9 @@
+title: Invoicing
+
+You->Redmine: on every ticket, note time spent
+You->QIV: create invoice from quote
+QIV->Redmine: fetches time spent
+QIV->QIV: creates invoice
+QIV->You: PDF invoice
+You->Customer: send invoice to customer
+

@@ -1,0 +1,5 @@
+title: Payment
+
+Customer->You: pays
+You->QIV: mark invoice as paid
+

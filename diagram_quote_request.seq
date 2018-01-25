@@ -1,0 +1,9 @@
+title Quote Creation
+
+Customer->You: requests quote
+You->Redmine: create user/project
+You->QIV: create quote
+QIV->Redmine: fetch user/project information
+QIV->You: PDF quote
+You->Customer: send quote to customer
+

@@ -1,0 +1,7 @@
+title: Quote approval
+
+Customer->You: approves quote
+You->QIV: mark quote as approved
+QIV->Redmine: creates 1 ticket per quote item
+note over Redmine: all the quote details are stored in the ticket description
+
